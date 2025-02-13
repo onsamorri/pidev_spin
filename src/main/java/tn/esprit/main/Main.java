@@ -81,6 +81,44 @@ public class Main {
             );
             filteredPlans.forEach(recoveryPlan -> System.out.println(recoveryPlan));
 
+            // Nutrition Plan Services
+            NutritionPlanServices nutritionPlanServices = new NutritionPlanServices();
+
+            // Add a new Nutrition Plan (updated)
+            NutritionPlan nutritionPlan1 = new NutritionPlan(1, 1, DietType.Intermittent_Fasting, Allergies.NONE, 2000, java.time.LocalDate.now(), java.time.LocalDate.now().plusDays(7), List.of("Breakfast: Eggs", "Lunch: Chicken Salad", "Dinner: Grilled Fish"), "High protein diet");
+            nutritionPlanServices.add(nutritionPlan1);
+
+            // Return all Nutrition Plans
+            List<NutritionPlan> allNutritionPlans = nutritionPlanServices.returnList();
+            allNutritionPlans.forEach(nutritionPlan -> System.out.println(nutritionPlan));
+
+            // Delete a Nutrition Plan
+            nutritionPlanServices.delete(nutritionPlan1);
+
+            // Update a Nutrition Plan
+            nutritionPlan1.setNotes("Updated high-protein diet");
+            nutritionPlanServices.update(nutritionPlan1);
+
+            // Search Nutrition Plans by Athlete ID and Diet Type
+            List<NutritionPlan> nutritionPlansByDiet = nutritionPlanServices.searchByAthleteIdAndDietType(1, DietType.Intermittent_Fasting);
+            nutritionPlansByDiet.forEach(nutritionPlan -> System.out.println("Found by Athlete ID and Diet Type: " + nutritionPlan));
+
+            // Sort Nutrition Plans by Start Date (earliest to latest)
+            List<NutritionPlan> sortedByStartDateNutrition = nutritionPlanServices.sortByStartDate(true);
+            sortedByStartDateNutrition.forEach(nutritionPlan -> System.out.println("Sorted by Start Date: " + nutritionPlan));
+
+            // Find a Nutrition Plan by ID
+            NutritionPlan foundNutritionPlan = nutritionPlanServices.findById(1);
+            System.out.println("Found Nutrition Plan by ID: " + foundNutritionPlan);
+
+            // Advanced Filtering
+            System.out.println("Advanced Filter: Nutrition Plans in the last 7 days:");
+            List<NutritionPlan> filteredNutritionPlans = nutritionPlanServices.advancedFilter(
+                    DietType.Intermittent_Fasting, // diet type
+                    java.time.LocalDate.now().minusDays(7), // start date
+                    java.time.LocalDate.now() // end date
+            );
+            filteredNutritionPlans.forEach(nutritionPlan -> System.out.println(nutritionPlan));
 
         } catch (SQLException e) {
             e.printStackTrace();
