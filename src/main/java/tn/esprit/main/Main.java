@@ -3,122 +3,144 @@ package tn.esprit.main;
 import tn.esprit.entities.*;
 import tn.esprit.services.*;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
         try {
-            // Injury Services
+            // InjuryServices
             InjuryServices injuryServices = new InjuryServices();
 
-            // Add a new Injury
-            Injury injury1 = new Injury(1, InjuryType.FRACTURE, "Fracture in the leg", java.time.LocalDate.now(), Severity.SEVERE);
+            // Adding an injury using the constructor
+            Injury injury1 = new Injury(1, 1, 1, InjuryType.FRACTURE, "Fracture in the leg", java.time.LocalDate.now(), Severity.SEVERE);
             injuryServices.add(injury1);
+
+
 
             // Return all injuries
             List<Injury> allInjuries = injuryServices.returnList();
-            allInjuries.forEach(injury -> System.out.println(injury));
+            allInjuries.forEach(System.out::println);
 
-            // Delete an Injury
+            // Delete an injury
             injuryServices.delete(injury1);
 
-            // Update an Injury
-            injury1.setDescription("Updated description");
+            // Update an injury
+            injury1.setInjury_description("Updated description");
             injuryServices.update(injury1);
 
-            // Search Injuries by Type
+            // Search injuries by Type
             List<Injury> fractures = injuryServices.searchByType(InjuryType.FRACTURE);
             fractures.forEach(injury -> System.out.println("Found by Type: " + injury));
 
-            // Sort Injuries by Severity
+            // Sort injuries by Severity
             List<Injury> sortedBySeverity = injuryServices.sortBySeverityAscending();
             sortedBySeverity.forEach(injury -> System.out.println("Sorted by Severity: " + injury));
 
-            // Find Injury by ID
+            // Find injury by id
             Injury foundInjury = injuryServices.findById(1);
             System.out.println("Found Injury by ID: " + foundInjury);
 
-            // Recovery Plan Services
+            // Create an instance of RecoveryPlanServices
             RecoveryPlanServices recoveryPlanServices = new RecoveryPlanServices();
 
-            // Add a new Recovery Plan
-            RecoveryPlan recoveryPlan1 = new RecoveryPlan(1, 5, RecoveryPlanGoal.REHABILITATION, "Initial recovery plan", java.time.LocalDate.now(), java.time.LocalDate.now().plusDays(30), RecoveryPlanStatus.IN_PROGRESS);
-            recoveryPlanServices.add(recoveryPlan1);
+            // Create RecovertyPlan
+            RecoveryPlan recoveryPlan1 = new RecoveryPlan(
+                    32, // injury_id
+                    11, // athlete_id
+                    8, // coach_id
+                    15, // medical_staff_id
+                    RecoveryGoal.REHABILITATION,
+                    "Recovery after leg fracture",
+                    LocalDate.of(2025, 2, 15), // recovery_StartDate
+                    LocalDate.of(2025, 2, 15), // recovery_EndDate
+                    RecoveryStatus.IN_PROGRESS
+            );
 
-            // Return all Recovery Plans
+            try {
+                // Add the recovery plan using the add method
+                recoveryPlanServices.add(recoveryPlan1);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+
+
+            // Return all RecoveryPlans
             List<RecoveryPlan> allRecoveryPlans = recoveryPlanServices.returnList();
-            allRecoveryPlans.forEach(recoveryPlan -> System.out.println(recoveryPlan));
+            allRecoveryPlans.forEach(System.out::println);
 
-            // Delete a Recovery Plan
+            // Delete a RecoveryPlan
             recoveryPlanServices.delete(recoveryPlan1);
 
-            // Update a Recovery Plan
-            recoveryPlan1.setStatus(RecoveryPlanStatus.COMPLETED);
+            // Update a RecoveryPlan
+            recoveryPlan1.setRecovery_Status(RecoveryStatus.COMPLETED);
             recoveryPlanServices.update(recoveryPlan1);
 
-            // Search Recovery Plans by Injury ID and Status
-            List<RecoveryPlan> plansByInjury = recoveryPlanServices.searchByInjuryIdAndStatus(1, RecoveryPlanStatus.IN_PROGRESS);
+            // Search RecoveryPlans by Injury id and Status
+            List<RecoveryPlan> plansByInjury = recoveryPlanServices.searchByInjuryIdAndStatus(1, RecoveryStatus.IN_PROGRESS);
             plansByInjury.forEach(recoveryPlan -> System.out.println("Found by Injury ID and Status: " + recoveryPlan));
 
-            // Sort Recovery Plans by Start Date (earliest to latest)
-            List<RecoveryPlan> sortedByStartDate = recoveryPlanServices.sortByStartDate(true);
+            // in ascending order ASC true and DSC is false
+            List<RecoveryPlan> sortedByStartDate = recoveryPlanServices.sortByRecoveryStartDate(true); // Ascending order
             sortedByStartDate.forEach(recoveryPlan -> System.out.println("Sorted by Start Date: " + recoveryPlan));
 
-            // Find a Recovery Plan by ID
+
+            // Find a RecoveryPlan by id
             RecoveryPlan foundRecoveryPlan = recoveryPlanServices.findById(1);
             System.out.println("Found Recovery Plan by ID: " + foundRecoveryPlan);
 
-            // View Recovery Plan by ID
+            // View RecoveryPlan by id
             RecoveryPlan viewPlan = recoveryPlanServices.viewRecoveryPlan(1);
             System.out.println("View Recovery Plan: " + viewPlan);
 
             // Advanced Filtering
             System.out.println("Advanced Filter: Recovery Plans with status COMPLETED in the last 30 days:");
             List<RecoveryPlan> filteredPlans = recoveryPlanServices.advancedFilter(
-                    null, // status can be null!!!!
-                    java.time.LocalDate.now().minusDays(30), // start date
-                    java.time.LocalDate.now() // end date
+                    null,
+                    java.time.LocalDate.now().minusDays(30),
+                    java.time.LocalDate.now()
             );
-            filteredPlans.forEach(recoveryPlan -> System.out.println(recoveryPlan));
+            filteredPlans.forEach(System.out::println);
 
-            // Nutrition Plan Services
+            // NutritionPlanServices
             NutritionPlanServices nutritionPlanServices = new NutritionPlanServices();
 
-            // Add a new Nutrition Plan (updated)
-            NutritionPlan nutritionPlan1 = new NutritionPlan(1, 1, DietType.Intermittent_Fasting, Allergies.NONE, 2000, java.time.LocalDate.now(), java.time.LocalDate.now().plusDays(7), List.of("Breakfast: Eggs", "Lunch: Chicken Salad", "Dinner: Grilled Fish"), "High protein diet");
+            // Add a new NutritionPlan (updated)
+            NutritionPlan nutritionPlan1 = new NutritionPlan(1, 1, 2, DietType.VEGAN, Allergies.NONE, 2000, java.time.LocalDate.now(), java.time.LocalDate.now().plusDays(7), "Breakfast: Eggs, Lunch: Chicken Salad, Dinner: Grilled Fish", "High protein diet");
             nutritionPlanServices.add(nutritionPlan1);
 
-            // Return all Nutrition Plans
+            // Return all NutritionPlans
             List<NutritionPlan> allNutritionPlans = nutritionPlanServices.returnList();
-            allNutritionPlans.forEach(nutritionPlan -> System.out.println(nutritionPlan));
+            allNutritionPlans.forEach(System.out::println);
 
-            // Delete a Nutrition Plan
+            // Delete a NutritionPlan
             nutritionPlanServices.delete(nutritionPlan1);
 
-            // Update a Nutrition Plan
-            nutritionPlan1.setNotes("Updated high-protein diet");
+            // Update a NutritionPlan
+            nutritionPlan1.setNutrition_notes("Updated high-protein diet");
             nutritionPlanServices.update(nutritionPlan1);
 
-            // Search Nutrition Plans by Athlete ID and Diet Type
-            List<NutritionPlan> nutritionPlansByDiet = nutritionPlanServices.searchByAthleteIdAndDietType(1, DietType.Intermittent_Fasting);
+            // Search NutritionPlans by athlete id and DietType
+            List<NutritionPlan> nutritionPlansByDiet = nutritionPlanServices.searchByAthleteIdAndDietType(1, DietType.VEGAN);
             nutritionPlansByDiet.forEach(nutritionPlan -> System.out.println("Found by Athlete ID and Diet Type: " + nutritionPlan));
 
-            // Sort Nutrition Plans by Start Date (earliest to latest)
+            // Sort NutritionPlans by StartDate (earliest to latest)
             List<NutritionPlan> sortedByStartDateNutrition = nutritionPlanServices.sortByStartDate(true);
             sortedByStartDateNutrition.forEach(nutritionPlan -> System.out.println("Sorted by Start Date: " + nutritionPlan));
 
-            // Find a Nutrition Plan by ID
+            // Find a NutritionPlan by id
             NutritionPlan foundNutritionPlan = nutritionPlanServices.findById(1);
             System.out.println("Found Nutrition Plan by ID: " + foundNutritionPlan);
 
-            // Advanced Filtering
+            // Advanced filtering
             System.out.println("Advanced Filter: Nutrition Plans in the last 7 days:");
             List<NutritionPlan> filteredNutritionPlans = nutritionPlanServices.advancedFilter(
-                    DietType.Intermittent_Fasting, // diet type
-                    java.time.LocalDate.now().minusDays(7), // start date
-                    java.time.LocalDate.now() // end date
+                    DietType.VEGAN,
+                    java.time.LocalDate.now().minusDays(7),
+                    java.time.LocalDate.now()
             );
-            filteredNutritionPlans.forEach(nutritionPlan -> System.out.println(nutritionPlan));
+            filteredNutritionPlans.forEach(System.out::println);
 
         } catch (SQLException e) {
             e.printStackTrace();

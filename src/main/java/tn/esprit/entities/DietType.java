@@ -4,7 +4,7 @@ public enum DietType {
     VEGAN,
     VEGETARIAN,
     PALEO,
-    Intermittent_Fasting,
+    INTERMITTENT_FASTING,
     MEDITERRANEAN,
     GLUTEN_FREE
 }

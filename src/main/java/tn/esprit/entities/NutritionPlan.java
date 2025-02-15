@@ -1,32 +1,34 @@
 package tn.esprit.entities;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public class NutritionPlan {
 
     private int nutrition_id;
-    private int athlete_id; // FK Athlete table
-    private DietType dietType;
-    private Allergies allergies;
-    private int calorie_intake;
-    private LocalDate start_date;
-    private LocalDate end_date;
-    private List<String> meal_plan; // List of meal descriptions
-    private String notes;
+    private int athlete_id;
+    private int medical_staff_id;
 
-    public NutritionPlan(int nutrition_id, int athlete_id, DietType dietType, Allergies allergies,
-                         int calorie_intake, LocalDate start_date, LocalDate end_date,
-                         List<String> meal_plan, String notes) {
+    private DietType nutrition_dietType;
+    private Allergies nutrition_allergies;
+    private int nutrition_calorie_intake;
+    private LocalDate nutrition_start_date;
+    private LocalDate nutrition_end_date;
+    private String nutrition_meal_plan;
+    private String nutrition_notes;
+
+    public NutritionPlan(int nutrition_id, int athlete_id, int medical_staff_id, DietType nutrition_dietType,
+                         Allergies nutrition_allergies, int nutrition_calorie_intake, LocalDate nutrition_start_date,
+                         LocalDate nutrition_end_date, String nutrition_meal_plan, String nutrition_notes) {
         this.nutrition_id = nutrition_id;
         this.athlete_id = athlete_id;
-        this.dietType = dietType;
-        this.allergies = allergies;
-        this.calorie_intake = calorie_intake;
-        this.start_date = start_date;
-        this.end_date = end_date;
-        this.meal_plan = meal_plan;
-        this.notes = notes;
+        this.medical_staff_id = medical_staff_id;
+        this.nutrition_dietType = nutrition_dietType;
+        this.nutrition_allergies = nutrition_allergies;
+        this.nutrition_calorie_intake = nutrition_calorie_intake;
+        this.nutrition_start_date = nutrition_start_date;
+        this.nutrition_end_date = nutrition_end_date;
+        this.nutrition_meal_plan = nutrition_meal_plan;
+        this.nutrition_notes = nutrition_notes;
     }
 
     public NutritionPlan(int nutrition_id) {
@@ -41,64 +43,72 @@ public class NutritionPlan {
         return athlete_id;
     }
 
-    public DietType getDietType() {
-        return dietType;
+    public int getMedical_staff_id() {
+        return medical_staff_id;
     }
 
-    public Allergies getAllergies() {
-        return allergies;
+    public DietType getNutrition_dietType() {
+        return nutrition_dietType;
     }
 
-    public int getCalorie_intake() {
-        return calorie_intake;
+    public Allergies getNutrition_allergies() {
+        return nutrition_allergies;
     }
 
-    public LocalDate getStart_date() {
-        return start_date;
+    public int getNutrition_calorie_intake() {
+        return nutrition_calorie_intake;
     }
 
-    public LocalDate getEnd_date() {
-        return end_date;
+    public LocalDate getNutrition_start_date() {
+        return nutrition_start_date;
     }
 
-    public List<String> getMeal_plan() {
-        return meal_plan;
+    public LocalDate getNutrition_end_date() {
+        return nutrition_end_date;
     }
 
-    public String getNotes() {
-        return notes;
+    public String getNutrition_meal_plan() {
+        return nutrition_meal_plan;
+    }
+
+    public String getNutrition_notes() {
+        return nutrition_notes;
     }
 
     public void setAthlete_id(int athlete_id) {
         this.athlete_id = athlete_id;
     }
 
-    public void setDietType(DietType dietType) {
-        this.dietType = dietType;
+    public void setMedical_staff_id(int medical_staff_id) {
+        this.medical_staff_id = medical_staff_id;
     }
 
-    public void setAllergies(Allergies allergies) {
-        this.allergies = allergies;
+    public void setNutrition_dietType(DietType nutrition_dietType) {
+        this.nutrition_dietType = nutrition_dietType;
     }
 
-    public void setCalorie_intake(int calorie_intake) {
-        this.calorie_intake = calorie_intake;
+    public void setNutrition_allergies(Allergies nutrition_allergies) {
+        this.nutrition_allergies = nutrition_allergies;
     }
 
-    public void setStart_date(LocalDate start_date) {
-        this.start_date = start_date;
+    public void setNutrition_calorie_intake(int nutrition_calorie_intake) {
+        this.nutrition_calorie_intake = nutrition_calorie_intake;
     }
 
-    public void setEnd_date(LocalDate end_date) {
-        this.end_date = end_date;
+    public void setNutrition_start_date(LocalDate nutrition_start_date) {
+        this.nutrition_start_date = nutrition_start_date;
     }
 
-    public void setMeal_plan(List<String> meal_plan) {
-        this.meal_plan = meal_plan;
+    public void setNutrition_end_date(LocalDate nutrition_end_date) {
+        this.nutrition_end_date = nutrition_end_date;
     }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
+    public void setNutrition_meal_plan(String nutrition_meal_plan) {
+        this.nutrition_meal_plan = nutrition_meal_plan;
+    }
+
+    public void setNutrition_notes(String nutrition_notes) {
+        this.nutrition_notes = nutrition_notes;
     }
 
     @Override
@@ -106,13 +116,14 @@ public class NutritionPlan {
         return "NutritionPlan{" +
                 "nutrition_id=" + nutrition_id +
                 ", athlete_id=" + athlete_id +
-                ", dietType=" + dietType +
-                ", allergies=" + allergies +
-                ", calorie_intake=" + calorie_intake +
-                ", start_date=" + start_date +
-                ", end_date=" + end_date +
-                ", meal_plan=" + meal_plan +
-                ", notes='" + notes + '\'' +
+                ", medical_staff_id=" + medical_staff_id +
+                ", nutrition_dietType=" + nutrition_dietType +
+                ", nutrition_allergies=" + nutrition_allergies +
+                ", nutrition_calorie_intake=" + nutrition_calorie_intake +
+                ", nutrition_start_date=" + nutrition_start_date +
+                ", nutrition_end_date=" + nutrition_end_date +
+                ", nutrition_meal_plan='" + nutrition_meal_plan + '\'' +
+                ", nutrition_notes='" + nutrition_notes + '\'' +
                 '}';
     }
 }

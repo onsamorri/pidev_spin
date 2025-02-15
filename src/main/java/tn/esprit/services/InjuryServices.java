@@ -21,15 +21,24 @@ public class InjuryServices implements IService<Injury> {
 
     @Override
     public void add(Injury injury) throws SQLException {
-        String query = "INSERT INTO Injury (injuryType, severity, description, injuryDate) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO Injury (athlete_id, medical_staff_id, injuryType, injury_severity, injury_description, injuryDate) VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = con.prepareStatement(query);
-        ps.setString(1, injury.getInjuryType().toString());
-        ps.setString(2, injury.getSeverity().toString());
-        ps.setString(3, injury.getDescription());
-        ps.setDate(4, Date.valueOf(injury.getInjuryDate()));
+
+        // Set the values for the query parameters
+        ps.setInt(1, injury.getAthlete_id());
+        ps.setInt(2, injury.getMedical_staff_id());
+        ps.setString(3, injury.getInjuryType().toString()); // Assuming InjuryType is an enum, converting to string
+        ps.setString(4, injury.getInjury_severity().toString()); // Assuming Severity is an enum, converting to string
+        ps.setString(5, injury.getInjury_description());
+        ps.setDate(6, Date.valueOf(injury.getInjuryDate())); // Converting LocalDate to SQL Date
+
+        // Execute the update query
         ps.executeUpdate();
+
         System.out.println("Injury added!");
     }
+
+
 
     @Override
     public List<Injury> returnList() throws SQLException {
@@ -50,13 +59,15 @@ public class InjuryServices implements IService<Injury> {
 
     @Override
     public void update(Injury injury) throws SQLException {
-        String query = "UPDATE Injury SET injuryType = ?, severity = ?, description = ?, injuryDate = ? WHERE injury_id = ?";
+        String query = "UPDATE Injury SET athlete_id = ?, medical_staff_id = ?, injuryType = ?, injury_severity = ?, description = ?, injuryDate = ? WHERE injury_id = ?";
         PreparedStatement ps = con.prepareStatement(query);
-        ps.setString(1, injury.getInjuryType().toString());
-        ps.setString(2, injury.getSeverity().toString());
-        ps.setString(3, injury.getDescription());
-        ps.setDate(4, Date.valueOf(injury.getInjuryDate()));
-        ps.setInt(5, injury.getInjury_id());
+        ps.setInt(1, injury.getAthlete_id());
+        ps.setInt(2, injury.getMedical_staff_id());
+        ps.setString(3, injury.getInjuryType().toString());
+        ps.setString(4, injury.getInjury_severity().toString());
+        ps.setString(5, injury.getInjury_description());
+        ps.setDate(6, Date.valueOf(injury.getInjuryDate()));
+        ps.setInt(7, injury.getInjury_id());
         ps.executeUpdate();
         System.out.println("Injury updated!");
     }
@@ -77,21 +88,21 @@ public class InjuryServices implements IService<Injury> {
         return buildInjuryList(rs);
     }
 
-    // Sort injuries by severity in ascending order (MILD to CRITICAL)
+    // Sorting injuries by severity in ascending order (MILD to CRITICAL)
     public List<Injury> sortBySeverityAscending() throws SQLException {
         List<Injury> injuries = returnList();
-        Collections.sort(injuries, Comparator.comparing(Injury::getSeverity));
+        Collections.sort(injuries, Comparator.comparing(Injury::getInjury_severity));
         return injuries;
     }
 
-    // Sort injuries by severity in descending order (CRITICAL to MILD)
+    // Sorting injuries by severity in descending order (CRITICAL to MILD)
     public List<Injury> sortBySeverityDescending() throws SQLException {
         List<Injury> injuries = returnList();
-        Collections.sort(injuries, Comparator.comparing(Injury::getSeverity).reversed());
+        Collections.sort(injuries, Comparator.comparing(Injury::getInjury_severity).reversed());
         return injuries;
     }
 
-    // Find an injury by its ID
+    // Find an injury by its id
     public Injury findById(int injuryId) throws SQLException {
         String query = "SELECT * FROM Injury WHERE injury_id = ?";
         PreparedStatement ps = con.prepareStatement(query);
@@ -100,6 +111,8 @@ public class InjuryServices implements IService<Injury> {
         if (rs.next()) {
             return new Injury(
                     rs.getInt("injury_id"),
+                    rs.getInt("athlete_id"),  // Retrieve athlete_id
+                    rs.getInt("medical_staff_id"),  // Retrieve medical_staff_id
                     InjuryType.valueOf(rs.getString("injuryType")),
                     rs.getString("description"),
                     rs.getDate("injuryDate").toLocalDate(),
@@ -113,17 +126,20 @@ public class InjuryServices implements IService<Injury> {
     /* Purpose: This method converts the ResultSet into a list of Injury objects.
     Each row in the ResultSet is turned into an Injury object and added to the list. */
     private List<Injury> buildInjuryList(ResultSet rs) throws SQLException {
-        List<Injury> injuries = new ArrayList<>(); //Creates an empty list to store the Injury objects.
-        while (rs.next()) { //Loops through each row in the ResultSet. For every row, an Injury object is created.
+        List<Injury> injuries = new ArrayList<>(); // Creates an empty list to store the Injury objects.
+        while (rs.next()) { // Loops through each row in the ResultSet. For every row, an Injury object is created.
             Injury injury = new Injury(
                     rs.getInt("injury_id"),
-                    InjuryType.valueOf(rs.getString("injuryType")),
+                    rs.getInt("athlete_id"),  // Retrieve athlete_id
+                    rs.getInt("medical_staff_id"),
+                    InjuryType.valueOf(rs.getString("injuryType")), // Converts injuryType string to InjuryType enum
                     rs.getString("description"),
-                    rs.getDate("injuryDate").toLocalDate(),
-                    Severity.valueOf(rs.getString("severity"))
+                    rs.getDate("injuryDate").toLocalDate(), // Converts SQL date to LocalDate
+                    Severity.valueOf(rs.getString("injury_severity")) // Converts injury_severity string to Severity enum
             );
-            injuries.add(injury);
+            injuries.add(injury); // Add the Injury object to the list
         }
-        return injuries;
+        return injuries; // Return the populated list
     }
+
 }
