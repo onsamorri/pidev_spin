@@ -18,23 +18,24 @@ public class NutritionPlanServices implements IService<NutritionPlan> {
 
     @Override
     public void add(NutritionPlan nutritionPlan) throws SQLException {
-        String query = "INSERT INTO `NutritionPlan` (`athlete_id`, `diet_type`, `allergies`, `calorie_intake`, `start_date`, `end_date`, `meal_plan`, `notes`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO nutritionplan (athlete_id, medical_staff_id, nutrition_dietType, nutrition_allergies, nutrition_calorie_intake, nutrition_start_date, nutrition_end_date, nutrition_meal_plan, nutrition_notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = con.prepareStatement(query);
         ps.setInt(1, nutritionPlan.getAthlete_id());
-        ps.setString(2, nutritionPlan.getDietType().toString());
-        ps.setString(3, nutritionPlan.getAllergies().toString());
-        ps.setInt(4, nutritionPlan.getCalorie_intake());
-        ps.setDate(5, Date.valueOf(nutritionPlan.getStart_date()));
-        ps.setDate(6, Date.valueOf(nutritionPlan.getEnd_date()));
-        ps.setString(7, String.join(", ", nutritionPlan.getMeal_plan()));
-        ps.setString(8, nutritionPlan.getNotes());
+        ps.setInt(2, nutritionPlan.getMedical_staff_id());
+        ps.setString(3, nutritionPlan.getNutrition_dietType().toString());
+        ps.setString(4, nutritionPlan.getNutrition_allergies().toString());
+        ps.setInt(5, nutritionPlan.getNutrition_calorie_intake());
+        ps.setDate(6, Date.valueOf(nutritionPlan.getNutrition_start_date()));
+        ps.setDate(7, Date.valueOf(nutritionPlan.getNutrition_end_date()));
+        ps.setString(8, nutritionPlan.getNutrition_meal_plan());
+        ps.setString(9, nutritionPlan.getNutrition_notes());
         ps.executeUpdate();
         System.out.println("Nutrition Plan added!");
     }
 
     @Override
     public List<NutritionPlan> returnList() throws SQLException {
-        String query = "SELECT * FROM `NutritionPlan`";
+        String query = "SELECT * FROM nutritionplan";
         Statement stm = con.createStatement();
         ResultSet rs = stm.executeQuery(query);
         return buildNutritionPlanList(rs);
@@ -42,7 +43,7 @@ public class NutritionPlanServices implements IService<NutritionPlan> {
 
     @Override
     public void delete(NutritionPlan nutritionPlan) throws SQLException {
-        String query = "DELETE FROM `NutritionPlan` WHERE `nutrition_id` = ?";
+        String query = "DELETE FROM nutritionplan WHERE nutrition_id = ?";
         PreparedStatement ps = con.prepareStatement(query);
         ps.setInt(1, nutritionPlan.getNutrition_id());
         ps.executeUpdate();
@@ -51,114 +52,140 @@ public class NutritionPlanServices implements IService<NutritionPlan> {
 
     @Override
     public void update(NutritionPlan nutritionPlan) throws SQLException {
-        String query = "UPDATE `NutritionPlan` SET `athlete_id` = ?, `diet_type` = ?, `allergies` = ?, `calorie_intake` = ?, `start_date` = ?, `end_date` = ?, `meal_plan` = ?, `notes` = ? WHERE `nutrition_id` = ?";
+        String query = "UPDATE nutritionplan SET athlete_id = ?, medical_staff_id = ?, nutrition_dietType = ?, nutrition_allergies = ?, nutrition_calorie_intake = ?, nutrition_start_date = ?, nutrition_end_date = ?, nutrition_meal_plan = ?, nutrition_notes = ? WHERE nutrition_id = ?";
         PreparedStatement ps = con.prepareStatement(query);
         ps.setInt(1, nutritionPlan.getAthlete_id());
-        ps.setString(2, nutritionPlan.getDietType().toString());
-        ps.setString(3, nutritionPlan.getAllergies().toString());
-        ps.setInt(4, nutritionPlan.getCalorie_intake());
-        ps.setDate(5, Date.valueOf(nutritionPlan.getStart_date()));
-        ps.setDate(6, Date.valueOf(nutritionPlan.getEnd_date()));
-        ps.setString(7, String.join(", ", nutritionPlan.getMeal_plan()));
-        ps.setString(8, nutritionPlan.getNotes());
-        ps.setInt(9, nutritionPlan.getNutrition_id());
+        ps.setInt(2, nutritionPlan.getMedical_staff_id());
+        ps.setString(3, nutritionPlan.getNutrition_dietType().toString());
+        ps.setString(4, nutritionPlan.getNutrition_allergies().toString());
+        ps.setInt(5, nutritionPlan.getNutrition_calorie_intake());
+        ps.setDate(6, Date.valueOf(nutritionPlan.getNutrition_start_date()));
+        ps.setDate(7, Date.valueOf(nutritionPlan.getNutrition_end_date()));
+        ps.setString(8, nutritionPlan.getNutrition_meal_plan());
+        ps.setString(9, nutritionPlan.getNutrition_notes());
+        ps.setInt(10, nutritionPlan.getNutrition_id());
         ps.executeUpdate();
         System.out.println("Nutrition Plan updated!");
     }
 
-    public List<NutritionPlan> sortByStartDate(boolean ascending) throws SQLException {
-        String order = ascending ? "ASC" : "DESC";
-        String query = "SELECT * FROM `NutritionPlan` ORDER BY `start_date` " + order;
-        Statement stm = con.createStatement();
-        ResultSet rs = stm.executeQuery(query);
-        return buildNutritionPlanList(rs);
-    }
-
-    public NutritionPlan findById(int nutrition_id) throws SQLException {
-        String query = "SELECT * FROM `NutritionPlan` WHERE `nutrition_id` = ?";
-        PreparedStatement ps = con.prepareStatement(query);
-        ps.setInt(1, nutrition_id);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            return new NutritionPlan(
-                    rs.getInt("nutrition_id"),
-                    rs.getInt("athlete_id"),
-                    DietType.valueOf(rs.getString("diet_type")),
-                    Allergies.valueOf(rs.getString("allergies")),
-                    rs.getInt("calorie_intake"),
-                    rs.getDate("start_date").toLocalDate(),
-                    rs.getDate("end_date").toLocalDate(),
-                    List.of(rs.getString("meal_plan").split(", ")),
-                    rs.getString("notes")
-            );
-        } else {
-            return null;
-        }
-    }
-
-    // Search Nutrition Plans by Athlete ID and Diet Type
-    public List<NutritionPlan> searchByAthleteIdAndDietType(int athleteId, DietType dietType) throws SQLException {
-        String query = "SELECT * FROM `NutritionPlan` WHERE `athlete_id` = ? AND `diet_type` = ?";
-        PreparedStatement ps = con.prepareStatement(query);
-        ps.setInt(1, athleteId);
-        ps.setString(2, dietType.toString());
-        ResultSet rs = ps.executeQuery();
-        return buildNutritionPlanList(rs);
-    }
-
-    // Advanced Filtering by these parameters: diet type, start date, end date
-    public List<NutritionPlan> advancedFilter(DietType dietType, LocalDate startDate, LocalDate endDate) throws SQLException {
+    // Search by athlete and dietType
+    public List<NutritionPlan> searchByAthleteIdAndDietType(int athleteId, DietType nutrition_dietType) throws SQLException {
+        String query = "SELECT * FROM nutritionplan WHERE athlete_id = ? AND nutrition_dietType = ?";
         List<NutritionPlan> nutritionPlans = new ArrayList<>();
-
-        // Build the dynamic query
-        StringBuilder query = new StringBuilder("SELECT * FROM `NutritionPlan` WHERE `start_date` BETWEEN ? AND ?");
-
-        if (dietType != null) {
-            query.append(" AND `diet_type` = ?");
-        }
-
-        PreparedStatement ps = con.prepareStatement(query.toString());
-        ps.setDate(1, Date.valueOf(startDate));
-        ps.setDate(2, Date.valueOf(endDate));
-
-        if (dietType != null) {
-            ps.setString(3, dietType.toString());
-        }
-
-        ResultSet rs = ps.executeQuery();
-
-        while (rs.next()) {
-            nutritionPlans.add(new NutritionPlan(
-                    rs.getInt("nutrition_id"),
-                    rs.getInt("athlete_id"),
-                    DietType.valueOf(rs.getString("diet_type")),
-                    Allergies.valueOf(rs.getString("allergies")),
-                    rs.getInt("calorie_intake"),
-                    rs.getDate("start_date").toLocalDate(),
-                    rs.getDate("end_date").toLocalDate(),
-                    List.of(rs.getString("meal_plan").split(", ")),
-                    rs.getString("notes")
-            ));
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            preparedStatement.setInt(1, athleteId);
+            preparedStatement.setString(2, nutrition_dietType.name());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                try {
+                    DietType diet = DietType.valueOf(resultSet.getString("nutrition_dietType"));
+                    nutritionPlans.add(mapResultSetToNutritionPlan(resultSet));
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Invalid DietType in the database: " + resultSet.getString("nutrition_dietType"));
+                }
+            }
         }
         return nutritionPlans;
     }
 
+    public List<NutritionPlan> sortByStartDate(boolean ascending) throws SQLException {
+        String query = "SELECT * FROM nutritionplan ORDER BY nutrition_start_date " + (ascending ? "ASC" : "DESC");
+        List<NutritionPlan> nutritionPlans = new ArrayList<>();
+        try (Statement statement = con.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+            while (resultSet.next()) {
+                nutritionPlans.add(mapResultSetToNutritionPlan(resultSet));
+            }
+        }
+        return nutritionPlans;
+    }
+
+    public NutritionPlan findById(int id) throws SQLException {
+        String query = "SELECT * FROM nutritionplan WHERE nutrition_id = ?";
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return mapResultSetToNutritionPlan(resultSet);
+            }
+        }
+        return null;
+    }
+
+    private NutritionPlan mapResultSetToNutritionPlan(ResultSet resultSet) throws SQLException {
+        return new NutritionPlan(
+                resultSet.getInt("nutrition_id"),
+                resultSet.getInt("athlete_id"),
+                resultSet.getInt("medical_staff_id"),
+                DietType.valueOf(resultSet.getString("nutrition_dietType")),
+                Allergies.valueOf(resultSet.getString("nutrition_allergies")),
+                resultSet.getInt("nutrition_calorie_intake"),
+                resultSet.getDate("nutrition_start_date").toLocalDate(),
+                resultSet.getDate("nutrition_end_date").toLocalDate(),
+                resultSet.getString("nutrition_meal_plan"),
+                resultSet.getString("nutrition_notes")
+        );
+    }
+
+
     private List<NutritionPlan> buildNutritionPlanList(ResultSet rs) throws SQLException {
         List<NutritionPlan> nutritionPlans = new ArrayList<>();
         while (rs.next()) {
+            DietType dietType = null;
+            try {
+                dietType = DietType.valueOf(rs.getString("nutrition_dietType"));
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid DietType: " + rs.getString("nutrition_dietType"));
+            }
+
             NutritionPlan nutritionPlan = new NutritionPlan(
                     rs.getInt("nutrition_id"),
                     rs.getInt("athlete_id"),
-                    DietType.valueOf(rs.getString("diet_type")),
-                    Allergies.valueOf(rs.getString("allergies")),
-                    rs.getInt("calorie_intake"),
-                    rs.getDate("start_date").toLocalDate(),
-                    rs.getDate("end_date").toLocalDate(),
-                    List.of(rs.getString("meal_plan").split(", ")),
-                    rs.getString("notes")
+                    rs.getInt("medical_staff_id"),
+                    dietType,
+                    Allergies.valueOf(rs.getString("nutrition_allergies")),
+                    rs.getInt("nutrition_calorie_intake"),
+                    rs.getDate("nutrition_start_date").toLocalDate(),
+                    rs.getDate("nutrition_end_date").toLocalDate(),
+                    rs.getString("nutrition_meal_plan"),
+                    rs.getString("nutrition_notes")
             );
             nutritionPlans.add(nutritionPlan);
         }
         return nutritionPlans;
     }
+
+    public List<NutritionPlan> advancedFilter(DietType dietType, LocalDate startDate, LocalDate endDate) throws SQLException {
+        // Prepare the SQL query based on the parameters provided
+        String query = "SELECT * FROM nutritionplan WHERE nutrition_start_date BETWEEN ? AND ?";
+
+        // Append the diet type condition if a diet type is provided
+        if (dietType != null) {
+            query += " AND nutrition_dietType = ?";
+        }
+
+        // Initialize the list to hold the results
+        List<NutritionPlan> nutritionPlans = new ArrayList<>();
+        try (PreparedStatement preparedStatement = con.prepareStatement(query)) {
+            // Set the start date and end date in the query
+            preparedStatement.setDate(1, java.sql.Date.valueOf(startDate));
+            preparedStatement.setDate(2, java.sql.Date.valueOf(endDate));
+
+            // If diet type is provided, set the corresponding parameter
+            if (dietType != null) {
+                preparedStatement.setString(3, dietType.name());
+            }
+
+            // Execute the query
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            // Loop through the result set and add each result to the list
+            while (resultSet.next()) {
+                // Map the result set to a NutritionPlan object
+                nutritionPlans.add(mapResultSetToNutritionPlan(resultSet));
+            }
+        }
+        return nutritionPlans;
+    }
+
 }
