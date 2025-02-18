@@ -5,20 +5,23 @@ import java.util.Date;
 
 public class ClaimAction {
     private int claimActionId;
+    private Claim claim;
     private ClaimActionType claimActionType;
     private LocalDate claimActionStartDate;
     private LocalDate claimActionEndDate;
     private String claimActionNotes;
 
-    public ClaimAction(int claimActionId, ClaimActionType claimActionType, LocalDate claimActionStartDate, LocalDate claimActionEndDate, String claimActionNotes) {
+    public ClaimAction(int claimActionId, Claim claim, ClaimActionType claimActionType, LocalDate claimActionStartDate, LocalDate claimActionEndDate, String claimActionNotes) {
         this.claimActionId = claimActionId;
+        this.claim = claim;
         this.claimActionType = claimActionType;
         this.claimActionStartDate = claimActionStartDate;
         this.claimActionEndDate = claimActionEndDate;
         this.claimActionNotes = claimActionNotes;
     }
 
-    public ClaimAction(ClaimActionType claimActionType, LocalDate claimActionStartDate, LocalDate claimActionEndDate, String claimActionNotes) {
+    public ClaimAction(Claim claim, ClaimActionType claimActionType, LocalDate claimActionStartDate, LocalDate claimActionEndDate, String claimActionNotes) {
+        this.claim = claim;
         this.claimActionType = claimActionType;
         this.claimActionStartDate = claimActionStartDate;
         this.claimActionEndDate = claimActionEndDate;
@@ -34,6 +37,14 @@ public class ClaimAction {
 
     public void setClaimActionId(int claimActionId) {
         this.claimActionId = claimActionId;
+    }
+
+    public Claim getClaim() {
+        return claim;
+    }
+
+    public void setClaim(Claim claim) {
+        this.claim = claim;
     }
 
     public ClaimActionType getClaimActionType() {
@@ -72,6 +83,7 @@ public class ClaimAction {
     public String toString() {
         return "ClaimAction{" +
                 "claimActionId=" + claimActionId +
+                ", claim=" + claim +
                 ", claimActionType=" + claimActionType +
                 ", claimActionStartDate=" + claimActionStartDate +
                 ", claimActionEndDate=" + claimActionEndDate +

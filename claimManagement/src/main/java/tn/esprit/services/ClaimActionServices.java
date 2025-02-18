@@ -1,6 +1,7 @@
 package tn.esprit.services;
 
 import tn.esprit.entities.ClaimAction;
+import tn.esprit.entities.Claim;
 import tn.esprit.utils.MyDatabase;
 
 import java.sql.Connection;
@@ -20,11 +21,18 @@ public class ClaimActionServices implements Iservice<ClaimAction>{
 
     @Override
     public void add(ClaimAction claimaction) throws SQLException {
-    String query = "INSERT INTO `claimaction`(`claimActionType`, `claimActionStartDate`, `claimActionEndDate`, `claimActionNotes`) VALUES ('"+ claimaction.getClaimActionType()+"','"+claimaction.getClaimActionStartDate()+"','"+claimaction.getClaimActionEndDate()+"','"+claimaction.getClaimActionNotes()+"')";
+        String query = "INSERT INTO `claimaction`(`claimId`, `claimActionType`, `claimActionStartDate`, `claimActionEndDate`, `claimActionNotes`) " +
+                "VALUES ('" + claimaction.getClaim().getClaimId() + "', '" +
+                claimaction.getClaimActionType() + "', '" +
+                claimaction.getClaimActionStartDate() + "', '" +
+                claimaction.getClaimActionEndDate() + "', '" +
+                claimaction.getClaimActionNotes() + "')";
+
         Statement stm = con.createStatement();
         stm.executeUpdate(query);
         System.out.println("Claim Action added!");
     }
+
 
     @Override
     public void addP(ClaimAction claimAction) {
@@ -54,14 +62,15 @@ public class ClaimActionServices implements Iservice<ClaimAction>{
     }
 
     public void update(ClaimAction claim_action) throws SQLException {
-        String query = "UPDATE claimaction SET claimActionType = ?, claimActionStartDate = ?, claimActionEndDate = ?, claimActionNotes = ? WHERE claimActionId = ?";
+        String query = "UPDATE claimaction SET claimId = ?, claimActionType = ?, claimActionStartDate = ?, claimActionEndDate = ?, claimActionNotes = ? WHERE claimActionId = ?";
 
         PreparedStatement pstmt = con.prepareStatement(query);
-        pstmt.setString(1, claim_action.getClaimActionType().toString()); // Convert enum to String if needed
-        pstmt.setDate(2, java.sql.Date.valueOf(claim_action.getClaimActionStartDate()));
-        pstmt.setDate(3, java.sql.Date.valueOf(claim_action.getClaimActionEndDate()));
-        pstmt.setString(4, claim_action.getClaimActionNotes());
-        pstmt.setInt(5, claim_action.getClaimActionId()); // Use claim_action's ID
+        pstmt.setInt(1, claim_action.getClaim().getClaimId());
+        pstmt.setString(2, claim_action.getClaimActionType().toString());
+        pstmt.setDate(3, java.sql.Date.valueOf(claim_action.getClaimActionStartDate()));
+        pstmt.setDate(4, java.sql.Date.valueOf(claim_action.getClaimActionEndDate()));
+        pstmt.setString(5, claim_action.getClaimActionNotes());
+        pstmt.setInt(6, claim_action.getClaimActionId());
 
         int rowsUpdated = pstmt.executeUpdate();
         if (rowsUpdated > 0) {

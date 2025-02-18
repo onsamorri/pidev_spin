@@ -50,14 +50,14 @@ public class Main {
 
         ClaimServices cs2 = new ClaimServices();
         try {
-            updatedClaim.setClaimId(2);
+            updatedClaim.setClaimId(16);
             cs2.update(updatedClaim);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
         Claim claimToDelete = new Claim();
-        claimToDelete.setClaimId(13);
+        claimToDelete.setClaimId(17);
 
         ClaimServices cs3 = new ClaimServices();
         try {
@@ -66,7 +66,11 @@ public class Main {
             System.out.println(e.getMessage()); // Handle exceptions
         }
 
+
+        Claim existingClaim = new Claim();
+        existingClaim.setClaimId(15);
         ClaimAction claim_action = new ClaimAction(
+                existingClaim,
                 ClaimActionType.SUSPENSION,
                 LocalDate.parse("2025-02-04"),
                 LocalDate.parse("2025-02-20"),
@@ -80,7 +84,10 @@ public class Main {
             System.out.println(e.getMessage());
         }
 
+        Claim existingClaim2 = new Claim();
+        existingClaim2.setClaimId(18);
         ClaimAction updatedClaimAction = new ClaimAction(
+                existingClaim2,
                 ClaimActionType.FINE,
                 LocalDate.parse("2025-02-04"),
                 LocalDate.parse("2025-02-20"),
@@ -89,14 +96,14 @@ public class Main {
 
         ClaimActionServices cas2 = new ClaimActionServices();
         try {
-            updatedClaimAction.setClaimActionId(1);
+            updatedClaimAction.setClaimActionId(19);
             cas2.update(updatedClaimAction);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
         ClaimAction claimActionToDelete = new ClaimAction();
-        claimActionToDelete.setClaimActionId(6);
+        claimActionToDelete.setClaimActionId(20);
 
         ClaimActionServices cas3 = new ClaimActionServices();
         try {
