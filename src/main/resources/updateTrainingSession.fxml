@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controllers.UpdateTrainingSession">
+    <VBox spacing="10" alignment="CENTER" layoutX="20" layoutY="20">
+        <Label text="Update Training Session" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+        <HBox spacing="10">
+            <Label text="Focus:"/>
+            <ChoiceBox fx:id="training_focus"/>
+        </HBox>
+
+        <HBox spacing="10">
+            <Label text="Start Time:"/>
+            <TextField fx:id="training_start_time"/>
+        </HBox>
+
+        <HBox spacing="10">
+            <Label text="Duration:"/>
+            <ChoiceBox fx:id="training_duration"/>
+        </HBox>
+
+        <HBox spacing="10">
+            <Label text="Location:"/>
+            <TextField fx:id="training_location"/>
+        </HBox>
+
+        <HBox spacing="10">
+            <Label text="Notes:"/>
+            <TextField fx:id="training_notes"/>
+        </HBox>
+
+        <Button fx:id="updateButton" text="Update" onAction="#updateTrainingSession"/>
+    </VBox>
+</AnchorPane>

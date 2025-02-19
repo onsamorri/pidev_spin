@@ -16,20 +16,20 @@ public class TrainingSessionServices implements IService<TrainingSession> {
         con = MyDatabase.getInstance().getConn();
     }
 
-    @Override
-    public void add(TrainingSession trainingSession) throws SQLException {
-        // Convert ENUM to String otherwise we will have an issue in the db
-        String query = "INSERT INTO `training_session`(`session_focus`, `session_start_time`, `session_duration`, `session_location`, `session_notes`) VALUES ('"
-                + trainingSession.getFocus().name() + "', '"
-                + trainingSession.getStart_time() + "', '"
-                + trainingSession.getDuration().getMinutes() + "', '"
-                + trainingSession.getLocation() + "', '"
-                + trainingSession.getSession_notes() + "')";
-        Statement stm = con.createStatement();
-        stm.executeUpdate(query);
-        System.out.println("Training Session added Successfully! :>");
-
-    }
+//    @Override
+//    public void add(TrainingSession trainingSession) throws SQLException {
+//        // Convert ENUM to String otherwise we will have an issue in the db
+//        String query = "INSERT INTO `training_session`(`session_focus`, `session_start_time`, `session_duration`, `session_location`, `session_notes`) VALUES ('"
+//                + trainingSession.getFocus().name() + "', '"
+//                + trainingSession.getStart_time() + "', '"
+//                + trainingSession.getDuration().getMinutes() + "', '"
+//                + trainingSession.getLocation() + "', '"
+//                + trainingSession.getSession_notes() + "')";
+//        Statement stm = con.createStatement();
+//        stm.executeUpdate(query);
+//        System.out.println("Training Session added Successfully! :>");
+//
+//    }
 
     @Override
     public void addP(TrainingSession trainingSession) {

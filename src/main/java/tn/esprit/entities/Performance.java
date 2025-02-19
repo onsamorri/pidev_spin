@@ -1,5 +1,6 @@
 package tn.esprit.entities;
 import java.sql.Date;
+import java.time.LocalDate;
 
 public class Performance {
     private int performance_id;
@@ -30,7 +31,7 @@ public class Performance {
 
     }
 
-    public Performance() {
+    public Performance(float speed, float agility, int goals, int assists, LocalDate date, int fouls) {
     }
 
     public int getPerformance_id() {
@@ -41,6 +42,8 @@ public class Performance {
         this.performance_id = performance_id;
     }
 
+
+
     public float getSpeed() {
         return speed;
     }
@@ -48,6 +51,7 @@ public class Performance {
     public void setSpeed(float speed) {
         this.speed = speed;
     }
+
 
     public float getAgility() {
         return agility;

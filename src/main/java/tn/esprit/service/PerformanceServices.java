@@ -16,19 +16,19 @@ public class PerformanceServices implements IService<Performance> {
         con = MyDatabase.getInstance().getConn();
     }
 
-    @Override
-    public void add(Performance performance) throws SQLException {
-        String query = "INSERT INTO `performance_data` (`performance_speed`, `performance_agility`, `performance_nbr_goals`, `performance_assists`, `performance_date_recorded`, `performance_nbr_fouls`) VALUES ("
-                + performance.getSpeed() + ", "
-                + performance.getAgility() + ", "
-                + performance.getNbr_goals() + ", "
-                + performance.getAssists() + ", '"
-                + performance.getDate_recorded() + "', "
-                + performance.getNbr_fouls() + ")";
-        Statement stm =con.createStatement();
-        stm.executeUpdate(query);
-        System.out.println("Performance added Successfully !! :>");
-    }
+   // @Override
+//    public void add(Performance performance) throws SQLException {
+//        String query = "INSERT INTO `performance_data` (`performance_speed`, `performance_agility`, `performance_nbr_goals`, `performance_assists`, `performance_date_recorded`, `performance_nbr_fouls`) VALUES ("
+//                + performance.getSpeed() + ", "
+//                + performance.getAgility() + ", "
+//                + performance.getNbr_goals() + ", "
+//                + performance.getAssists() + ", '"
+//                + performance.getDate_recorded() + "', "
+//                + performance.getNbr_fouls() + ")";
+//        Statement stm =con.createStatement();
+//        stm.executeUpdate(query);
+//        System.out.println("Performance added Successfully !! :>");
+//    }
 
     @Override
     public void addP(Performance performance) throws SQLException {
@@ -51,16 +51,21 @@ public class PerformanceServices implements IService<Performance> {
         List<Performance> performances = new ArrayList<>();
         ResultSet rs = stm.executeQuery(query);
         while (rs.next()) {
-            long dateRecordedLong = rs.getLong(5);
-            Date dateRecorded = new Date(dateRecordedLong);
+            Date dateRecorded = rs.getDate("performance_date_recorded");
 
-            Performance pr = new Performance(rs.getInt(1), rs.getFloat(2), rs.getFloat(3), rs.getInt(4), rs.getInt(5), dateRecorded, rs.getInt(7));
+            Performance pr = new Performance(
+                    rs.getInt("performance_id"),
+                    rs.getFloat("performance_speed"),
+                    rs.getFloat("performance_agility"),
+                    rs.getInt("performance_nbr_goals"),
+                    rs.getInt("performance_assists"),
+                    dateRecorded,
+                    rs.getInt("performance_nbr_fouls")
+            );
             performances.add(pr);
-
         }
         return performances;
     }
-
     @Override
     public void delete(Performance performance) throws SQLException {
         String query = "DELETE FROM `performance_data` WHERE `performance_id` = ?";
