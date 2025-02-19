@@ -2,12 +2,13 @@ package tn.esprit.services;
 
 import tn.esprit.entities.Claim;
 import tn.esprit.entities.ClaimAction;
+import tn.esprit.entities.ClaimCategory;
+import tn.esprit.entities.ClaimStatus;
 import tn.esprit.utils.MyDatabase;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClaimServices implements Iservice<Claim> {
@@ -39,12 +40,35 @@ public class ClaimServices implements Iservice<Claim> {
     }
 
     @Override
-    public List<Claim> returnList() {
-        return null;
+    public List<Claim> returnList() throws SQLException {
+        List<Claim> claims = new ArrayList<>();
+        String query = "SELECT * FROM claim"; // Adjust the table name if necessary
+
+        try (Statement stmt = con.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                int claimId = rs.getInt("claimId"); // Adjust this to your actual column name
+                String claimDescription = rs.getString("claimDescription");
+                ClaimStatus claimStatus = ClaimStatus.valueOf(rs.getString("claimStatus")); // Adjust if your DB uses different strings
+                LocalDate claimDate = rs.getDate("claimDate").toLocalDate();
+                ClaimCategory claimCategory = ClaimCategory.valueOf(rs.getString("claimCategory")); // Adjust as needed
+
+                Claim claim = new Claim(claimId, claimDescription, claimStatus, claimDate, claimCategory);
+                claims.add(claim);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error retrieving claims: " + e.getMessage());
+            throw e; // Propagate the exception
+        }
+
+        return claims;
     }
 
+
     @Override
-    public void delete(Claim claim) {
+    public void delete(Claim claim) throws SQLException {
         String query = "DELETE FROM claim WHERE claimId = ?";
 
         try (PreparedStatement pstmt = con.prepareStatement(query)) {
@@ -57,8 +81,10 @@ public class ClaimServices implements Iservice<Claim> {
             }
         } catch (SQLException e) {
             System.out.println("Error deleting claim: " + e.getMessage());
+            throw e; // Propagate the exception
         }
     }
+
 
     @Override
     public void update(Claim claim) throws SQLException {
