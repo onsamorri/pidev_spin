@@ -2,148 +2,106 @@ package tn.esprit.main;
 
 import tn.esprit.entities.*;
 import tn.esprit.services.*;
+import tn.esprit.utils.MyDatabase;
+
+import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
+        // Get the database instance
+        MyDatabase db1 = MyDatabase.getInstance();
+
+        // Create service objects
+        InjuryServices injuryServices = new InjuryServices();
+        RecoveryPlanServices recoveryPlanServices = new RecoveryPlanServices();
+        NutritionPlanServices nutritionPlanServices = new NutritionPlanServices();
+        UserServices userServices = new UserServices();
+
         try {
-            // InjuryServices
-            InjuryServices injuryServices = new InjuryServices();
+            // Adding a user (example: athlete)
+            user athlete = new Athlete(2, "John", "Doe", "johndoe@example.com", "password", "123456789", Date.valueOf(LocalDate.of(1995, 5, 10)), "Male", "123 Main St", 5.9f, 160.5f, 0, Date.valueOf(LocalDate.now()));
+            userServices.add(athlete);
 
-            // Adding an injury using the constructor
-            Injury injury1 = new Injury(1, 1, 1, InjuryType.FRACTURE, "Fracture in the leg", java.time.LocalDate.now(), Severity.SEVERE);
-            injuryServices.add(injury1);
+            // Adding an injury
+            Injury injury = new Injury(2, 2, InjuryType.SPRAIN, "Ankle sprain", LocalDate.now(), Severity.MODERATE);
+            injuryServices.add(injury);
 
+            // Get the injury_id and user_id dynamically (assuming they are already set or retrieved from a database)
+            int injury_id = injury.getInjury_id();  // Using the injury object to get the ID
+            int user_id = athlete.getUser_id();    // Using the athlete object to get the ID
 
+            // Define recovery plan details
+            RecoveryGoal recoveryGoal = RecoveryGoal.REHABILITATION;  // Example recovery goal from enum
+            String recoveryDescription = "Recovery from sprain";  // Description of recovery
+            LocalDate recoveryStartDate = LocalDate.now();  // Current date as start date
+            LocalDate recoveryEndDate = LocalDate.now().plusDays(14);  // Recovery ends 14 days after the start date
+            RecoveryStatus recoveryStatus = RecoveryStatus.IN_PROGRESS;  // Current status of recovery
 
-            // Return all injuries
-            List<Injury> allInjuries = injuryServices.returnList();
-            allInjuries.forEach(System.out::println);
+            // Create the RecoveryPlan object with proper parameters
+            RecoveryPlan recoveryPlan = new RecoveryPlan(injury_id, user_id, recoveryGoal, recoveryDescription, recoveryStartDate, recoveryEndDate, recoveryStatus);
+            recoveryPlanServices.add(recoveryPlan);
 
-            // Delete an injury
-            injuryServices.delete(injury1);
+            // Adding a nutrition plan
+            NutritionPlan nutritionPlan = new NutritionPlan(0, 1, DietType.VEGAN, Allergies.NONE, 2000, LocalDate.now(), LocalDate.of(2025, 2, 28), "Balanced meal plan", "No notes");
+            nutritionPlanServices.add(nutritionPlan);
 
-            // Update an injury
-            injury1.setInjury_description("Updated description");
-            injuryServices.update(injury1);
+            // Updating a user
+            athlete.setUser_fname("Jonathan");
+            userServices.update(athlete);
 
-            // Search injuries by Type
-            List<Injury> fractures = injuryServices.searchByType(InjuryType.FRACTURE);
-            fractures.forEach(injury -> System.out.println("Found by Type: " + injury));
+            // Updating an injury
+            injury.setInjury_description("Severe ankle sprain");
+            injuryServices.update(injury);
 
-            // Sort injuries by Severity
-            List<Injury> sortedBySeverity = injuryServices.sortBySeverityAscending();
-            sortedBySeverity.forEach(injury -> System.out.println("Sorted by Severity: " + injury));
+            // Updating a recovery plan
+            recoveryPlan.setRecovery_Status(RecoveryStatus.COMPLETED);
+            recoveryPlanServices.update(recoveryPlan);
 
-            // Find injury by id
-            Injury foundInjury = injuryServices.findById(1);
-            System.out.println("Found Injury by ID: " + foundInjury);
+            // Updating a nutrition plan
+            nutritionPlan.setNutrition_meal_plan("Updated meal plan");
+            nutritionPlanServices.update(nutritionPlan);
 
-            // Create an instance of RecoveryPlanServices
-            RecoveryPlanServices recoveryPlanServices = new RecoveryPlanServices();
+            // Deleting a user
+            userServices.delete(athlete);
 
-            // Create RecovertyPlan
-            RecoveryPlan recoveryPlan1 = new RecoveryPlan(
-                    32, // injury_id
-                    11, // athlete_id
-                    8, // coach_id
-                    15, // medical_staff_id
-                    RecoveryGoal.REHABILITATION,
-                    "Recovery after leg fracture",
-                    LocalDate.of(2025, 2, 15), // recovery_StartDate
-                    LocalDate.of(2025, 2, 15), // recovery_EndDate
-                    RecoveryStatus.IN_PROGRESS
-            );
+            // Deleting an injury
+            injuryServices.delete(injury);
 
-            try {
-                // Add the recovery plan using the add method
-                recoveryPlanServices.add(recoveryPlan1);
-            } catch (SQLException e) {
-                e.printStackTrace();
+            // Deleting a recovery plan
+            recoveryPlanServices.delete(recoveryPlan);
+
+            // Deleting a nutrition plan
+            nutritionPlanServices.delete(nutritionPlan);
+
+            // Getting all users
+            List<user> users = userServices.getAll();
+            for (user u : users) {
+                System.out.println(u);
             }
 
+            // Getting all injuries
+            List<Injury> injuries = injuryServices.getAll();
+            for (Injury i : injuries) {
+                System.out.println(i);
+            }
 
+            // Getting all recovery plans
+            List<RecoveryPlan> recoveryPlans = recoveryPlanServices.getAll();
+            for (RecoveryPlan rp : recoveryPlans) {
+                System.out.println(rp);
+            }
 
-            // Return all RecoveryPlans
-            List<RecoveryPlan> allRecoveryPlans = recoveryPlanServices.returnList();
-            allRecoveryPlans.forEach(System.out::println);
-
-            // Delete a RecoveryPlan
-            recoveryPlanServices.delete(recoveryPlan1);
-
-            // Update a RecoveryPlan
-            recoveryPlan1.setRecovery_Status(RecoveryStatus.COMPLETED);
-            recoveryPlanServices.update(recoveryPlan1);
-
-            // Search RecoveryPlans by Injury id and Status
-            List<RecoveryPlan> plansByInjury = recoveryPlanServices.searchByInjuryIdAndStatus(1, RecoveryStatus.IN_PROGRESS);
-            plansByInjury.forEach(recoveryPlan -> System.out.println("Found by Injury ID and Status: " + recoveryPlan));
-
-            // in ascending order ASC true and DSC is false
-            List<RecoveryPlan> sortedByStartDate = recoveryPlanServices.sortByRecoveryStartDate(true); // Ascending order
-            sortedByStartDate.forEach(recoveryPlan -> System.out.println("Sorted by Start Date: " + recoveryPlan));
-
-
-            // Find a RecoveryPlan by id
-            RecoveryPlan foundRecoveryPlan = recoveryPlanServices.findById(1);
-            System.out.println("Found Recovery Plan by ID: " + foundRecoveryPlan);
-
-            // View RecoveryPlan by id
-            RecoveryPlan viewPlan = recoveryPlanServices.viewRecoveryPlan(1);
-            System.out.println("View Recovery Plan: " + viewPlan);
-
-            // Advanced Filtering
-            System.out.println("Advanced Filter: Recovery Plans with status COMPLETED in the last 30 days:");
-            List<RecoveryPlan> filteredPlans = recoveryPlanServices.advancedFilter(
-                    null,
-                    java.time.LocalDate.now().minusDays(30),
-                    java.time.LocalDate.now()
-            );
-            filteredPlans.forEach(System.out::println);
-
-            // NutritionPlanServices
-            NutritionPlanServices nutritionPlanServices = new NutritionPlanServices();
-
-            // Add a new NutritionPlan (updated)
-            NutritionPlan nutritionPlan1 = new NutritionPlan(1, 1, 2, DietType.VEGAN, Allergies.NONE, 2000, java.time.LocalDate.now(), java.time.LocalDate.now().plusDays(7), "Breakfast: Eggs, Lunch: Chicken Salad, Dinner: Grilled Fish", "High protein diet");
-            nutritionPlanServices.add(nutritionPlan1);
-
-            // Return all NutritionPlans
-            List<NutritionPlan> allNutritionPlans = nutritionPlanServices.returnList();
-            allNutritionPlans.forEach(System.out::println);
-
-            // Delete a NutritionPlan
-            nutritionPlanServices.delete(nutritionPlan1);
-
-            // Update a NutritionPlan
-            nutritionPlan1.setNutrition_notes("Updated high-protein diet");
-            nutritionPlanServices.update(nutritionPlan1);
-
-            // Search NutritionPlans by athlete id and DietType
-            List<NutritionPlan> nutritionPlansByDiet = nutritionPlanServices.searchByAthleteIdAndDietType(1, DietType.VEGAN);
-            nutritionPlansByDiet.forEach(nutritionPlan -> System.out.println("Found by Athlete ID and Diet Type: " + nutritionPlan));
-
-            // Sort NutritionPlans by StartDate (earliest to latest)
-            List<NutritionPlan> sortedByStartDateNutrition = nutritionPlanServices.sortByStartDate(true);
-            sortedByStartDateNutrition.forEach(nutritionPlan -> System.out.println("Sorted by Start Date: " + nutritionPlan));
-
-            // Find a NutritionPlan by id
-            NutritionPlan foundNutritionPlan = nutritionPlanServices.findById(1);
-            System.out.println("Found Nutrition Plan by ID: " + foundNutritionPlan);
-
-            // Advanced filtering
-            System.out.println("Advanced Filter: Nutrition Plans in the last 7 days:");
-            List<NutritionPlan> filteredNutritionPlans = nutritionPlanServices.advancedFilter(
-                    DietType.VEGAN,
-                    java.time.LocalDate.now().minusDays(7),
-                    java.time.LocalDate.now()
-            );
-            filteredNutritionPlans.forEach(System.out::println);
+            // Getting all nutrition plans
+            List<NutritionPlan> nutritionPlans = nutritionPlanServices.getAll();
+            for (NutritionPlan np : nutritionPlans) {
+                System.out.println(np);
+            }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Error occurred: " + e.getMessage());
         }
     }
 }

@@ -5,8 +5,7 @@ import java.time.LocalDate;
 public class NutritionPlan {
 
     private int nutrition_id;
-    private int athlete_id;
-    private int medical_staff_id;
+    private int user_id;
 
     private DietType nutrition_dietType;
     private Allergies nutrition_allergies;
@@ -16,12 +15,11 @@ public class NutritionPlan {
     private String nutrition_meal_plan;
     private String nutrition_notes;
 
-    public NutritionPlan(int nutrition_id, int athlete_id, int medical_staff_id, DietType nutrition_dietType,
+    public NutritionPlan(int nutrition_id, int user_id, DietType nutrition_dietType,
                          Allergies nutrition_allergies, int nutrition_calorie_intake, LocalDate nutrition_start_date,
                          LocalDate nutrition_end_date, String nutrition_meal_plan, String nutrition_notes) {
         this.nutrition_id = nutrition_id;
-        this.athlete_id = athlete_id;
-        this.medical_staff_id = medical_staff_id;
+        this.user_id = user_id;
         this.nutrition_dietType = nutrition_dietType;
         this.nutrition_allergies = nutrition_allergies;
         this.nutrition_calorie_intake = nutrition_calorie_intake;
@@ -39,12 +37,8 @@ public class NutritionPlan {
         return nutrition_id;
     }
 
-    public int getAthlete_id() {
-        return athlete_id;
-    }
-
-    public int getMedical_staff_id() {
-        return medical_staff_id;
+    public int getUser_id() {
+        return user_id;
     }
 
     public DietType getNutrition_dietType() {
@@ -75,12 +69,8 @@ public class NutritionPlan {
         return nutrition_notes;
     }
 
-    public void setAthlete_id(int athlete_id) {
-        this.athlete_id = athlete_id;
-    }
-
-    public void setMedical_staff_id(int medical_staff_id) {
-        this.medical_staff_id = medical_staff_id;
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
     }
 
     public void setNutrition_dietType(DietType nutrition_dietType) {
@@ -115,8 +105,7 @@ public class NutritionPlan {
     public String toString() {
         return "NutritionPlan{" +
                 "nutrition_id=" + nutrition_id +
-                ", athlete_id=" + athlete_id +
-                ", medical_staff_id=" + medical_staff_id +
+                ", user_id=" + user_id +
                 ", nutrition_dietType=" + nutrition_dietType +
                 ", nutrition_allergies=" + nutrition_allergies +
                 ", nutrition_calorie_intake=" + nutrition_calorie_intake +
