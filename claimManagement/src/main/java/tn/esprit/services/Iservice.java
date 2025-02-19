@@ -9,9 +9,9 @@ public interface Iservice<T> {
 
     void addP(T t) throws SQLException;
 
-    List<T> returnList();
+    List<T> returnList() throws SQLException;
 
-    void delete(T t);
+    void delete(T t) throws SQLException;
 
     void update(T t)throws SQLException;
 }
