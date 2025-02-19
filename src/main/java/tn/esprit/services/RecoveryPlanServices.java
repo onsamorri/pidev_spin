@@ -18,7 +18,7 @@ public class RecoveryPlanServices implements IService<RecoveryPlan> {
 
     @Override
     public void add(RecoveryPlan recoveryPlan) throws SQLException {
-        String query = "INSERT INTO `RecoveryPlan` (`injury_id`, `recovery_Goal`, `recovery_Description`, `recovery_StartDate`, `recovery_EndDate`, `Recovery_Status`, `athlete_id`, `coach_id`, `medical_staff_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO `RecoveryPlan` (`injury_id`, `recovery_Goal`, `recovery_Description`, `recovery_StartDate`, `recovery_EndDate`, `Recovery_Status`, `user_id`) VALUES (?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = con.prepareStatement(query);
 
         // Set the values for the query parameters
@@ -28,22 +28,12 @@ public class RecoveryPlanServices implements IService<RecoveryPlan> {
         ps.setDate(4, Date.valueOf(recoveryPlan.getRecovery_StartDate()));
         ps.setDate(5, Date.valueOf(recoveryPlan.getRecovery_EndDate()));
         ps.setString(6, recoveryPlan.getRecovery_Status().toString());
-        ps.setInt(7, recoveryPlan.getAthlete_id());
-        ps.setInt(8, recoveryPlan.getCoach_id());
-        ps.setInt(9, recoveryPlan.getMedical_staff_id());
+        ps.setInt(7, recoveryPlan.getUser_id()); // Replace athlete_id, coach_id, and medical_staff_id with user_id
 
         // Execute the update query
         ps.executeUpdate();
 
         System.out.println("Recovery Plan added!");
-    }
-
-    @Override
-    public List<RecoveryPlan> returnList() throws SQLException {
-        String query = "SELECT * FROM `RecoveryPlan`";
-        Statement stm = con.createStatement();
-        ResultSet rs = stm.executeQuery(query);
-        return buildRecoveryPlanList(rs);
     }
 
     @Override
@@ -57,7 +47,7 @@ public class RecoveryPlanServices implements IService<RecoveryPlan> {
 
     @Override
     public void update(RecoveryPlan recoveryPlan) throws SQLException {
-        String query = "UPDATE `RecoveryPlan` SET `recovery_Goal` = ?, `recovery_Description` = ?, `recovery_StartDate` = ?, `recovery_EndDate` = ?, `Recovery_Status` = ?, `athlete_id` = ?, `coach_id` = ?, `medical_staff_id` = ? WHERE `recovery_id` = ?";
+        String query = "UPDATE `RecoveryPlan` SET `recovery_Goal` = ?, `recovery_Description` = ?, `recovery_StartDate` = ?, `recovery_EndDate` = ?, `Recovery_Status` = ?, `user_id` = ? WHERE `recovery_id` = ?";
         PreparedStatement ps = con.prepareStatement(query);
 
         // Setting values for the query parameters
@@ -66,16 +56,21 @@ public class RecoveryPlanServices implements IService<RecoveryPlan> {
         ps.setDate(3, Date.valueOf(recoveryPlan.getRecovery_StartDate()));
         ps.setDate(4, Date.valueOf(recoveryPlan.getRecovery_EndDate()));
         ps.setString(5, recoveryPlan.getRecovery_Status().toString());
-        ps.setInt(6, recoveryPlan.getAthlete_id());
-        ps.setInt(7, recoveryPlan.getCoach_id());
-        ps.setInt(8, recoveryPlan.getMedical_staff_id());  // medical_staff_id is now set here
-        ps.setInt(9, recoveryPlan.getRecovery_id());
+        ps.setInt(6, recoveryPlan.getUser_id()); // Replace athlete_id, coach_id, and medical_staff_id with user_id
+        ps.setInt(7, recoveryPlan.getRecovery_id());
 
         // Execute the update query
         ps.executeUpdate();
         System.out.println("Recovery Plan updated!");
     }
 
+    @Override
+    public List<RecoveryPlan> getAll() throws SQLException {
+        String query = "SELECT * FROM `RecoveryPlan`";
+        Statement stm = con.createStatement();
+        ResultSet rs = stm.executeQuery(query);
+        return buildRecoveryPlanList(rs);
+    }
 
     public List<RecoveryPlan> sortByRecoveryStartDate(boolean ascending) throws SQLException {
         String order = ascending ? "ASC" : "DESC";
@@ -84,7 +79,6 @@ public class RecoveryPlanServices implements IService<RecoveryPlan> {
         ResultSet rs = stm.executeQuery(query);
         return buildRecoveryPlanList(rs);
     }
-
 
     public RecoveryPlan findById(int recoveryPlanId) throws SQLException {
         String query = "SELECT * FROM `RecoveryPlan` WHERE `recovery_id` = ?";
@@ -95,9 +89,7 @@ public class RecoveryPlanServices implements IService<RecoveryPlan> {
             return new RecoveryPlan(
                     rs.getInt("recovery_id"),
                     rs.getInt("injury_id"),
-                    rs.getInt("athlete_id"),
-                    rs.getInt("coach_id"),
-                    rs.getInt("medical_staff_id"),
+                    rs.getInt("user_id"), // Replace athlete_id, coach_id, and medical_staff_id with user_id
                     RecoveryGoal.valueOf(rs.getString("recovery_Goal")),
                     rs.getString("recovery_Description"),
                     rs.getDate("recovery_StartDate").toLocalDate(),
@@ -118,9 +110,7 @@ public class RecoveryPlanServices implements IService<RecoveryPlan> {
             return new RecoveryPlan(
                     rs.getInt("recovery_id"),
                     rs.getInt("injury_id"),
-                    rs.getInt("athlete_id"),
-                    rs.getInt("coach_id"),
-                    rs.getInt("medical_staff_id"),
+                    rs.getInt("user_id"), // Replace athlete_id, coach_id, and medical_staff_id with user_id
                     RecoveryGoal.valueOf(rs.getString("recovery_Goal")),
                     rs.getString("recovery_Description"),
                     rs.getDate("recovery_StartDate").toLocalDate(),
@@ -128,7 +118,7 @@ public class RecoveryPlanServices implements IService<RecoveryPlan> {
                     RecoveryStatus.valueOf(rs.getString("Recovery_Status"))
             );
         } else {
-            return null; // Return null if no recovery plan found
+            return null;
         }
     }
 
@@ -167,9 +157,7 @@ public class RecoveryPlanServices implements IService<RecoveryPlan> {
             recoveryPlans.add(new RecoveryPlan(
                     rs.getInt("recovery_id"),
                     rs.getInt("injury_id"),
-                    rs.getInt("athlete_id"),
-                    rs.getInt("coach_id"),
-                    rs.getInt("medical_staff_id"),
+                    rs.getInt("user_id"), // Replace athlete_id, coach_id, and medical_staff_id with user_id
                     RecoveryGoal.valueOf(rs.getString("recovery_Goal")),
                     rs.getString("recovery_Description"),
                     rs.getDate("recovery_StartDate").toLocalDate(),
@@ -208,9 +196,7 @@ public class RecoveryPlanServices implements IService<RecoveryPlan> {
             RecoveryPlan recoveryPlan = new RecoveryPlan(
                     rs.getInt("recovery_id"),
                     rs.getInt("injury_id"),
-                    rs.getInt("athlete_id"),
-                    rs.getInt("coach_id"),
-                    rs.getInt("medical_staff_id"),
+                    rs.getInt("user_id"), // Replace athlete_id, coach_id, and medical_staff_id with user_id
                     recoveryGoal,  // Use the parsed recoveryGoal
                     rs.getString("recovery_Description"),
                     rs.getDate("recovery_StartDate").toLocalDate(),
@@ -221,5 +207,4 @@ public class RecoveryPlanServices implements IService<RecoveryPlan> {
         }
         return recoveryPlans;
     }
-
 }

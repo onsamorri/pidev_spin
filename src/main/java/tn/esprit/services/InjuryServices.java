@@ -7,7 +7,6 @@ import tn.esprit.utils.MyDatabase;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -21,31 +20,17 @@ public class InjuryServices implements IService<Injury> {
 
     @Override
     public void add(Injury injury) throws SQLException {
-        String query = "INSERT INTO Injury (athlete_id, medical_staff_id, injuryType, injury_severity, injury_description, injuryDate) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Injury (user_id, injuryType, injury_severity, injury_description, injuryDate) VALUES (?, ?, ?, ?, ?)";
         PreparedStatement ps = con.prepareStatement(query);
 
-        // Set the values for the query parameters
-        ps.setInt(1, injury.getAthlete_id());
-        ps.setInt(2, injury.getMedical_staff_id());
-        ps.setString(3, injury.getInjuryType().toString()); // Assuming InjuryType is an enum, converting to string
-        ps.setString(4, injury.getInjury_severity().toString()); // Assuming Severity is an enum, converting to string
-        ps.setString(5, injury.getInjury_description());
-        ps.setDate(6, Date.valueOf(injury.getInjuryDate())); // Converting LocalDate to SQL Date
+        ps.setInt(1, injury.getUser_id());
+        ps.setString(2, injury.getInjuryType().toString());
+        ps.setString(3, injury.getInjury_severity().toString());
+        ps.setString(4, injury.getInjury_description());
+        ps.setDate(5, Date.valueOf(injury.getInjuryDate()));
 
-        // Execute the update query
         ps.executeUpdate();
-
         System.out.println("Injury added!");
-    }
-
-
-
-    @Override
-    public List<Injury> returnList() throws SQLException {
-        String query = "SELECT * FROM Injury";
-        Statement stm = con.createStatement();
-        ResultSet rs = stm.executeQuery(query);
-        return buildInjuryList(rs);
     }
 
     @Override
@@ -59,18 +44,26 @@ public class InjuryServices implements IService<Injury> {
 
     @Override
     public void update(Injury injury) throws SQLException {
-        String query = "UPDATE Injury SET athlete_id = ?, medical_staff_id = ?, injuryType = ?, injury_severity = ?, description = ?, injuryDate = ? WHERE injury_id = ?";
+        String query = "UPDATE Injury SET user_id = ?, injuryType = ?, injury_severity = ?, injury_description = ?, injuryDate = ? WHERE injury_id = ?";
         PreparedStatement ps = con.prepareStatement(query);
-        ps.setInt(1, injury.getAthlete_id());
-        ps.setInt(2, injury.getMedical_staff_id());
-        ps.setString(3, injury.getInjuryType().toString());
-        ps.setString(4, injury.getInjury_severity().toString());
-        ps.setString(5, injury.getInjury_description());
-        ps.setDate(6, Date.valueOf(injury.getInjuryDate()));
-        ps.setInt(7, injury.getInjury_id());
+        ps.setInt(1, injury.getUser_id());
+        ps.setString(2, injury.getInjuryType().toString());
+        ps.setString(3, injury.getInjury_severity().toString());
+        ps.setString(4, injury.getInjury_description());
+        ps.setDate(5, Date.valueOf(injury.getInjuryDate()));
+        ps.setInt(6, injury.getInjury_id());
         ps.executeUpdate();
         System.out.println("Injury updated!");
     }
+
+    @Override
+    public List<Injury> getAll() throws SQLException {
+        String query = "SELECT * FROM Injury";
+        Statement stm = con.createStatement();
+        ResultSet rs = stm.executeQuery(query);
+        return buildInjuryList(rs);
+    }
+
 
     public List<Injury> searchByType(InjuryType type) throws SQLException {
         String query = "SELECT * FROM Injury WHERE injuryType = ?";
@@ -82,27 +75,24 @@ public class InjuryServices implements IService<Injury> {
 
     public List<Injury> sortBySeverity(boolean ascending) throws SQLException {
         String order = ascending ? "ASC" : "DESC";
-        String query = "SELECT * FROM Injury ORDER BY FIELD(severity, 'MILD', 'MODERATE', 'SEVERE', 'CRITICAL') " + order;
+        String query = "SELECT * FROM Injury ORDER BY FIELD(injury_severity, 'MILD', 'MODERATE', 'SEVERE', 'CRITICAL') " + order;
         Statement stm = con.createStatement();
         ResultSet rs = stm.executeQuery(query);
         return buildInjuryList(rs);
     }
 
-    // Sorting injuries by severity in ascending order (MILD to CRITICAL)
     public List<Injury> sortBySeverityAscending() throws SQLException {
-        List<Injury> injuries = returnList();
-        Collections.sort(injuries, Comparator.comparing(Injury::getInjury_severity));
+        List<Injury> injuries = getAll();
+        injuries.sort(Comparator.comparing(Injury::getInjury_severity));
         return injuries;
     }
 
-    // Sorting injuries by severity in descending order (CRITICAL to MILD)
     public List<Injury> sortBySeverityDescending() throws SQLException {
-        List<Injury> injuries = returnList();
-        Collections.sort(injuries, Comparator.comparing(Injury::getInjury_severity).reversed());
+        List<Injury> injuries = getAll();
+        injuries.sort(Comparator.comparing(Injury::getInjury_severity).reversed());
         return injuries;
     }
 
-    // Find an injury by its id
     public Injury findById(int injuryId) throws SQLException {
         String query = "SELECT * FROM Injury WHERE injury_id = ?";
         PreparedStatement ps = con.prepareStatement(query);
@@ -111,35 +101,29 @@ public class InjuryServices implements IService<Injury> {
         if (rs.next()) {
             return new Injury(
                     rs.getInt("injury_id"),
-                    rs.getInt("athlete_id"),  // Retrieve athlete_id
-                    rs.getInt("medical_staff_id"),  // Retrieve medical_staff_id
+                    rs.getInt("user_id"),
                     InjuryType.valueOf(rs.getString("injuryType")),
-                    rs.getString("description"),
+                    rs.getString("injury_description"),
                     rs.getDate("injuryDate").toLocalDate(),
-                    Severity.valueOf(rs.getString("severity"))
+                    Severity.valueOf(rs.getString("injury_severity"))
             );
-        } else {
-            return null; // Injury not found
         }
+        return null;
     }
 
-    /* Purpose: This method converts the ResultSet into a list of Injury objects.
-    Each row in the ResultSet is turned into an Injury object and added to the list. */
     private List<Injury> buildInjuryList(ResultSet rs) throws SQLException {
-        List<Injury> injuries = new ArrayList<>(); // Creates an empty list to store the Injury objects.
-        while (rs.next()) { // Loops through each row in the ResultSet. For every row, an Injury object is created.
+        List<Injury> injuries = new ArrayList<>();
+        while (rs.next()) {
             Injury injury = new Injury(
                     rs.getInt("injury_id"),
-                    rs.getInt("athlete_id"),  // Retrieve athlete_id
-                    rs.getInt("medical_staff_id"),
-                    InjuryType.valueOf(rs.getString("injuryType")), // Converts injuryType string to InjuryType enum
-                    rs.getString("description"),
-                    rs.getDate("injuryDate").toLocalDate(), // Converts SQL date to LocalDate
-                    Severity.valueOf(rs.getString("injury_severity")) // Converts injury_severity string to Severity enum
+                    rs.getInt("user_id"),
+                    InjuryType.valueOf(rs.getString("injuryType")),
+                    rs.getString("injury_description"),
+                    rs.getDate("injuryDate").toLocalDate(),
+                    Severity.valueOf(rs.getString("injury_severity"))
             );
-            injuries.add(injury); // Add the Injury object to the list
+            injuries.add(injury);
         }
-        return injuries; // Return the populated list
+        return injuries;
     }
-
 }
