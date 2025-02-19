@@ -19,7 +19,7 @@ public class TrainingSessionServices implements IService<TrainingSession> {
     @Override
     public void add(TrainingSession trainingSession) throws SQLException {
         // Convert ENUM to String otherwise we will have an issue in the db
-        String query = "INSERT INTO `training_session`(`focus`, `start_time`, `duration`, `location`, `session_notes`) VALUES ('"
+        String query = "INSERT INTO `training_session`(`session_focus`, `session_start_time`, `session_duration`, `session_location`, `session_notes`) VALUES ('"
                 + trainingSession.getFocus().name() + "', '"
                 + trainingSession.getStart_time() + "', '"
                 + trainingSession.getDuration().getMinutes() + "', '"

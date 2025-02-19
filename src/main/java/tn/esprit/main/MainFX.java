@@ -18,7 +18,7 @@ public class MainFX extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
 
-        Parent root= FXMLLoader.load(getClass().getResource("/AddPersonInterface.fxml"));
+        Parent root= FXMLLoader.load(getClass().getResource("/addPerformance.fxml"));
 
         Scene scene=new Scene(root);
 
@@ -27,6 +27,7 @@ public class MainFX extends Application {
         primaryStage.show();
 
         primaryStage.setTitle("first Scene");
+
 
     }
 }
