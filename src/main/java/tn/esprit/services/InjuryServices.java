@@ -20,10 +20,10 @@ public class InjuryServices implements IService<Injury> {
 
     @Override
     public void add(Injury injury) throws SQLException {
-        String query = "INSERT INTO Injury (user_id, injuryType, injury_severity, injury_description, injuryDate) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Injury (user_fname, injuryType, injury_severity, injury_description, injuryDate) VALUES (?, ?, ?, ?, ?)";
         PreparedStatement ps = con.prepareStatement(query);
 
-        ps.setInt(1, injury.getUser_id());
+        ps.setString(1, injury.getUser_fname());
         ps.setString(2, injury.getInjuryType().toString());
         ps.setString(3, injury.getInjury_severity().toString());
         ps.setString(4, injury.getInjury_description());
@@ -44,9 +44,9 @@ public class InjuryServices implements IService<Injury> {
 
     @Override
     public void update(Injury injury) throws SQLException {
-        String query = "UPDATE Injury SET user_id = ?, injuryType = ?, injury_severity = ?, injury_description = ?, injuryDate = ? WHERE injury_id = ?";
+        String query = "UPDATE Injury SET user_fname = ?, injuryType = ?, injury_severity = ?, injury_description = ?, injuryDate = ? WHERE injury_id = ?";
         PreparedStatement ps = con.prepareStatement(query);
-        ps.setInt(1, injury.getUser_id());
+        ps.setString(1, injury.getUser_fname());
         ps.setString(2, injury.getInjuryType().toString());
         ps.setString(3, injury.getInjury_severity().toString());
         ps.setString(4, injury.getInjury_description());
@@ -63,7 +63,6 @@ public class InjuryServices implements IService<Injury> {
         ResultSet rs = stm.executeQuery(query);
         return buildInjuryList(rs);
     }
-
 
     public List<Injury> searchByType(InjuryType type) throws SQLException {
         String query = "SELECT * FROM Injury WHERE injuryType = ?";
@@ -101,7 +100,7 @@ public class InjuryServices implements IService<Injury> {
         if (rs.next()) {
             return new Injury(
                     rs.getInt("injury_id"),
-                    rs.getInt("user_id"),
+                    rs.getString("user_fname"),
                     InjuryType.valueOf(rs.getString("injuryType")),
                     rs.getString("injury_description"),
                     rs.getDate("injuryDate").toLocalDate(),
@@ -116,7 +115,7 @@ public class InjuryServices implements IService<Injury> {
         while (rs.next()) {
             Injury injury = new Injury(
                     rs.getInt("injury_id"),
-                    rs.getInt("user_id"),
+                    rs.getString("user_fname"),
                     InjuryType.valueOf(rs.getString("injuryType")),
                     rs.getString("injury_description"),
                     rs.getDate("injuryDate").toLocalDate(),
