@@ -2,12 +2,16 @@ package tn.esprit.Controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import tn.esprit.entities.User;
 import tn.esprit.entities.Injury;
 import tn.esprit.entities.InjuryType;
 import tn.esprit.entities.Severity;
 import tn.esprit.services.InjuryServices;
+import tn.esprit.services.UserServices;
+import tn.esprit.utils.MyDatabase;
 
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
@@ -15,6 +19,10 @@ public class AddInjuryController {
 
     @FXML
     private TextField AthleteNameField;
+
+    @FXML
+    private TextField AthleteLastNameField;
+
 
     @FXML
     private ChoiceBox<InjuryType> InjuryTypeBox;
@@ -69,8 +77,10 @@ public class AddInjuryController {
 
     private void addInjury() {
         InjuryServices injuryService = new InjuryServices();
+        UserServices userService = new UserServices();
 
         String user_fname = AthleteNameField.getText();
+        String user_lname = AthleteLastNameField.getText();
         String injury_description = InjuryDescriptionField.getText();
         Severity severity = SeverityBox.getValue();
         LocalDate injuryDate = InjuryDatePicker.getValue();
@@ -84,6 +94,13 @@ public class AddInjuryController {
             valid = false;
         } else {
             AthleteNameField.getStyleClass().remove("invalid-input");
+        }
+
+        if (user_lname.isEmpty()) {
+            AthleteLastNameField.getStyleClass().add("invalid-input");
+            valid = false;
+        } else {
+            AthleteLastNameField.getStyleClass().remove("invalid-input");
         }
 
         if (severity == null) {
@@ -112,15 +129,26 @@ public class AddInjuryController {
             return;
         }
 
-        // Create injury object
-        Injury injury = new Injury(user_fname, type, severity, injury_description, injuryDate);
+        try (Connection con = MyDatabase.getInstance().getCon()) {
+            // Get user_id based on the athlete's first and last name
+            int user_id = userService.getUser_id(con, user_fname, user_lname);
 
+            if (user_id == -1) {
+                showAlert(Alert.AlertType.ERROR, "Error", "Athlete not found.");
+                return;
+            }
 
+            // Create an Injury object and populate it with the values from the form
+            Injury injury = new Injury(user_id, type, injury_description, injuryDate, severity);
+            injury.setUser_id(user_id);  // Set the user_id obtained from the database
+            injury.setInjuryType(type);
+            injury.setInjury_description(injury_description);
+            injury.setInjuryDate(injuryDate);
+            injury.setInjury_severity(severity);
 
-        try {
             // Add injury to database
-            injuryService.add(injury);
-            showAlert(Alert.AlertType.INFORMATION, "Success", "injury added successfully!");
+            injuryService.add(injury);  // Assuming `add` method in InjuryServices takes an Injury object as a parameter
+            showAlert(Alert.AlertType.INFORMATION, "Success", "Injury added successfully!");
 
             // Clear fields after successful addition
             clearFields();
@@ -129,6 +157,7 @@ public class AddInjuryController {
             showAlert(Alert.AlertType.ERROR, "Database Error", "Failed to add injury.");
         }
     }
+
 
     private void showAlert(Alert.AlertType alertType, String title, String content) {
         Alert alert = new Alert(alertType);
@@ -140,6 +169,7 @@ public class AddInjuryController {
 
     private void clearFields() {
         AthleteNameField.clear();
+        AthleteLastNameField.clear();
         InjuryDescriptionField.clear();
         InjuryDatePicker.setValue(null);
         SeverityBox.setValue(Severity.MODERATE);
@@ -147,6 +177,7 @@ public class AddInjuryController {
 
         // Remove invalid-input class
         AthleteNameField.getStyleClass().remove("invalid-input");
+        AthleteLastNameField.getStyleClass().remove("invalid-input");
         SeverityBox.getStyleClass().remove("invalid-input");
         InjuryDatePicker.getStyleClass().remove("invalid-input");
         InjuryTypeBox.getStyleClass().remove("invalid-input");

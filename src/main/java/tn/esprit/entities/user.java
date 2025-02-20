@@ -1,8 +1,6 @@
 package tn.esprit.entities;
 
-import java.util.Date;
-
-public class user {
+public class User {
     private int user_id;
 
     private String user_fname;
@@ -18,10 +16,10 @@ public class user {
         ADMIN, COACH, MEDICAL_STAFF, ATHLETE
     }
 
-    public user() {
+    public User() {
     }
 
-    public user(int user_id, String user_fname, String user_lname, String user_email, String user_pwd, String user_nbr, user.user_role user_role) {
+    public User(int user_id, String user_fname, String user_lname, String user_email, String user_pwd, String user_nbr, User.user_role user_role) {
         this.user_id = user_id;
         this.user_fname = user_fname;
         this.user_lname = user_lname;
@@ -31,7 +29,7 @@ public class user {
         this.user_role = user_role;
     }
 
-    public user(String user_fname, String user_lname, String user_email, String user_pwd, String user_nbr, user.user_role user_role) {
+    public User(String user_fname, String user_lname, String user_email, String user_pwd, String user_nbr, User.user_role user_role) {
         this.user_fname = user_fname;
         this.user_lname = user_lname;
         this.user_email = user_email;
@@ -88,11 +86,11 @@ public class user {
         this.user_nbr = user_nbr;
     }
 
-    public user.user_role getUser_role() {
+    public User.user_role getUser_role() {
         return user_role;
     }
 
-    public void setUser_role(user.user_role user_role) {
+    public void setUser_role(User.user_role user_role) {
         this.user_role = user_role;
     }
 

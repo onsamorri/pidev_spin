@@ -54,20 +54,23 @@
                         <Label text="Athlete Name:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label" />
                         <TextField fx:id="AthleteNameField" promptText="Enter athlete name" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
 
-                        <Label text="Injury Type " GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label" />
-                        <ChoiceBox fx:id="InjuryTypeBox" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
+                        <Label text="Athlete Last Name:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label" />
+                        <TextField fx:id="AthleteLastNameField" promptText="Enter athlete Last name" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
 
-                        <Label text="Injury Date:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label" />
-                        <DatePicker fx:id="InjuryDatePicker" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
+                        <Label text="Injury Type " GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label" />
+                        <ChoiceBox fx:id="InjuryTypeBox" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
 
-                        <Label text="Injury Severity:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label" />
-                        <ChoiceBox fx:id="SeverityBox" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
+                        <Label text="Injury Date:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label" />
+                        <DatePicker fx:id="InjuryDatePicker" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
 
-                        <Label text="Description:" GridPane.rowIndex="4" GridPane.columnIndex="1" styleClass="form-label" />
-                        <TextField fx:id="InjuryDescriptionField" promptText="Enter description" GridPane.rowIndex="4" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
+                        <Label text="Injury Severity:" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="form-label" />
+                        <ChoiceBox fx:id="SeverityBox" GridPane.rowIndex="4" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
+
+                        <Label text="Description:" GridPane.rowIndex="5" GridPane.columnIndex="0" styleClass="form-label" />
+                        <TextField fx:id="InjuryDescriptionField" promptText="Enter description" GridPane.rowIndex="5" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
 
                         <!-- Add Injury Button -->
-                        <Button fx:id="addInjuryButton" text="Add Injury" GridPane.rowIndex="5" GridPane.columnIndex="1" GridPane.halignment="RIGHT" styleClass="form-button" />
+                        <Button fx:id="addInjuryButton" text="Add Injury" GridPane.rowIndex="6" GridPane.columnIndex="1" GridPane.halignment="RIGHT" styleClass="form-button" />
                     </children>
                 </GridPane>
             </center>

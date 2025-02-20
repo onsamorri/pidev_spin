@@ -5,11 +5,13 @@ import tn.esprit.services.*;
 import tn.esprit.utils.MyDatabase;
 
 import java.sql.Date;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
 public class Main {
+
     public static void main(String[] args) {
         // Get the database instance
         MyDatabase db1 = MyDatabase.getInstance();
@@ -21,17 +23,28 @@ public class Main {
         UserServices userServices = new UserServices();
 
         try {
+            // Get the database connection instance
+            Connection con = MyDatabase.getInstance().getCon();
+
             // Adding a user (example: athlete)
-            user athlete = new Athlete(2, "John", "Doe", "johndoe@example.com", "password", "123456789", Date.valueOf(LocalDate.of(1995, 5, 10)), "Male", "123 Main St", 5.9f, 160.5f, 0, Date.valueOf(LocalDate.now()));
+            User athlete = new Athlete(2, "John", "Doe", "johndoe@example.com", "password", "123456789", Date.valueOf(LocalDate.of(1995, 5, 10)), "Male", "123 Main St", 5.9f, 160.5f, 0, Date.valueOf(LocalDate.now()));
             userServices.add(athlete);
 
+            // Get the user_id dynamically using getUser_id method
+            int user_id = userServices.getUser_id(con, "John", "Doe");
+            if (user_id != -1) {
+                System.out.println("User ID: " + user_id);
+            } else {
+                System.out.println("User not found!");
+                return; // If user not found, exit
+            }
+
             // Adding an injury
-            Injury injury = new Injury(2, "Ali", InjuryType.SPRAIN, "Ankle sprain", LocalDate.now(), Severity.MODERATE);
+            Injury injury = new Injury(user_id, InjuryType.SPRAIN, "Ankle sprain", LocalDate.now(), Severity.MODERATE);
             injuryServices.add(injury);
 
-            // Get the injury_id and user_id dynamically (assuming they are already set or retrieved from a database)
+            // Get the injury_id and user_id dynamically
             int injury_id = injury.getInjury_id();  // Using the injury object to get the ID
-            int user_id = athlete.getUser_id();    // Using the athlete object to get the ID
 
             // Define recovery plan details
             RecoveryGoal recoveryGoal = RecoveryGoal.REHABILITATION;  // Example recovery goal from enum
@@ -77,8 +90,8 @@ public class Main {
             nutritionPlanServices.delete(nutritionPlan);
 
             // Getting all users
-            List<user> users = userServices.getAll();
-            for (user u : users) {
+            List<User> users = userServices.getAll();
+            for (User u : users) {
                 System.out.println(u);
             }
 

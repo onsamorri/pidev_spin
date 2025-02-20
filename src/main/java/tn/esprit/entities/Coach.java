@@ -1,6 +1,6 @@
 package tn.esprit.entities;
 
-public class Coach extends user {
+public class Coach extends User {
     private int nb_teams;
     public Coach() {
         super();

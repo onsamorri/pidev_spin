@@ -43,9 +43,11 @@
                         <columns>
                             <TableColumn fx:id="InjuryIdColumn" text="ID" />
                             <TableColumn fx:id="AthleteNameColumn" text="Athlete_Name" />
+                            <TableColumn fx:id="AthleteLastNameColumn" text="Athlete_Last_Name" />
                             <TableColumn fx:id="InjuryTypeColumn" text="Injury Type" />
+                            <TableColumn fx:id="InjuryDescriptionColumn" text="Description" />
                             <TableColumn fx:id="InjuryDateColumn" text="Injury Date" />
-                            <TableColumn fx:id="SeverityColumn" text="Severity" />
+                            <TableColumn fx:id="InjurySeverityColumn" text="Severity" />
                             <TableColumn fx:id="actionsColumn" text="Actions" />
                         </columns>
                     </TableView>
