@@ -16,6 +16,12 @@ public class AddClaimController {
     private TextField claimDescriptionField;
 
     @FXML
+<<<<<<< HEAD
+=======
+    private ChoiceBox<ClaimStatus> claimStatusBox;
+
+    @FXML
+>>>>>>> 25b00d9d2a12642a04c47dfc83611927232072c4
     private DatePicker claimDatePicker;
 
     @FXML
@@ -26,10 +32,19 @@ public class AddClaimController {
 
     @FXML
     public void initialize() {
+<<<<<<< HEAD
         // Populate ChoiceBox with enum values
         claimCategoryBox.getItems().addAll(ClaimCategory.values());
 
         // Set default values (optional)
+=======
+        // Populate ChoiceBoxes with enum values
+        claimStatusBox.getItems().addAll(ClaimStatus.values());
+        claimCategoryBox.getItems().addAll(ClaimCategory.values());
+
+        // Set default values (optional)
+        claimStatusBox.setValue(ClaimStatus.IN_REVIEW);
+>>>>>>> 25b00d9d2a12642a04c47dfc83611927232072c4
         claimCategoryBox.setValue(ClaimCategory.MISCONDUCT);
 
         // Set button action
@@ -62,6 +77,10 @@ public class AddClaimController {
         ClaimServices claimService = new ClaimServices();
 
         String description = claimDescriptionField.getText();
+<<<<<<< HEAD
+=======
+        ClaimStatus status = claimStatusBox.getValue();
+>>>>>>> 25b00d9d2a12642a04c47dfc83611927232072c4
         LocalDate claimDate = claimDatePicker.getValue();
         ClaimCategory category = claimCategoryBox.getValue();
 
@@ -75,6 +94,16 @@ public class AddClaimController {
             claimDescriptionField.getStyleClass().remove("invalid-input");
         }
 
+<<<<<<< HEAD
+=======
+        if (status == null) {
+            claimStatusBox.getStyleClass().add("invalid-input");
+            valid = false;
+        } else {
+            claimStatusBox.getStyleClass().remove("invalid-input");
+        }
+
+>>>>>>> 25b00d9d2a12642a04c47dfc83611927232072c4
         if (claimDate == null) {
             claimDatePicker.getStyleClass().add("invalid-input");
             valid = false;
@@ -94,8 +123,13 @@ public class AddClaimController {
             return;
         }
 
+<<<<<<< HEAD
         // Create Claim object with status IN_REVIEW
         Claim claim = new Claim(description, ClaimStatus.IN_REVIEW, claimDate, category);
+=======
+        // Create Claim object
+        Claim claim = new Claim(description, status, claimDate, category);
+>>>>>>> 25b00d9d2a12642a04c47dfc83611927232072c4
 
         try {
             // Add claim to database
@@ -121,10 +155,18 @@ public class AddClaimController {
     private void clearFields() {
         claimDescriptionField.clear();
         claimDatePicker.setValue(null);
+<<<<<<< HEAD
+=======
+        claimStatusBox.setValue(ClaimStatus.IN_REVIEW);
+>>>>>>> 25b00d9d2a12642a04c47dfc83611927232072c4
         claimCategoryBox.setValue(ClaimCategory.MISCONDUCT);
 
         // Remove invalid-input class
         claimDescriptionField.getStyleClass().remove("invalid-input");
+<<<<<<< HEAD
+=======
+        claimStatusBox.getStyleClass().remove("invalid-input");
+>>>>>>> 25b00d9d2a12642a04c47dfc83611927232072c4
         claimDatePicker.getStyleClass().remove("invalid-input");
         claimCategoryBox.getStyleClass().remove("invalid-input");
     }

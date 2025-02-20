@@ -66,7 +66,10 @@ public class ShowClaimController {
                 return new TableCell<Claim, Void>() {
                     private final Button updateButton = new Button("Update");
                     private final Button deleteButton = new Button("Delete");
+<<<<<<< HEAD
                     private final Button submitActionButton = new Button("Submit Action");
+=======
+>>>>>>> 25b00d9d2a12642a04c47dfc83611927232072c4
 
                     {
                         updateButton.setOnAction(event -> {
@@ -79,12 +82,16 @@ public class ShowClaimController {
                             deleteClaim(selectedClaim);
                         });
 
+<<<<<<< HEAD
                         submitActionButton.setOnAction(event -> {
                             Claim selectedClaim = getTableView().getItems().get(getIndex());
                             submitClaimAction(selectedClaim);
                         });
 
                         HBox hBox = new HBox(updateButton, deleteButton, submitActionButton);
+=======
+                        HBox hBox = new HBox(updateButton, deleteButton);
+>>>>>>> 25b00d9d2a12642a04c47dfc83611927232072c4
                         hBox.setSpacing(10);
                         setGraphic(hBox);
                     }
@@ -152,6 +159,7 @@ public class ShowClaimController {
         }
     }
 
+<<<<<<< HEAD
     private void submitClaimAction(Claim selectedClaim) {
         if (selectedClaim != null) {
             openAddClaimActionInterface(selectedClaim);
@@ -179,6 +187,8 @@ public class ShowClaimController {
         }
     }
 
+=======
+>>>>>>> 25b00d9d2a12642a04c47dfc83611927232072c4
     private void showAlert(Alert.AlertType alertType, String title, String content) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
