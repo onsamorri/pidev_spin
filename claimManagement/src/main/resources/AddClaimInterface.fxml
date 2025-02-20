@@ -50,7 +50,6 @@
                         <Label text="Claim Description:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label" />
                         <TextField fx:id="claimDescriptionField" promptText="Enter claim description" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
 
-<<<<<<< HEAD
                         <Label text="Claim Date:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label" />
                         <DatePicker fx:id="claimDatePicker" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
 
@@ -59,19 +58,6 @@
 
                         <!-- Add Claim Button -->
                         <Button fx:id="addClaimButton" text="Add Claim" GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.halignment="RIGHT" styleClass="form-button" />
-=======
-                        <Label text="Claim Status:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label" />
-                        <ChoiceBox fx:id="claimStatusBox" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
-
-                        <Label text="Claim Date:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label" />
-                        <DatePicker fx:id="claimDatePicker" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
-
-                        <Label text="Claim Category:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label" />
-                        <ChoiceBox fx:id="claimCategoryBox" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
-
-                        <!-- Add Claim Button -->
-                        <Button fx:id="addClaimButton" text="Add Claim" GridPane.rowIndex="4" GridPane.columnIndex="1" GridPane.halignment="RIGHT" styleClass="form-button" />
->>>>>>> 25b00d9d2a12642a04c47dfc83611927232072c4
                     </children>
                 </GridPane>
             </center>

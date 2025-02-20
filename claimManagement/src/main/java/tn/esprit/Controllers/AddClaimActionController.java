@@ -32,6 +32,8 @@ public class AddClaimActionController {
     @FXML
     private Button addClaimActionButton;
 
+    private ShowClaimController showClaimController;
+
     @FXML
     public void initialize() {
         // Populate ChoiceBox with enum values
@@ -53,6 +55,10 @@ public class AddClaimActionController {
     public void setClaimData(Claim claim) {
         claimIdField.setText(String.valueOf(claim.getClaimId()));
         claimIdField.setDisable(true); // Disable editing of claim ID
+    }
+
+    public void setShowClaimController(ShowClaimController showClaimController) {
+        this.showClaimController = showClaimController;
     }
 
     private void setDatePickerConstraints() {
@@ -104,6 +110,17 @@ public class AddClaimActionController {
             claimId = Integer.parseInt(claimIdField.getText());
         } catch (NumberFormatException e) {
             showAlert(Alert.AlertType.ERROR, "Form Error", "Please enter a valid claim ID.");
+            return;
+        }
+
+        try {
+            if (claimActionService.hasClaimAction(claimId)) {
+                showAlert(Alert.AlertType.ERROR, "Form Error", "This claim already has an action submitted.");
+                return;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Database Error", "Failed to check claim action.");
             return;
         }
 
@@ -184,6 +201,11 @@ public class AddClaimActionController {
 
             // Clear fields after successful addition
             clearFields();
+
+            // Refresh the table in ShowClaimController
+            if (showClaimController != null) {
+                showClaimController.refreshTable();
+            }
 
             // Close the window after successful addition
             closeWindow();

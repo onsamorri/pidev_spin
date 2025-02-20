@@ -144,4 +144,16 @@ public class ClaimActionServices implements Iservice<ClaimAction> {
 
         return claimAction;
     }
+
+    public boolean hasClaimAction(int claimId) throws SQLException {
+        String query = "SELECT COUNT(*) FROM claimaction WHERE claimId = ?";
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setInt(1, claimId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        }
+        return false;
+    }
 }

@@ -45,7 +45,7 @@
                             <TableColumn fx:id="claimStatusColumn" text="Status" />
                             <TableColumn fx:id="claimDateColumn" text="Date" />
                             <TableColumn fx:id="claimCategoryColumn" text="Category" />
-                            <TableColumn fx:id="actionsColumn" text="Actions" />
+                            <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="250" />
                         </columns>
                     </TableView>
                 </VBox>

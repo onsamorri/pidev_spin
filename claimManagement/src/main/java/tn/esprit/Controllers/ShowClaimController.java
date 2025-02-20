@@ -6,12 +6,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import tn.esprit.entities.Claim;
+import tn.esprit.services.ClaimActionServices;
 import tn.esprit.services.ClaimServices;
 
 import javafx.util.Callback;
@@ -42,11 +44,13 @@ public class ShowClaimController {
     private TableColumn<Claim, Void> actionsColumn;
 
     private ClaimServices claimServices;
+    private ClaimActionServices claimActionServices;
     private ObservableList<Claim> claimList;
 
     @FXML
     public void initialize() {
         claimServices = new ClaimServices();
+        claimActionServices = new ClaimActionServices(); // Initialize ClaimActionServices
         claimList = FXCollections.observableArrayList();
 
         // Set up the table columns
@@ -55,6 +59,9 @@ public class ShowClaimController {
         claimStatusColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getClaimStatus().toString()));
         claimDateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getClaimDate().toString()));
         claimCategoryColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getClaimCategory().toString()));
+
+        // Set preferred width for the actions column
+        actionsColumn.setPrefWidth(250);
 
         // Load claims from the database
         loadClaims();
@@ -66,10 +73,8 @@ public class ShowClaimController {
                 return new TableCell<Claim, Void>() {
                     private final Button updateButton = new Button("Update");
                     private final Button deleteButton = new Button("Delete");
-<<<<<<< HEAD
                     private final Button submitActionButton = new Button("Submit Action");
-=======
->>>>>>> 25b00d9d2a12642a04c47dfc83611927232072c4
+                    private final Label actionSubmittedLabel = new Label("Action Submitted");
 
                     {
                         updateButton.setOnAction(event -> {
@@ -82,17 +87,14 @@ public class ShowClaimController {
                             deleteClaim(selectedClaim);
                         });
 
-<<<<<<< HEAD
                         submitActionButton.setOnAction(event -> {
                             Claim selectedClaim = getTableView().getItems().get(getIndex());
                             submitClaimAction(selectedClaim);
                         });
 
                         HBox hBox = new HBox(updateButton, deleteButton, submitActionButton);
-=======
-                        HBox hBox = new HBox(updateButton, deleteButton);
->>>>>>> 25b00d9d2a12642a04c47dfc83611927232072c4
                         hBox.setSpacing(10);
+                        hBox.setPadding(new Insets(5, 0, 5, 0)); // Add padding
                         setGraphic(hBox);
                     }
 
@@ -102,7 +104,23 @@ public class ShowClaimController {
                         if (empty) {
                             setGraphic(null);
                         } else {
-                            setGraphic(getGraphic());
+                            Claim selectedClaim = getTableView().getItems().get(getIndex());
+                            try {
+                                if (claimActionServices.hasClaimAction(selectedClaim.getClaimId())) {
+                                    HBox hBox = new HBox(updateButton, deleteButton, actionSubmittedLabel);
+                                    hBox.setSpacing(10);
+                                    hBox.setPadding(new Insets(5, 0, 5, 0)); // Add padding
+                                    setGraphic(hBox);
+                                } else {
+                                    HBox hBox = new HBox(updateButton, deleteButton, submitActionButton);
+                                    hBox.setSpacing(10);
+                                    hBox.setPadding(new Insets(5, 0, 5, 0)); // Add padding
+                                    setGraphic(hBox);
+                                }
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                                setGraphic(null);
+                            }
                         }
                     }
                 };
@@ -159,7 +177,6 @@ public class ShowClaimController {
         }
     }
 
-<<<<<<< HEAD
     private void submitClaimAction(Claim selectedClaim) {
         if (selectedClaim != null) {
             openAddClaimActionInterface(selectedClaim);
@@ -175,6 +192,7 @@ public class ShowClaimController {
 
             AddClaimActionController addClaimActionController = loader.getController();
             addClaimActionController.setClaimData(selectedClaim);
+            addClaimActionController.setShowClaimController(this); // Pass the ShowClaimController instance
 
             Stage addClaimActionStage = new Stage();
             addClaimActionStage.setTitle("Submit Claim Action");
@@ -187,8 +205,6 @@ public class ShowClaimController {
         }
     }
 
-=======
->>>>>>> 25b00d9d2a12642a04c47dfc83611927232072c4
     private void showAlert(Alert.AlertType alertType, String title, String content) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
