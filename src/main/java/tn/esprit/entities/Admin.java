@@ -1,6 +1,8 @@
 package tn.esprit.entities;
+import tn.esprit.entities.User;
 
-public class Admin extends user {
+
+public class Admin extends User {
 
     public Admin() {
         super();

@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserServices implements IService<user> {
+public class UserServices implements IService<User> {
     private Connection con;
 
     public UserServices() {
@@ -15,7 +15,7 @@ public class UserServices implements IService<user> {
     }
 
     @Override
-    public void add(user user) throws SQLException {
+    public void add(User user) throws SQLException {
         if (user instanceof Admin) {
             System.out.println("Admins must be added manually in the database.");
             return; // Don't allow adding admins through this method
@@ -66,12 +66,12 @@ public class UserServices implements IService<user> {
     }
 
     @Override
-    public void delete(user user) {
+    public void delete(User user) {
         String query = "DELETE FROM user WHERE user_id = ?";
 
         try (PreparedStatement ps = con.prepareStatement(query)) {
             // Use the user object to get the user_id
-            ps.setInt(1, user.getUser_id()); // Assuming you have a `getUser_id()` method in the `user` class
+            ps.setInt(1, user.getUser_id()); // Assuming you have a `getUser_id()` method in the `User` class
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {
@@ -84,9 +84,8 @@ public class UserServices implements IService<user> {
         }
     }
 
-
     @Override
-    public void update(user updatedUser) {
+    public void update(User updatedUser) {
         String query = "UPDATE user SET user_fname=?, user_lname=?, user_email=?, user_pwd=?, user_nbr=?, user_role=?, "
                 + "nb_teams=?, med_specialty=?, athlete_DoB=?, athlete_gender=?, athlete_address=?, athlete_height=?, athlete_weight=?, isInjured=?, athlete_regDate=? WHERE user_id=?";
 
@@ -149,10 +148,9 @@ public class UserServices implements IService<user> {
         }
     }
 
-
     @Override
-    public List<user> getAll() {
-        List<user> users = new ArrayList<>();
+    public List<User> getAll() {
+        List<User> users = new ArrayList<>();
         String query = "SELECT * FROM user";
         try (Statement stmt = con.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
@@ -191,19 +189,20 @@ public class UserServices implements IService<user> {
 
     //Leena
 
-    public int getUserIdByName(String userName) throws SQLException {
-        String query = "SELECT id FROM users WHERE name = ?";
-        PreparedStatement ps = con.prepareStatement(query);
-        ps.setString(1, userName);
-        ResultSet rs = ps.executeQuery();
-
-        if (rs.next()) {
-            return rs.getInt("id");
-        } else {
-            throw new SQLException("User not found");
+    // In UserServices class
+    public Integer getUser_id(Connection con, String user_fname, String user_lname) throws SQLException {
+        String query = "SELECT user_id FROM user WHERE user_fname = ? AND user_lname = ? LIMIT 1";
+        try (PreparedStatement stmt = con.prepareStatement(query)) {
+            stmt.setString(1, user_fname);
+            stmt.setString(2, user_lname);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("user_id"); // Return user_id if found
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return -1; // Return null if no user is found
     }
-
 }
-
-

@@ -3,7 +3,7 @@ package tn.esprit.entities;
 import java.sql.Date;
 import java.time.LocalDate;
 
-public class Athlete extends user {
+public class Athlete extends User {
     private float athlete_height;
     private float athlete_weight;
     private String athlete_gender;

@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import tn.esprit.entities.Injury;
-import tn.esprit.entities.user;
+import tn.esprit.entities.User;
 import tn.esprit.entities.InjuryType;
 import tn.esprit.entities.Severity;
 import tn.esprit.services.InjuryServices;
@@ -18,11 +18,13 @@ public class UpdateInjuryController {
     private TextField AthleteNameField;
 
     @FXML
+    private TextField AthleteLastNameField;
+
+    @FXML
     private ChoiceBox<InjuryType> InjuryTypeBox;
 
     @FXML
     private TextField InjuryDescriptionField;
-
 
     @FXML
     private DatePicker InjuryDatePicker;
@@ -41,10 +43,11 @@ public class UpdateInjuryController {
     private ShowInjuryController showInjuryController; // Reference to the ShowInjuryController
 
     public void setInjuryData(Injury selectedInjury) {
-        this.selectedInjury= selectedInjury; // Pass the selected Injury when opening this controller
+        this.selectedInjury = selectedInjury; // Pass the selected Injury when opening this controller
         // Fill fields with the selected Injury's data
         if (selectedInjury != null) {
-            AthleteNameField.setText(selectedInjury.getUser_fname());
+            AthleteNameField.setText(selectedInjury.getUser().getUser_fname());
+            AthleteLastNameField.setText(selectedInjury.getUser().getUser_lname());
             InjuryDescriptionField.setText(selectedInjury.getInjury_description());
             InjuryTypeBox.setValue(selectedInjury.getInjuryType());
             InjuryDatePicker.setValue(selectedInjury.getInjuryDate());
@@ -97,6 +100,7 @@ public class UpdateInjuryController {
 
     private void updateInjury() {
         String user_fname = AthleteNameField.getText();
+        String user_lname = AthleteLastNameField.getText();
         String injury_description = InjuryDescriptionField.getText();
         InjuryType type = InjuryTypeBox.getValue();
         LocalDate InjuryDate = InjuryDatePicker.getValue();
@@ -110,6 +114,13 @@ public class UpdateInjuryController {
             valid = false;
         } else {
             AthleteNameField.getStyleClass().remove("invalid-input");
+        }
+
+        if (user_lname.isEmpty()) {
+            AthleteLastNameField.getStyleClass().add("invalid-input");
+            valid = false;
+        } else {
+            AthleteLastNameField.getStyleClass().remove("invalid-input");
         }
 
         if (type == null) {
@@ -138,8 +149,14 @@ public class UpdateInjuryController {
             return;
         }
 
+        // Update the User associated with the selected Injury
+        User user = selectedInjury.getUser();
+        if (user != null) {
+            user.setUser_fname(user_fname); // Update the first name
+            user.setUser_lname(user_lname); // Update the last name
+        }
+
         // Update the selected Injury with the new data
-        selectedInjury.setUser_fname(user_fname);
         selectedInjury.setInjuryType(type);
         selectedInjury.setInjury_description(injury_description);
         selectedInjury.setInjuryDate(InjuryDate);
@@ -172,6 +189,7 @@ public class UpdateInjuryController {
 
     private void clearFields() {
         AthleteNameField.clear();
+        AthleteLastNameField.clear();
         InjuryDatePicker.setValue(null);
         InjuryTypeBox.setValue(InjuryType.DISLOCATION);
         InjuryDescriptionField.clear();
@@ -179,6 +197,7 @@ public class UpdateInjuryController {
 
         // Remove invalid-input class
         AthleteNameField.getStyleClass().remove("invalid-input");
+        AthleteLastNameField.getStyleClass().remove("invalid-input");
         InjuryTypeBox.getStyleClass().remove("invalid-input");
         InjuryDescriptionField.getStyleClass().remove("invalid-input");
         InjuryDatePicker.getStyleClass().remove("invalid-input");
