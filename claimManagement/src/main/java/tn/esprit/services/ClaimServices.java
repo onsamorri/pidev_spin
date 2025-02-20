@@ -104,4 +104,26 @@ public class ClaimServices implements Iservice<Claim> {
             System.out.println("No claim found with the given ID.");
         }
     }
+
+    public Claim findById(int claimId) throws SQLException {
+        String query = "SELECT * FROM claim WHERE claimId = ?";
+        Claim claim = null;
+
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setInt(1, claimId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                String description = rs.getString("claimDescription");
+                ClaimStatus status = ClaimStatus.valueOf(rs.getString("claimStatus"));
+                LocalDate date = rs.getDate("claimDate").toLocalDate();
+                ClaimCategory category = ClaimCategory.valueOf(rs.getString("claimCategory"));
+
+                claim = new Claim(claimId, description, status, date, category);
+            }
+        }
+
+        return claim;
+    }
+
 }

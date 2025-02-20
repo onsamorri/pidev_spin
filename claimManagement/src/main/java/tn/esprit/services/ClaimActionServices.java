@@ -2,81 +2,146 @@ package tn.esprit.services;
 
 import tn.esprit.entities.ClaimAction;
 import tn.esprit.entities.Claim;
+import tn.esprit.entities.ClaimActionType;
 import tn.esprit.utils.MyDatabase;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
-public class ClaimActionServices implements Iservice<ClaimAction>{
+public class ClaimActionServices implements Iservice<ClaimAction> {
 
     private Connection con;
-    public ClaimActionServices(){
+
+    public ClaimActionServices() {
         con = MyDatabase.getInstance().getCon();
     }
 
-
-
     @Override
-    public void add(ClaimAction claimaction) throws SQLException {
+    public void add(ClaimAction claimAction) throws SQLException {
         String query = "INSERT INTO `claimaction`(`claimId`, `claimActionType`, `claimActionStartDate`, `claimActionEndDate`, `claimActionNotes`) " +
-                "VALUES ('" + claimaction.getClaim().getClaimId() + "', '" +
-                claimaction.getClaimActionType() + "', '" +
-                claimaction.getClaimActionStartDate() + "', '" +
-                claimaction.getClaimActionEndDate() + "', '" +
-                claimaction.getClaimActionNotes() + "')";
+                "VALUES (?, ?, ?, ?, ?)";
 
-        Statement stm = con.createStatement();
-        stm.executeUpdate(query);
-        System.out.println("Claim Action added!");
-    }
-
-
-    @Override
-    public void addP(ClaimAction claimAction) {
-
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setInt(1, claimAction.getClaim().getClaimId());
+            pstmt.setString(2, claimAction.getClaimActionType().toString());
+            pstmt.setDate(3, java.sql.Date.valueOf(claimAction.getClaimActionStartDate()));
+            pstmt.setDate(4, java.sql.Date.valueOf(claimAction.getClaimActionEndDate()));
+            pstmt.setString(5, claimAction.getClaimActionNotes());
+            pstmt.executeUpdate();
+            System.out.println("Claim Action added!");
+        }
     }
 
     @Override
-    public List<ClaimAction> returnList() {
-        return null;
+    public void addP(ClaimAction claimAction) throws SQLException {
+        String query = "INSERT INTO `claimaction`(`claimId`, `claimActionType`, `claimActionStartDate`, `claimActionEndDate`, `claimActionNotes`) " +
+                "VALUES (?, ?, ?, ?, ?)";
+
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setInt(1, claimAction.getClaim().getClaimId());
+            pstmt.setString(2, claimAction.getClaimActionType().toString());
+            pstmt.setDate(3, java.sql.Date.valueOf(claimAction.getClaimActionStartDate()));
+            pstmt.setDate(4, java.sql.Date.valueOf(claimAction.getClaimActionEndDate()));
+            pstmt.setString(5, claimAction.getClaimActionNotes());
+            pstmt.executeUpdate();
+            System.out.println("Claim Action added with second method!");
+        }
     }
 
     @Override
-    public void delete(ClaimAction claim_action) {
-        String query = "DELETE FROM claimAction WHERE claimActionId = ?";
+    public List<ClaimAction> returnList() throws SQLException {
+        List<ClaimAction> claimActions = new ArrayList<>();
+        String query = "SELECT * FROM claimaction";
 
-        try (PreparedStatement kstmt = con.prepareStatement(query)) {
-            kstmt.setInt(1, claim_action.getClaimActionId());
-            int rowsDeleted = kstmt.executeUpdate();
+        try (Statement stmt = con.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                int claimActionId = rs.getInt("claimActionId");
+                int claimId = rs.getInt("claimId");
+                ClaimActionType claimActionType = ClaimActionType.valueOf(rs.getString("claimActionType"));
+                LocalDate claimActionStartDate = rs.getDate("claimActionStartDate").toLocalDate();
+                LocalDate claimActionEndDate = rs.getDate("claimActionEndDate").toLocalDate();
+                String claimActionNotes = rs.getString("claimActionNotes");
+
+                Claim claim = new Claim(); // Assuming you have a way to retrieve the Claim object by claimId
+                claim.setClaimId(claimId);
+
+                ClaimAction claimAction = new ClaimAction(claimActionId, claim, claimActionType, claimActionStartDate, claimActionEndDate, claimActionNotes);
+                claimActions.add(claimAction);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error retrieving claim actions: " + e.getMessage());
+            throw e;
+        }
+
+        return claimActions;
+    }
+
+    @Override
+    public void delete(ClaimAction claimAction) throws SQLException {
+        String query = "DELETE FROM claimaction WHERE claimActionId = ?";
+
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setInt(1, claimAction.getClaimActionId());
+            int rowsDeleted = pstmt.executeUpdate();
             if (rowsDeleted > 0) {
                 System.out.println("Claim Action deleted successfully!");
             } else {
-                System.out.println("No claim Action found with the given ID.");
+                System.out.println("No claim action found with the given ID.");
             }
         } catch (SQLException e) {
             System.out.println("Error deleting claim action: " + e.getMessage());
+            throw e;
         }
     }
 
-    public void update(ClaimAction claim_action) throws SQLException {
+    @Override
+    public void update(ClaimAction claimAction) throws SQLException {
         String query = "UPDATE claimaction SET claimId = ?, claimActionType = ?, claimActionStartDate = ?, claimActionEndDate = ?, claimActionNotes = ? WHERE claimActionId = ?";
 
-        PreparedStatement pstmt = con.prepareStatement(query);
-        pstmt.setInt(1, claim_action.getClaim().getClaimId());
-        pstmt.setString(2, claim_action.getClaimActionType().toString());
-        pstmt.setDate(3, java.sql.Date.valueOf(claim_action.getClaimActionStartDate()));
-        pstmt.setDate(4, java.sql.Date.valueOf(claim_action.getClaimActionEndDate()));
-        pstmt.setString(5, claim_action.getClaimActionNotes());
-        pstmt.setInt(6, claim_action.getClaimActionId());
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setInt(1, claimAction.getClaim().getClaimId());
+            pstmt.setString(2, claimAction.getClaimActionType().toString());
+            pstmt.setDate(3, java.sql.Date.valueOf(claimAction.getClaimActionStartDate()));
+            pstmt.setDate(4, java.sql.Date.valueOf(claimAction.getClaimActionEndDate()));
+            pstmt.setString(5, claimAction.getClaimActionNotes());
+            pstmt.setInt(6, claimAction.getClaimActionId());
 
-        int rowsUpdated = pstmt.executeUpdate();
-        if (rowsUpdated > 0) {
-            System.out.println("Claim Action updated successfully!");
-        } else {
-            System.out.println("No claim action found with the given ID.");
+            int rowsUpdated = pstmt.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Claim Action updated successfully!");
+            } else {
+                System.out.println("No claim action found with the given ID.");
+            }
         }
+    }
+
+    public ClaimAction findById(int claimActionId) throws SQLException {
+        String query = "SELECT * FROM claimaction WHERE claimActionId = ?";
+        ClaimAction claimAction = null;
+
+        try (PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setInt(1, claimActionId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                int claimId = rs.getInt("claimId");
+                ClaimActionType claimActionType = ClaimActionType.valueOf(rs.getString("claimActionType"));
+                LocalDate claimActionStartDate = rs.getDate("claimActionStartDate").toLocalDate();
+                LocalDate claimActionEndDate = rs.getDate("claimActionEndDate").toLocalDate();
+                String claimActionNotes = rs.getString("claimActionNotes");
+
+                Claim claim = new Claim(); // Assuming you have a way to retrieve the Claim object by claimId
+                claim.setClaimId(claimId);
+
+                claimAction = new ClaimAction(claimActionId, claim, claimActionType, claimActionStartDate, claimActionEndDate, claimActionNotes);
+            }
+        }
+
+        return claimAction;
     }
 }

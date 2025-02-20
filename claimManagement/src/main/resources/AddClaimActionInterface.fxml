@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 
 <?import java.net.URL?>
-<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.Controllers.AddClaimController">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.Controllers.AddClaimActionController">
     <stylesheets>
         <URL value="@styles.css" />
     </stylesheets>
@@ -22,7 +22,7 @@
         <BorderPane prefHeight="600.0" prefWidth="900.0">
             <top>
                 <HBox prefHeight="80.0" prefWidth="900.0" styleClass="header" BorderPane.alignment="CENTER">
-                    <Label text="Add New Claim" styleClass="header-title" />
+                    <Label text="Add New Claim Action" styleClass="header-title" />
                 </HBox>
             </top>
             <left>
@@ -47,17 +47,23 @@
                     </columnConstraints>
                     <children>
                         <!-- Labels and Inputs -->
-                        <Label text="Claim Description:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label" />
-                        <TextField fx:id="claimDescriptionField" promptText="Enter claim description" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
+                        <Label text="Claim ID:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label" />
+                        <TextField fx:id="claimIdField" promptText="Enter claim ID" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
 
-                        <Label text="Claim Date:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label" />
-                        <DatePicker fx:id="claimDatePicker" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
+                        <Label text="Claim Action Type:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label" />
+                        <ChoiceBox fx:id="claimActionTypeBox" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
 
-                        <Label text="Claim Category:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label" />
-                        <ChoiceBox fx:id="claimCategoryBox" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
+                        <Label text="Start Date:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label" />
+                        <DatePicker fx:id="claimActionStartDatePicker" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
 
-                        <!-- Add Claim Button -->
-                        <Button fx:id="addClaimButton" text="Add Claim" GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.halignment="RIGHT" styleClass="form-button" />
+                        <Label text="End Date:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label" />
+                        <DatePicker fx:id="claimActionEndDatePicker" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
+
+                        <Label text="Notes:" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="form-label" />
+                        <TextField fx:id="claimActionNotesField" promptText="Enter notes" GridPane.rowIndex="4" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
+
+                        <!-- Add Claim Action Button -->
+                        <Button fx:id="addClaimActionButton" text="Add Claim Action" GridPane.rowIndex="5" GridPane.columnIndex="1" GridPane.halignment="RIGHT" styleClass="form-button" />
                     </children>
                 </GridPane>
             </center>

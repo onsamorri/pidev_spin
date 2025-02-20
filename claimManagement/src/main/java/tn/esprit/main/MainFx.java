@@ -12,6 +12,8 @@ public class MainFx extends Application {
 
         //Parent root= FXMLLoader.load(getClass().getResource("/AddClaimInterface.fxml"));
         Parent root= FXMLLoader.load(getClass().getResource("/ManageClaimsInterface.fxml"));
+        //Parent root= FXMLLoader.load(getClass().getResource("/AddClaimActionInterface.fxml"));
+        //Parent root= FXMLLoader.load(getClass().getResource("/ManageClaimActionsInterface.fxml"));
 
         Scene scene=new Scene(root);
 

@@ -66,6 +66,7 @@ public class ShowClaimController {
                 return new TableCell<Claim, Void>() {
                     private final Button updateButton = new Button("Update");
                     private final Button deleteButton = new Button("Delete");
+                    private final Button submitActionButton = new Button("Submit Action");
 
                     {
                         updateButton.setOnAction(event -> {
@@ -78,7 +79,12 @@ public class ShowClaimController {
                             deleteClaim(selectedClaim);
                         });
 
-                        HBox hBox = new HBox(updateButton, deleteButton);
+                        submitActionButton.setOnAction(event -> {
+                            Claim selectedClaim = getTableView().getItems().get(getIndex());
+                            submitClaimAction(selectedClaim);
+                        });
+
+                        HBox hBox = new HBox(updateButton, deleteButton, submitActionButton);
                         hBox.setSpacing(10);
                         setGraphic(hBox);
                     }
@@ -143,6 +149,33 @@ public class ShowClaimController {
             claimsTable.refresh(); // Force the table to refresh its cells
         } else {
             showAlert(Alert.AlertType.WARNING, "Selection Error", "Please select a claim to delete.");
+        }
+    }
+
+    private void submitClaimAction(Claim selectedClaim) {
+        if (selectedClaim != null) {
+            openAddClaimActionInterface(selectedClaim);
+        } else {
+            showAlert(Alert.AlertType.WARNING, "Selection Error", "Please select a claim to submit an action.");
+        }
+    }
+
+    private void openAddClaimActionInterface(Claim selectedClaim) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AddClaimActionInterface.fxml"));
+            Parent addClaimActionRoot = loader.load();
+
+            AddClaimActionController addClaimActionController = loader.getController();
+            addClaimActionController.setClaimData(selectedClaim);
+
+            Stage addClaimActionStage = new Stage();
+            addClaimActionStage.setTitle("Submit Claim Action");
+            addClaimActionStage.setScene(new Scene(addClaimActionRoot));
+            addClaimActionStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to open Submit Claim Action interface.");
         }
     }
 
