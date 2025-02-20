@@ -26,7 +26,7 @@ public class Main {
             userServices.add(athlete);
 
             // Adding an injury
-            Injury injury = new Injury(2, 2, InjuryType.SPRAIN, "Ankle sprain", LocalDate.now(), Severity.MODERATE);
+            Injury injury = new Injury(2, "Ali", InjuryType.SPRAIN, "Ankle sprain", LocalDate.now(), Severity.MODERATE);
             injuryServices.add(injury);
 
             // Get the injury_id and user_id dynamically (assuming they are already set or retrieved from a database)

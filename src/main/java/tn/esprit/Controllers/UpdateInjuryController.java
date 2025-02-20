@@ -2,16 +2,17 @@ package tn.esprit.Controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import tn.esprit.entities.Injury;
+import tn.esprit.entities.user;
 import tn.esprit.entities.InjuryType;
 import tn.esprit.entities.Severity;
 import tn.esprit.services.InjuryServices;
 
-
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-public class AddInjuryController {
+public class UpdateInjuryController {
 
     @FXML
     private TextField AthleteNameField;
@@ -22,27 +23,54 @@ public class AddInjuryController {
     @FXML
     private TextField InjuryDescriptionField;
 
-    @FXML
-    private ChoiceBox<Severity> SeverityBox;
 
     @FXML
     private DatePicker InjuryDatePicker;
 
     @FXML
-    private Button addInjuryButton;
+    private ChoiceBox<Severity> SeverityBox;
+
+    @FXML
+    private Button updateInjuryButton;
+
+    @FXML
+    private Button cancelButton;
+
+    private InjuryServices InjuryService;
+    private Injury selectedInjury; // To hold the injury being updated
+    private ShowInjuryController showInjuryController; // Reference to the ShowInjuryController
+
+    public void setInjuryData(Injury selectedInjury) {
+        this.selectedInjury= selectedInjury; // Pass the selected Injury when opening this controller
+        // Fill fields with the selected Injury's data
+        if (selectedInjury != null) {
+            AthleteNameField.setText(selectedInjury.getUser_fname());
+            InjuryDescriptionField.setText(selectedInjury.getInjury_description());
+            InjuryTypeBox.setValue(selectedInjury.getInjuryType());
+            InjuryDatePicker.setValue(selectedInjury.getInjuryDate());
+            SeverityBox.setValue(selectedInjury.getInjury_severity());
+        }
+    }
+
+    public void setShowInjuryController(ShowInjuryController showInjuryController) {
+        this.showInjuryController = showInjuryController; // Set the reference to ShowInjuryController
+    }
 
     @FXML
     public void initialize() {
+        InjuryService = new InjuryServices();
+
         // Populate ChoiceBoxes with enum values
-        SeverityBox.getItems().addAll(Severity.values());
         InjuryTypeBox.getItems().addAll(InjuryType.values());
+        SeverityBox.getItems().addAll(Severity.values());
 
         // Set default values (optional)
-        SeverityBox.setValue(Severity.MILD);
         InjuryTypeBox.setValue(InjuryType.STRAIN);
+        SeverityBox.setValue(Severity.MILD);
 
-        // Set button action
-        addInjuryButton.setOnAction(event -> addInjury());
+        // Set button actions
+        updateInjuryButton.setOnAction(event -> updateInjury());
+        cancelButton.setOnAction(event -> closeWindow());
 
         // Set the date picker to not allow dates before September 1st of the current academic year
         setDatePickerConstraints();
@@ -67,14 +95,12 @@ public class AddInjuryController {
         });
     }
 
-    private void addInjury() {
-        InjuryServices injuryService = new InjuryServices();
-
+    private void updateInjury() {
         String user_fname = AthleteNameField.getText();
         String injury_description = InjuryDescriptionField.getText();
-        Severity severity = SeverityBox.getValue();
-        LocalDate injuryDate = InjuryDatePicker.getValue();
         InjuryType type = InjuryTypeBox.getValue();
+        LocalDate InjuryDate = InjuryDatePicker.getValue();
+        Severity severity = SeverityBox.getValue();
 
         // Validate inputs
         boolean valid = true;
@@ -86,20 +112,6 @@ public class AddInjuryController {
             AthleteNameField.getStyleClass().remove("invalid-input");
         }
 
-        if (severity == null) {
-            SeverityBox.getStyleClass().add("invalid-input");
-            valid = false;
-        } else {
-            SeverityBox.getStyleClass().remove("invalid-input");
-        }
-
-        if (injuryDate == null) {
-            InjuryDatePicker.getStyleClass().add("invalid-input");
-            valid = false;
-        } else {
-            InjuryDatePicker.getStyleClass().remove("invalid-input");
-        }
-
         if (type == null) {
             InjuryTypeBox.getStyleClass().add("invalid-input");
             valid = false;
@@ -107,27 +119,47 @@ public class AddInjuryController {
             InjuryTypeBox.getStyleClass().remove("invalid-input");
         }
 
+        if (InjuryDate == null) {
+            InjuryDatePicker.getStyleClass().add("invalid-input");
+            valid = false;
+        } else {
+            InjuryDatePicker.getStyleClass().remove("invalid-input");
+        }
+
+        if (severity == null) {
+            SeverityBox.getStyleClass().add("invalid-input");
+            valid = false;
+        } else {
+            SeverityBox.getStyleClass().remove("invalid-input");
+        }
+
         if (!valid) {
             showAlert(Alert.AlertType.ERROR, "Form Error", "Please fill in all fields correctly.");
             return;
         }
 
-        // Create injury object
-        Injury injury = new Injury(user_fname, type, severity, injury_description, injuryDate);
-
-
+        // Update the selected Injury with the new data
+        selectedInjury.setUser_fname(user_fname);
+        selectedInjury.setInjuryType(type);
+        selectedInjury.setInjury_description(injury_description);
+        selectedInjury.setInjuryDate(InjuryDate);
+        selectedInjury.setInjury_severity(severity);
 
         try {
-            // Add injury to database
-            injuryService.add(injury);
-            showAlert(Alert.AlertType.INFORMATION, "Success", "injury added successfully!");
-
-            // Clear fields after successful addition
-            clearFields();
+            // Update Injury in the database
+            InjuryService.update(selectedInjury);
+            showAlert(Alert.AlertType.INFORMATION, "Success", "Injury updated successfully!");
+            showInjuryController.refreshTable(); // Refresh the table in ShowInjuryController
+            closeWindow(); // Close the window after update
         } catch (SQLException e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Database Error", "Failed to add injury.");
+            showAlert(Alert.AlertType.ERROR, "Database Error", "Failed to update Injury.");
         }
+    }
+
+    private void closeWindow() {
+        Stage stage = (Stage) cancelButton.getScene().getWindow();
+        stage.close();
     }
 
     private void showAlert(Alert.AlertType alertType, String title, String content) {
@@ -140,15 +172,16 @@ public class AddInjuryController {
 
     private void clearFields() {
         AthleteNameField.clear();
-        InjuryDescriptionField.clear();
         InjuryDatePicker.setValue(null);
-        SeverityBox.setValue(Severity.MODERATE);
-        InjuryTypeBox.setValue(InjuryType.BRUISE);
+        InjuryTypeBox.setValue(InjuryType.DISLOCATION);
+        InjuryDescriptionField.clear();
+        SeverityBox.setValue(Severity.SEVERE);
 
         // Remove invalid-input class
         AthleteNameField.getStyleClass().remove("invalid-input");
-        SeverityBox.getStyleClass().remove("invalid-input");
-        InjuryDatePicker.getStyleClass().remove("invalid-input");
         InjuryTypeBox.getStyleClass().remove("invalid-input");
+        InjuryDescriptionField.getStyleClass().remove("invalid-input");
+        InjuryDatePicker.getStyleClass().remove("invalid-input");
+        SeverityBox.getStyleClass().remove("invalid-input");
     }
 }

@@ -188,6 +188,22 @@ public class UserServices implements IService<user> {
         }
         return users;
     }
+
+    //Leena
+
+    public int getUserIdByName(String userName) throws SQLException {
+        String query = "SELECT id FROM users WHERE name = ?";
+        PreparedStatement ps = con.prepareStatement(query);
+        ps.setString(1, userName);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            return rs.getInt("id");
+        } else {
+            throw new SQLException("User not found");
+        }
+    }
+
 }
 
 
