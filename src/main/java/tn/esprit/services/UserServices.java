@@ -189,20 +189,70 @@ public class UserServices implements IService<User> {
 
     //Leena
 
-    // In UserServices class
-    public Integer getUser_id(Connection con, String user_fname, String user_lname) throws SQLException {
-        String query = "SELECT user_id FROM user WHERE user_fname = ? AND user_lname = ? LIMIT 1";
+    public User findUserById(Connection con, int user_id) throws SQLException {
+        String query = "SELECT * FROM user WHERE user_id = ?";
+
+        try (PreparedStatement stmt = con.prepareStatement(query)) {
+            stmt.setInt(1, user_id);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new User(
+                            rs.getInt("user_id"),
+                            rs.getString("user_fname"),
+                            rs.getString("user_lname"),
+                            rs.getString("user_email"),
+                            rs.getString("user_pwd"),
+                            rs.getString("user_nbr"),
+                            User.user_role.valueOf(rs.getString("user_role")) // Convert String to Enum
+                    );
+                }
+            }
+        }
+
+        return null; // Return null if user is not found
+    }
+
+    public User getUserByName(Connection con, String user_fname, String user_lname) throws SQLException {
+        String query = "SELECT * FROM user WHERE user_fname = ? AND user_lname = ?";
+        try (PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, user_fname);
+            ps.setString(2, user_lname);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int user_id = rs.getInt("user_id");
+                String fname = rs.getString("user_fname");
+                String lname = rs.getString("user_lname");
+                String email = rs.getString("user_email");
+                String password = rs.getString("user_pwd");
+                String phone = rs.getString("user_nbr");
+                User.user_role role = User.user_role.valueOf(rs.getString("user_role"));
+
+                return new User(user_id, fname, lname, email, password, phone, role);
+            }
+        }
+        return null; // Return null if user not found
+    }
+
+    public int getUser_id(Connection con, String user_fname, String user_lname) throws SQLException {
+        String query = "SELECT user_id FROM user WHERE user_fname = ? AND user_lname = ?";
+
         try (PreparedStatement stmt = con.prepareStatement(query)) {
             stmt.setString(1, user_fname);
             stmt.setString(2, user_lname);
+
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return rs.getInt("user_id"); // Return user_id if found
+                    return rs.getInt("user_id");  // Return the user_id if found
                 }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-        return -1; // Return null if no user is found
+
+        return -1;  // Return -1 if user is not found
     }
+
+
+
+
 }
