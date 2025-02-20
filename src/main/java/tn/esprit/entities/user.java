@@ -1,10 +1,16 @@
 package tn.esprit.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User {
     private int user_id;
 
     private String user_fname;
     private String user_lname;
+
+
+    private List<Injury> injuries = new ArrayList<>();
     private String user_email;
     private String user_pwd;
     private String user_nbr;
@@ -92,6 +98,14 @@ public class User {
 
     public void setUser_role(User.user_role user_role) {
         this.user_role = user_role;
+    }
+
+    public List<Injury> getInjuries() {
+        return injuries;
+    }
+
+    public void setInjuries(List<Injury> injuries) {
+        this.injuries = injuries;
     }
 
     @Override

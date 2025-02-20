@@ -3,26 +3,27 @@ package tn.esprit.services;
 import tn.esprit.entities.Injury;
 import tn.esprit.entities.InjuryType;
 import tn.esprit.entities.Severity;
+import tn.esprit.entities.User;
 import tn.esprit.utils.MyDatabase;
-
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class InjuryServices implements IService<Injury> {
-
     private Connection con;
+    private UserServices userService;
 
     public InjuryServices() {
         con = MyDatabase.getInstance().getCon();
+        userService = new UserServices();
     }
 
     @Override
     public void add(Injury injury) throws SQLException {
         String query = "INSERT INTO injury (user_id, injuryType, injury_description, injuryDate, injury_severity) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement ps = con.prepareStatement(query)) {
-            ps.setInt(1, injury.getUser_id());
+            ps.setInt(1, injury.getUser().getUser_id());
             ps.setString(2, injury.getInjuryType().toString());
             ps.setString(3, injury.getInjury_description());
             ps.setDate(4, java.sql.Date.valueOf(injury.getInjuryDate()));
@@ -46,12 +47,13 @@ public class InjuryServices implements IService<Injury> {
             while (rs.next()) {
                 int injury_id = rs.getInt("injury_id");
                 int user_id = rs.getInt("user_id");
+                User user = userService.findUserById(con, user_id);
                 InjuryType injuryType = InjuryType.valueOf(rs.getString("injuryType"));
                 String injuryDescription = rs.getString("injury_description");
                 LocalDate injuryDate = rs.getDate("injuryDate").toLocalDate();
                 Severity injurySeverity = Severity.valueOf(rs.getString("injury_severity"));
 
-                Injury injury = new Injury(injury_id, user_id, injuryType, injuryDescription, injuryDate, injurySeverity);
+                Injury injury = new Injury(injury_id, user, injuryType, injuryDescription, injuryDate, injurySeverity);
                 injuries.add(injury);
             }
 
@@ -62,7 +64,6 @@ public class InjuryServices implements IService<Injury> {
 
         return injuries;
     }
-
 
     @Override
     public void delete(Injury injury) throws SQLException {
@@ -86,19 +87,23 @@ public class InjuryServices implements IService<Injury> {
     public void update(Injury injury) throws SQLException {
         String query = "UPDATE injury SET user_id = ?, injuryType = ?, injury_description = ?, injuryDate = ?, injury_severity = ? WHERE injury_id = ?";
 
-        PreparedStatement stmt = con.prepareStatement(query);
-        stmt.setInt(1, injury.getUser_id());
-        stmt.setString(2, injury.getInjuryType().toString());
-        stmt.setString(3, injury.getInjury_description());
-        stmt.setDate(4, java.sql.Date.valueOf(injury.getInjuryDate()));
-        stmt.setString(5, injury.getInjury_severity().toString());
-        stmt.setInt(6, injury.getInjury_id());
+        try (PreparedStatement stmt = con.prepareStatement(query)) {
+            stmt.setInt(1, injury.getUser().getUser_id());
+            stmt.setString(2, injury.getInjuryType().toString());
+            stmt.setString(3, injury.getInjury_description());
+            stmt.setDate(4, java.sql.Date.valueOf(injury.getInjuryDate()));
+            stmt.setString(5, injury.getInjury_severity().toString());
+            stmt.setInt(6, injury.getInjury_id());
 
-        int rowsUpdated = stmt.executeUpdate();
-        if (rowsUpdated > 0) {
-            System.out.println("Injury updated successfully!");
-        } else {
-            System.out.println("No injury found with the given ID.");
+            int rowsUpdated = stmt.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Injury updated successfully!");
+            } else {
+                System.out.println("No injury found with the given ID.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error updating injury: " + e.getMessage());
+            throw e;
         }
     }
 
@@ -112,22 +117,21 @@ public class InjuryServices implements IService<Injury> {
 
             if (rs.next()) {
                 int user_id = rs.getInt("user_id");
+                User user = userService.findUserById(con, user_id);
                 InjuryType injuryType = InjuryType.valueOf(rs.getString("injuryType"));
                 String injuryDescription = rs.getString("injury_description");
                 LocalDate injuryDate = rs.getDate("injuryDate").toLocalDate();
                 Severity injurySeverity = Severity.valueOf(rs.getString("injury_severity"));
 
-                injury = new Injury(injury_id, user_id, injuryType, injuryDescription, injuryDate, injurySeverity);
+                injury = new Injury(injury_id, user, injuryType, injuryDescription, injuryDate, injurySeverity);
             }
         }
 
         return injury;
     }
 
-    public Integer getUser_id(String user_fname, String user_lname) throws SQLException {
-        UserServices userService = new UserServices();
-        return userService.getUser_id(con, user_fname, user_lname);
-
+    public User getUserByName(String user_fname, String user_lname) throws SQLException {
+        return userService.getUserByName(con, user_fname, user_lname);
     }
 
 }

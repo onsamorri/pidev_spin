@@ -7,49 +7,38 @@ import java.time.LocalDate;
 public class Injury {
 
     private int injury_id;
-    private int user_id;  // Keep user_id for database reference
-    private User user;    // Store the User object
     private InjuryType injuryType;
     private String injury_description;
     private LocalDate injuryDate;
     private Severity injury_severity;
+    private User user;
 
     // Constructor with all attributes
-    public Injury(int injury_id, int user_id, InjuryType injuryType, String injury_description, LocalDate injuryDate, Severity injury_severity) {
+    public Injury(int injury_id, User user, InjuryType injuryType, String injury_description, LocalDate injuryDate, Severity injury_severity) {
         this.injury_id = injury_id;
-        this.user_id = user_id;
+        this.user = user;
         this.injuryType = injuryType;
         this.injury_description = injury_description;
         this.injuryDate = injuryDate;
         this.injury_severity = injury_severity;
     }
 
-    public Injury(int user_id, InjuryType injuryType, String injury_description, LocalDate injuryDate, Severity injury_severity) {
+    public Injury(User user, InjuryType injuryType, String injury_description, LocalDate injuryDate, Severity injury_severity) {
 
-        this.user_id = user_id;
+        this.user = user;
         this.injuryType = injuryType;
         this.injury_description = injury_description;
         this.injuryDate = injuryDate;
         this.injury_severity = injury_severity;
     }
 
-    // Getter for user
     public User getUser() {
         return user;
-    }
-
-    // Setter for user
-    public void setUser(User user) {
-        this.user = user;
     }
 
     // Other getters and setters
     public int getInjury_id() {
         return injury_id;
-    }
-
-    public int getUser_id() {
-        return user_id;
     }
 
     public InjuryType getInjuryType() {
@@ -74,8 +63,9 @@ public class Injury {
         this.injury_id = injury_id;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public void setInjuryType(InjuryType injuryType) {
@@ -98,12 +88,14 @@ public class Injury {
     public String toString() {
         return "Injury{" +
                 "injury_id=" + injury_id +
-                ", user_id=" + user_id +
-                ", user=" + (user != null ? user.getUser_fname() + " " + user.getUser_lname() : "Unknown") +
+                ", user_id=" + (user != null ? user.getUser_id() : "Unknown") +
+                ", user_name=" + (user != null ? user.getUser_fname() + " " + user.getUser_lname() : "Unknown") +
                 ", injuryType=" + injuryType +
                 ", injury_description='" + injury_description + '\'' +
                 ", injuryDate=" + injuryDate +
                 ", injury_severity=" + injury_severity +
                 '}';
     }
+
+
 }

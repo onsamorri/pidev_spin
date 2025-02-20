@@ -30,21 +30,23 @@ public class Main {
             User athlete = new Athlete(2, "John", "Doe", "johndoe@example.com", "password", "123456789", Date.valueOf(LocalDate.of(1995, 5, 10)), "Male", "123 Main St", 5.9f, 160.5f, 0, Date.valueOf(LocalDate.now()));
             userServices.add(athlete);
 
-            // Get the user_id dynamically using getUser_id method
+            // Get the user ID by name
             int user_id = userServices.getUser_id(con, "John", "Doe");
-            if (user_id != -1) {
-                System.out.println("User ID: " + user_id);
-            } else {
+            if (user_id == -1) {
                 System.out.println("User not found!");
-                return; // If user not found, exit
+                return; // Exit if user not found
+            }
+
+            // Retrieve the User object using the findUserById method
+            User user = userServices.findUserById(con, user_id);
+            if (user == null) {
+                System.out.println("User not found!");
+                return; // Exit if user is not found
             }
 
             // Adding an injury
-            Injury injury = new Injury(user_id, InjuryType.SPRAIN, "Ankle sprain", LocalDate.now(), Severity.MODERATE);
+            Injury injury = new Injury(user, InjuryType.SPRAIN, "Ankle sprain", LocalDate.now(), Severity.MODERATE);
             injuryServices.add(injury);
-
-            // Get the injury_id and user_id dynamically
-            int injury_id = injury.getInjury_id();  // Using the injury object to get the ID
 
             // Define recovery plan details
             RecoveryGoal recoveryGoal = RecoveryGoal.REHABILITATION;  // Example recovery goal from enum
@@ -54,7 +56,7 @@ public class Main {
             RecoveryStatus recoveryStatus = RecoveryStatus.IN_PROGRESS;  // Current status of recovery
 
             // Create the RecoveryPlan object with proper parameters
-            RecoveryPlan recoveryPlan = new RecoveryPlan(injury_id, user_id, recoveryGoal, recoveryDescription, recoveryStartDate, recoveryEndDate, recoveryStatus);
+            RecoveryPlan recoveryPlan = new RecoveryPlan(injury.getInjury_id(), user_id, recoveryGoal, recoveryDescription, recoveryStartDate, recoveryEndDate, recoveryStatus);
             recoveryPlanServices.add(recoveryPlan);
 
             // Adding a nutrition plan
