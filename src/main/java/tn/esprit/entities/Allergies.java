@@ -17,3 +17,5 @@ public enum Allergies {
     LUPIN,
     SULPHITES
 }
+
+

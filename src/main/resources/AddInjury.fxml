@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 
 <?import java.net.URL?>
-<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.Controllers.AddInjuryController">
+<AnchorPane fx:controller="tn.esprit.Controllers.AddInjuryController" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <stylesheets>
         <URL value="@styles.css" />
     </stylesheets>
@@ -26,22 +26,8 @@
                 </HBox>
             </top>
             <left>
-                <VBox prefHeight="600.0" prefWidth="200.0" styleClass="sidebar" BorderPane.alignment="CENTER">
-                    <children>
-                        <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Add injuries" styleClass="sidebar-button" />
-                        <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="View injuries" styleClass="sidebar-button" />
-                        <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Update injury" styleClass="sidebar-button" />
-                        <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="206.0" text="Add Recovery" styleClass="sidebar-button" />
-                        <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="206.0" text="View Recovery" styleClass="sidebar-button" />
-                        <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Update Recovery" styleClass="sidebar-button" />
-                        <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="220.0" text="Add Nutrition " styleClass="sidebar-button" />
-                        <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="220.0" text="View Nutrition " styleClass="sidebar-button" />
-                        <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Update Nutrition" styleClass="sidebar-button" />
-                    </children>
-                    <opaqueInsets>
-                        <Insets />
-                    </opaqueInsets>
-                </VBox>
+                <!-- Include Sidebar.fxml without extra AnchorPane wrapper -->
+                <fx:include source="SideBar.fxml" />
             </left>
             <center>
                 <GridPane alignment="CENTER" hgap="10" vgap="10" styleClass="form-grid" BorderPane.alignment="CENTER">

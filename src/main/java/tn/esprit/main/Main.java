@@ -56,7 +56,7 @@ public class Main {
             RecoveryStatus recoveryStatus = RecoveryStatus.IN_PROGRESS;  // Current status of recovery
 
             // Create the RecoveryPlan object with proper parameters
-            RecoveryPlan recoveryPlan = new RecoveryPlan(injury.getInjury_id(), user_id, recoveryGoal, recoveryDescription, recoveryStartDate, recoveryEndDate, recoveryStatus);
+            RecoveryPlan recoveryPlan = new RecoveryPlan(injury, user, recoveryGoal, recoveryDescription, recoveryStartDate, recoveryEndDate, recoveryStatus);
             recoveryPlanServices.add(recoveryPlan);
 
             // Adding a nutrition plan

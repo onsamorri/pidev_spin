@@ -9,20 +9,13 @@ import javafx.stage.Stage;
 public class MainFX extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("/Main.fxml"));
 
-        //Parent root= FXMLLoader.load(getClass().getResource("/AddInjury.fxml"));
-        Parent root= FXMLLoader.load(getClass().getResource("/ManageInjuries.fxml"));
-
-
-        Scene scene=new Scene(root);
+        Scene scene = new Scene(root);
 
         primaryStage.setScene(scene);
-
+        primaryStage.setTitle("SPIN");
         primaryStage.show();
-
-        primaryStage.setTitle("Injuries");
-
-
     }
 
     public static void main(String[] args) {

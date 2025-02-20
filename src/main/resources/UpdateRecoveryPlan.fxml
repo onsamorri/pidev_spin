@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 
 <?import java.net.URL?>
-<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.Controllers.UpdateInjuryController">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.Controllers.UpdateRecoveryPlanController">
     <stylesheets>
         <URL value="@styles.css" />
     </stylesheets>
@@ -22,7 +22,7 @@
         <BorderPane prefHeight="600.0" prefWidth="900.0">
             <top>
                 <HBox prefHeight="80.0" prefWidth="900.0" styleClass="header" BorderPane.alignment="CENTER">
-                    <Label text="Update Injury" styleClass="header-title" />
+                    <Label text="Update Recovery Plan" styleClass="header-title" />
                 </HBox>
             </top>
             <left>
@@ -41,25 +41,29 @@
                         <TextField fx:id="AthleteNameField" promptText="Enter athlete name" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
 
                         <Label text="Athlete Last Name:" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label" />
-                        <TextField fx:id="AthleteLastNameField" promptText="Enter athlete Last name" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
+                        <TextField fx:id="AthleteLastNameField" promptText="Enter athlete last name" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
 
-                        <Label text="Injury Type " GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label" />
-                        <ChoiceBox fx:id="InjuryTypeBox" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
+                        <Label text="Recovery Description:" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="form-label" />
+                        <TextField fx:id="RecoveryDescriptionField" promptText="Enter recovery description" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
 
-                        <Label text="Injury Date:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label" />
-                        <DatePicker fx:id="InjuryDatePicker" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
+                        <Label text="Recovery Start Date:" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="form-label" />
+                        <DatePicker fx:id="RecoveryStartDatePicker" GridPane.rowIndex="3" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
 
-                        <Label text="Injury Severity:" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="form-label" />
-                        <ChoiceBox fx:id="SeverityBox" GridPane.rowIndex="4" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
+                        <Label text="Recovery End Date:" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="form-label" />
+                        <DatePicker fx:id="RecoveryEndDatePicker" GridPane.rowIndex="4" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
 
-                        <Label text="Description:" GridPane.rowIndex="5" GridPane.columnIndex="0" styleClass="form-label" />
-                        <TextField fx:id="InjuryDescriptionField" promptText="Enter description" GridPane.rowIndex="5" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
+                        <Label text="Recovery Goal:" GridPane.rowIndex="5" GridPane.columnIndex="0" styleClass="form-label" />
+                        <ChoiceBox fx:id="RecoveryGoalBox" GridPane.rowIndex="5" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
+
+                        <Label text="Recovery Status:" GridPane.rowIndex="6" GridPane.columnIndex="0" styleClass="form-label" />
+                        <ChoiceBox fx:id="RecoveryStatusBox" GridPane.rowIndex="6" GridPane.columnIndex="1" styleClass="form-input" prefWidth="300.0" />
 
                         <!-- Update and Cancel Buttons -->
-                        <HBox spacing="10" GridPane.rowIndex="6" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
-                            <Button fx:id="updateInjuryButton" text="Update Injury" styleClass="form-button" />
+                        <HBox spacing="10" GridPane.rowIndex="7" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
+                            <Button fx:id="updateRecoveryPlanButton" text="Update Recovery Plan" styleClass="form-button" />
                             <Button fx:id="cancelButton" text="Cancel" styleClass="form-button" />
                         </HBox>
+
                     </children>
                 </GridPane>
             </center>

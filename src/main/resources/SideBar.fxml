@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="412.0" prefWidth="200.0" style="-fx-background-color: #709775;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.Controllers.MainController">
+    <VBox prefHeight="400.0" prefWidth="157.0" style="-fx-background-color: #709775;">
+        <children>
+            <VBox prefHeight="91.0" prefWidth="157.0">
+                <children>
+                    <ImageView fitHeight="75.0" fitWidth="107.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                            <Image url="@logo.png" />
+                        </image>
+                        <VBox.margin>
+                            <Insets left="40.0" top="5.0" />
+                        </VBox.margin>
+                    </ImageView>
+                </children>
+            </VBox>
+            <Button prefHeight="38.0" prefWidth="157.0" text="View Injuries" onAction="#handleViewInjuries" style="-fx-background-color: #709775; -fx-text-fill: white;"/>
+            <Button prefHeight="38.0" prefWidth="157.0" text="Add Injury" onAction="#handleAddInjury" style="-fx-background-color: #709775; -fx-text-fill: white;"/>
+            <Button prefHeight="38.0" prefWidth="157.0" text="Update Injury" onAction="#handleUpdateInjury" style="-fx-background-color: #709775; -fx-text-fill: white;"/>
+            <Button prefHeight="38.0" prefWidth="157.0" text="View Recovery Plans" onAction="#handleViewRecoveryPlans" style="-fx-background-color: #709775; -fx-text-fill: white;"/>
+            <Button prefHeight="38.0" prefWidth="157.0" text="Add Recovery Plans" onAction="#handleAddRecoveryPlans" style="-fx-background-color: #709775; -fx-text-fill: white;"/>
+            <Button prefHeight="36.0" prefWidth="157.0" text="Update Recovery Plan" onAction="#handleUpdateRecoveryPlan" style="-fx-background-color: #709775; -fx-text-fill: white;"/>
+        </children>
+    </VBox>
+</AnchorPane>
