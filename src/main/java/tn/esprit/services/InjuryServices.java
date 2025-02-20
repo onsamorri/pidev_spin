@@ -130,6 +130,39 @@ public class InjuryServices implements IService<Injury> {
         return injury;
     }
 
+    public Injury findByUserId(int user_id) throws SQLException {
+        String query = "SELECT * FROM injury WHERE user_id = ?";
+        Injury injury = null;
+
+        try (PreparedStatement stmt = con.prepareStatement(query)) {
+            stmt.setInt(1, user_id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                // Retrieve Injury attributes
+                int injury_id = rs.getInt("injury_id");
+                String injury_description = rs.getString("injury_description");
+                Severity injury_severity = Severity.valueOf(rs.getString("injury_severity"));
+                LocalDate injuryDate = rs.getDate("injuryDate").toLocalDate();
+                InjuryType injuryType = InjuryType.valueOf(rs.getString("injurytype"));
+
+                // Retrieve the User associated with the injury
+                User user = new User(); // Assuming you have a User object already created
+                user.setUser_id(user_id);  // You may retrieve other User details if needed
+
+                // Create the Injury object
+                injury = new Injury(injury_id, user, injuryType, injury_description, injuryDate, injury_severity);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error retrieving injury: " + e.getMessage());
+            throw e;
+        }
+
+        return injury;
+    }
+
+
+
     public User getUserByName(String user_fname, String user_lname) throws SQLException {
         return userService.getUserByName(con, user_fname, user_lname);
     }

@@ -22,26 +22,16 @@
                     <Label text="Manage Injuries" styleClass="header-title" />
                 </HBox>
             </top>
+
             <left>
-                <VBox prefHeight="600.0" prefWidth="200.0" styleClass="sidebar" BorderPane.alignment="CENTER">
-                    <children>
-                        <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Add injuries" styleClass="sidebar-button" />
-                        <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="View injuries" styleClass="sidebar-button" />
-                        <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="206.0" text="Add RecoveryPlan" styleClass="sidebar-button" />
-                        <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="206.0" text="View Recovery Plans" styleClass="sidebar-button" />
-                        <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="220.0" text="Add Nutrition Plan " styleClass="sidebar-button" />
-                        <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="220.0" text="View Nutrition Plans " styleClass="sidebar-button" />
-                    </children>
-                    <opaqueInsets>
-                        <Insets />
-                    </opaqueInsets>
-                </VBox>
+                <!-- Include Sidebar.fxml without extra AnchorPane wrapper -->
+                <fx:include source="SideBar.fxml" />
             </left>
             <center>
                 <VBox alignment="CENTER" spacing="10" styleClass="form-grid" BorderPane.alignment="CENTER">
                     <TableView fx:id="InjuryTable" prefHeight="500.0" prefWidth="700.0">
                         <columns>
-                            <TableColumn fx:id="InjuryIdColumn" text="ID" />
+
                             <TableColumn fx:id="AthleteNameColumn" text="Athlete_Name" />
                             <TableColumn fx:id="AthleteLastNameColumn" text="Athlete_Last_Name" />
                             <TableColumn fx:id="InjuryTypeColumn" text="Injury Type" />

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<?import java.net.URL?>
+<AnchorPane prefHeight="412.0" prefWidth="600.0" style="-fx-background-color: #709775;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.Controllers.AddRecoveryPlanController">
+    <stylesheets>
+        <URL value="@styles.css" />
+    </stylesheets>
+    <children>
+        <!-- Include Sidebar.fxml -->
+        <AnchorPane layoutX="0" layoutY="0" prefWidth="157.0" prefHeight="412.0">
+            <fx:include source="SideBar.fxml" />
+        </AnchorPane>
+
+        <VBox layoutX="157.0" layoutY="5.0" prefHeight="406.0" prefWidth="439.0">
+            <children>
+                <VBox prefHeight="402.0" prefWidth="462.0" style="-fx-background-color: white; -fx-background-radius: 25;">
+                    <children>
+                        <HBox alignment="CENTER" spacing="10" prefHeight="42.0" prefWidth="439.0">
+                            <Label text="Add Recovery" styleClass="header-title" style="-fx-text-fill: #D68C45;" />
+                        </HBox>
+                        <VBox alignment="CENTER" spacing="10" prefHeight="360.0" prefWidth="439.0" style="-fx-padding: 20;">
+                            <HBox alignment="CENTER" spacing="10" prefHeight="40.0" prefWidth="400.0">
+                                <Label text="Athlete First Name"/>
+                                <TextField fx:id="AthleteNameField" prefWidth="250.0" />
+                            </HBox>
+
+                            <HBox alignment="CENTER" spacing="10" prefHeight="40.0" prefWidth="400.0">
+                                <Label text="Athlete Last Name"/>
+                                <TextField fx:id="AthleteLastNameField" prefWidth="250.0" />
+                            </HBox>
+
+                            <HBox alignment="CENTER" spacing="10" prefHeight="40.0" prefWidth="400.0">
+                                <Label text="Recovery Goal:"/>
+                                <ChoiceBox fx:id="RecoveryGoalBox" prefWidth="250.0" />
+                            </HBox>
+
+                            <HBox alignment="CENTER" spacing="10" prefHeight="40.0" prefWidth="400.0">
+                                <Label text="Description:"/>
+                                <TextField fx:id="RecoveryDescriptionField" prefWidth="250.0" />
+                            </HBox>
+
+                            <HBox alignment="CENTER" spacing="10" prefHeight="40.0" prefWidth="400.0">
+                                <Label text="Start Date:"/>
+                                <DatePicker fx:id="RecoveryStartDatePicker" prefWidth="250.0" />
+                            </HBox>
+
+                            <HBox alignment="CENTER" spacing="10" prefHeight="40.0" prefWidth="400.0">
+                                <Label text="End Date:"/>
+                                <DatePicker fx:id="RecoveryEndDatePicker" prefWidth="250.0" />
+                            </HBox>
+
+                            <HBox alignment="CENTER" spacing="10" prefHeight="40.0" prefWidth="400.0">
+                                <Label text="Recovery Status:"/>
+                                <ChoiceBox fx:id="RecoveryStatusBox" prefWidth="250.0" />
+                            </HBox>
+
+                            <!-- Add Recovery Plan Button -->
+                            <Button fx:id="addRecoveryPlanButton" text="Add Recovery Plan" styleClass="form-button" style="-fx-background-color: #D68C45;" />
+                        </VBox>
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>
