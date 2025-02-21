@@ -10,10 +10,13 @@ public class MainFx extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        //Parent root= FXMLLoader.load(getClass().getResource("/AddClaimInterface.fxml"));
-        Parent root= FXMLLoader.load(getClass().getResource("/ManageClaimsInterface.fxml"));
+        Parent root= FXMLLoader.load(getClass().getResource("/AddClaimInterface.fxml"));
+        //Parent root= FXMLLoader.load(getClass().getResource("/ManageClaimsInterface.fxml"));
         //Parent root= FXMLLoader.load(getClass().getResource("/AddClaimActionInterface.fxml"));
         //Parent root= FXMLLoader.load(getClass().getResource("/ManageClaimActionsInterface.fxml"));
+        //Parent root= FXMLLoader.load(getClass().getResource("/AdminBack.fxml"));
+        //Parent root= FXMLLoader.load(getClass().getResource("/test.fxml"));
+
 
         Scene scene=new Scene(root);
 

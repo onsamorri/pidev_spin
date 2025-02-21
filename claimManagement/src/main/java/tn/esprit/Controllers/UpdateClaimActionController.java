@@ -1,12 +1,18 @@
 package tn.esprit.Controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import tn.esprit.entities.ClaimAction;
 import tn.esprit.entities.ClaimActionType;
 import tn.esprit.services.ClaimActionServices;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
@@ -201,5 +207,49 @@ public class UpdateClaimActionController {
         claimActionStartDatePicker.getStyleClass().remove("invalid-input");
         claimActionEndDatePicker.getStyleClass().remove("invalid-input");
         claimActionNotesField.getStyleClass().remove("invalid-input");
+    }
+
+    @FXML
+    private void handleClaimsButtonAction(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ManageClaimsInterface.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleClaimActionsButtonAction(ActionEvent event) { // Add this method
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ManageClaimActionsInterface.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleBackButtonAction(ActionEvent event) {
+        try {
+            // Load the AdminBack interface
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AdminBack.fxml"));
+            Parent adminBackRoot = loader.load();
+
+            // Get the current stage and switch the scene
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(adminBackRoot));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
