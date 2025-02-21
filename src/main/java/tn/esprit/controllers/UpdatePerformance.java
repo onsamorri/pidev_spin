@@ -91,7 +91,6 @@ public class UpdatePerformance {
     }
     private boolean validateInputs() {
         boolean valid = true;
-
         // Validate speed
         try {
             Float.parseFloat(performance_speed.getText());
@@ -100,7 +99,6 @@ public class UpdatePerformance {
             performance_speed.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
             valid = false;
         }
-
         // Validate agility
         try {
             Float.parseFloat(performance_agility.getText());
@@ -109,7 +107,6 @@ public class UpdatePerformance {
             performance_agility.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
             valid = false;
         }
-
         // Validate goals
         try {
             Integer.parseInt(performance_nbr_goals.getText());
@@ -118,7 +115,6 @@ public class UpdatePerformance {
             performance_nbr_goals.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
             valid = false;
         }
-
         // Validate assists
         try {
             Integer.parseInt(performance_assists.getText());
@@ -127,7 +123,6 @@ public class UpdatePerformance {
             performance_assists.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
             valid = false;
         }
-
         // Validate fouls
         try {
             Integer.parseInt(performance_nbr_fouls.getText());
@@ -136,7 +131,6 @@ public class UpdatePerformance {
             performance_nbr_fouls.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
             valid = false;
         }
-
         // Validate date
         if (performance_date_recorded.getValue() == null) {
             performance_date_recorded.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
@@ -144,7 +138,6 @@ public class UpdatePerformance {
         } else {
             performance_date_recorded.setBorder(Border.EMPTY);
         }
-
         return valid;
     }
 }
