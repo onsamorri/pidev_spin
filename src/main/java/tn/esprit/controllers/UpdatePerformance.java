@@ -28,7 +28,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.geometry.Insets;
 import tn.esprit.entities.Performance;
-import tn.esprit.service.PerformanceServices;
+import tn.esprit.services.PerformanceServices;
 
 import java.sql.SQLException;
 

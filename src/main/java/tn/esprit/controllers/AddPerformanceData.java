@@ -12,7 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import tn.esprit.service.PerformanceServices;
+import tn.esprit.services.PerformanceServices;
 import tn.esprit.entities.Performance;
 
 import java.io.IOException;
@@ -69,6 +69,8 @@ public class AddPerformanceData {
 
     @FXML
     private TableColumn<Performance, Void> colActions;
+    @FXML
+    private Label backBtn;
 
     private final PerformanceServices performanceService = new PerformanceServices();
     private final ObservableList<Performance> performanceList = FXCollections.observableArrayList();
@@ -83,7 +85,7 @@ public class AddPerformanceData {
         colDate.setCellValueFactory(new PropertyValueFactory<>("date_recorded"));
         colFouls.setCellValueFactory(new PropertyValueFactory<>("nbr_fouls"));
 
-
+        backBtn.setOnMouseClicked(event -> switchBackToCoachFront());
         performanceTable.setItems(performanceList);
         updatePerformanceList();
         addActionButtonsToTable();
@@ -120,6 +122,25 @@ public class AddPerformanceData {
             showAlert("Error", "Please enter valid numbers for speed, agility, goals, assists, and fouls.");
         } catch (SQLException e) {
             showAlert("Error", "Database error: " + e.getMessage());
+        }
+    }
+
+    private void switchBackToCoachFront() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Coachfront.fxml"));
+            Parent root = loader.load();
+
+            Coachfront controller = loader.getController();
+            controller.initialize();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Welcome Coach");
+            stage.setUserData(this);
+            stage.show();
+            Stage currentStage = (Stage) backBtn.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            showAlert("Error", "Failed to open coach front screen: " + e.getMessage());
         }
     }
     private boolean validateInputs() {

@@ -16,7 +16,7 @@ import javafx.scene.paint.Color;
 import tn.esprit.entities.Duration;
 import tn.esprit.entities.Focus;
 import tn.esprit.entities.TrainingSession;
-import tn.esprit.service.TrainingSessionServices;
+import tn.esprit.services.TrainingSessionServices;
 
 import java.sql.SQLException;
 import java.time.LocalTime;

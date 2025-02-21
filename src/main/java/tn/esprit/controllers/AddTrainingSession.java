@@ -16,7 +16,7 @@ import javafx.util.StringConverter;
 import tn.esprit.entities.Duration;
 import tn.esprit.entities.Focus;
 import tn.esprit.entities.TrainingSession;
-import tn.esprit.service.TrainingSessionServices;
+import tn.esprit.services.TrainingSessionServices;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -65,6 +65,8 @@ public class AddTrainingSession {
 
     @FXML
     private TableColumn<TrainingSession, Void> colActions;
+    @FXML
+    private Label backBtn;
 
 
     private final TrainingSessionServices trainingSessionService = new TrainingSessionServices();
@@ -72,6 +74,7 @@ public class AddTrainingSession {
 
     @FXML
     public void initialize() {
+        backBtn.setOnMouseClicked(event -> switchBackToCoachFront());
         colId.setCellValueFactory(new PropertyValueFactory<>("trainingSession_id"));
         colFocus.setCellValueFactory(new PropertyValueFactory<>("focus"));
         colStartTime.setCellValueFactory(new PropertyValueFactory<>("start_time"));
@@ -122,6 +125,25 @@ public class AddTrainingSession {
             }
         });
         training_duration.setValue(null); // set the placeholder as the default value
+    }
+
+    private void switchBackToCoachFront() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Coachfront.fxml"));
+            Parent root = loader.load();
+
+            Coachfront controller = loader.getController();
+            controller.initialize();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Welcome Coach");
+            stage.setUserData(this);
+            stage.show();
+            Stage currentStage = (Stage) backBtn.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            showAlert("Error", "Failed to open coach front screen: " + e.getMessage());
+        }
     }
 
     private void addActionButtonsToTable() {
