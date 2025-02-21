@@ -136,7 +136,7 @@ public class UserServices implements IService<user> {
                 ps.setNull(14, java.sql.Types.INTEGER);
             }
 
-            ps.setInt(16, user_id); // WHERE condition
+            ps.setInt(15, user_id); // WHERE condition
             ps.executeUpdate();
             System.out.println("Account updated successfully.");
         } catch (SQLException e) {

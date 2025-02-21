@@ -40,6 +40,11 @@ public class addUser {
 
     @FXML
     private void addUserAction() {
+        if (!validateInputs()) {
+            return;
+        }
+        Coach newCoach =null;
+
         String fname = fname_id.getText().trim();
         String lname = lname_id.getText().trim();
         String email = email_id.getText().trim();
@@ -48,33 +53,9 @@ public class addUser {
         String role = "coach";  // Role is always "coach"
         Integer nbTeams = 0;  // Default value
 
-        // Validate input
-        if (!isValidName(fname)) {
-            showAlert("Validation Error", "First name should only contain letters.");
-            return;
-        }
 
-        if (!isValidName(lname)) {
-            showAlert("Validation Error", "Last name should only contain letters.");
-            return;
-        }
 
-        if (!isValidEmail(email)) {
-            showAlert("Validation Error", "Invalid email format. Example: example@domain.com");
-            return;
-        }
-
-        if (!isValidPassword(password)) {
-            showAlert("Validation Error", "Password must contain letters, numbers, and special characters.");
-            return;
-        }
-
-        if (!isValidPhoneNumber(phoneNumber)) {
-            showAlert("Validation Error", "Phone number must start with '+' followed by digits.");
-            return;
-        }
-
-        Coach newCoach = new Coach(fname, lname, email, password, phoneNumber, nbTeams);
+        newCoach = new Coach(fname, lname, email, password, phoneNumber, nbTeams);
 
         try {
             userService.add(newCoach);
@@ -83,25 +64,6 @@ public class addUser {
         } catch (SQLException e) {
             showAlert("Database Error", "Error adding coach: " + e.getMessage());
         }
-    }
-
-    private boolean isValidEmail(String email) {
-        String emailRegex = "^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
-        return Pattern.matches(emailRegex, email);
-    }
-
-    private boolean isValidName(String name) {
-        return name.matches("^[a-zA-Z]+$");
-    }
-
-    private boolean isValidPassword(String password) {
-        // At least one letter, one number, one special character, and at least 6 characters long
-        String passwordRegex = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,}$";
-        return Pattern.matches(passwordRegex, password);
-    }
-
-    private boolean isValidPhoneNumber(String phoneNumber) {
-        return phoneNumber.matches("^\\+\\d+$");
     }
 
     private void clearFields() {
@@ -119,4 +81,59 @@ public class addUser {
         alert.setContentText(content);
         alert.showAndWait();
     }
+    private boolean validateInputs() {
+        String fname = fname_id.getText().trim();
+        String lname = lname_id.getText().trim();
+        String email = email_id.getText().trim();
+        String password = password_id.getText().trim();
+        String phoneNumber = phone_nb_id.getText().trim();
+
+        // Validate first name
+        if (fname.isEmpty() || !fname.matches("[a-zA-Z]+")) {
+            showAlert("Validation Error", "First name should only contain letters (no numbers or special characters).");
+            return false;
+        }
+
+        // Validate last name
+        if (lname.isEmpty() || !lname.matches("[a-zA-Z]+")) {
+            showAlert("Validation Error", "Last name should only contain letters (no numbers or special characters).");
+            return false;
+        }
+
+        // Validate email
+        if (!email.contains("@") || !email.contains(".") || email.startsWith("@") || email.endsWith(".")) {
+            showAlert("Validation Error", "Invalid email format. Example: example@domain.com");
+            return false;
+        }
+
+        // Validate password (at least 8 characters, one uppercase, one number, one special character)
+        if (password.length() < 8) {
+            showAlert("Validation Error", "Password must be at least 8 characters long.");
+            return false;
+        }
+        if (!password.matches(".*[A-Z].*")) {
+            showAlert("Validation Error", "Password must contain at least one uppercase letter.");
+            return false;
+        }
+        if (!password.matches(".*\\d.*")) {
+            showAlert("Validation Error", "Password must contain at least one number.");
+            return false;
+        }
+        if (!password.matches(".*[@$!%*?&].*")) {
+            showAlert("Validation Error", "Password must contain at least one special character (@, $, !, %, *, ?, &).");
+            return false;
+        }
+
+        // Validate phone number (must start with + and have at least 8 digits)
+        if (!phoneNumber.startsWith("+") || phoneNumber.length() < 9 || !phoneNumber.substring(1).matches("\\d+")) {
+            showAlert("Validation Error", "Phone number must start with '+' and contain at least 8 digits.");
+            return false;
+        }
+
+        return true;
+    }
+
+
+
+
 }

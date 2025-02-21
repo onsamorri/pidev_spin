@@ -114,7 +114,7 @@ public class ListAthlete {
             Parent root = loader.load();
 
             updateAthlete controller = loader.getController();
-            //controller.initData(athlete);
+            controller.initData(athlete);
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root));

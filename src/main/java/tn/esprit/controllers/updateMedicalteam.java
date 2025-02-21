@@ -55,9 +55,9 @@ public class updateMedicalteam {
     }
     @FXML
     private void updateStaffAction() {
-        /*if (!validateInputs()) {
+        if (!validateInputs()) {
             return;
-        }*/
+        }
         selectedStaff.setUser_fname(fname_id1.getText());
         selectedStaff.setUser_lname(lname_id1.getText());
         selectedStaff.setUser_email(email_id1.getText());
@@ -65,12 +65,15 @@ public class updateMedicalteam {
         selectedStaff.setUser_nbr(phone_nb_id1.getText());
         selectedStaff.setSpeciality(specialty_id.getValue());
         selectedStaff.setUser_role(user.user_role.MEDICAL_STAFF);
+        try {
+            userServices.update(selectedStaff.getUser_id(), selectedStaff);
+            System.out.println("Medical staff updated successfully!");
 
-        userServices.update(selectedStaff.getUser_id(), selectedStaff);
-        System.out.println("Medical staff updated successfully!");
-
-        // Close the update window
-        updateStaffBtn.getScene().getWindow().hide();
+            // Close the update window
+            updateStaffBtn.getScene().getWindow().hide();
+        } catch (Exception e) {
+            System.out.println("An unexpected error occurred: " + e.getMessage());
+        }
 
     }
 
@@ -82,33 +85,61 @@ public class updateMedicalteam {
         alert.setContentText(message);
         alert.showAndWait();
     }
+    private boolean validateInputs() {
+        String fname = fname_id1.getText().trim();
+        String lname = lname_id1.getText().trim();
+        String email = email_id1.getText().trim();
+        String password = password_id1.getText().trim();
+        String phoneNumber = phone_nb_id1.getText().trim();
+        String specialty = specialty_id.getValue();
 
-    /*private boolean validateInputs() {
-        boolean valid = true;
-        String namePattern = "^[a-zA-Z]+$";
-
-        if (teamNameU.getText().isEmpty() || !Pattern.matches(namePattern, teamNameU.getText())) {
-            showAlert("Validation Error", "Team name must contain only letters and cannot be empty.");
-            valid = false;
-        } else if (teamTOSU.getValue() == null) {
-            showAlert("Validation Error", "Please select a sport.");
-            valid = false;
-        }
-        try {
-            Integer.parseInt(teamLossesU.getText());
-        } catch (NumberFormatException e) {
-            showAlert("Validation Error", "Losses must be a valid integer.");
-            valid = false;
+        // Validate first name
+        if (fname.isEmpty() || !fname.matches("[a-zA-Z]+")) {
+            showAlert("Validation Error", "First name should only contain letters (no numbers or special characters).");
+            return false;
         }
 
-        try {
-            Integer.parseInt(teamWinsU.getText());
-        } catch (NumberFormatException e) {
-            showAlert("Validation Error", "Wins must be a valid integer.");
-            valid = false;
+        // Validate last name
+        if (lname.isEmpty() || !lname.matches("[a-zA-Z]+")) {
+            showAlert("Validation Error", "Last name should only contain letters (no numbers or special characters).");
+            return false;
         }
 
+        // Validate email
+        if (!email.contains("@") || !email.contains(".") || email.startsWith("@") || email.endsWith(".")) {
+            showAlert("Validation Error", "Invalid email format. Example: example@domain.com");
+            return false;
+        }
 
-        return valid;
-}*/
+        // Validate password (at least 8 characters, one uppercase, one number, one special character)
+        if (password.length() < 8) {
+            showAlert("Validation Error", "Password must be at least 8 characters long.");
+            return false;
+        }
+        if (!password.matches(".*[A-Z].*")) {
+            showAlert("Validation Error", "Password must contain at least one uppercase letter.");
+            return false;
+        }
+        if (!password.matches(".*\\d.*")) {
+            showAlert("Validation Error", "Password must contain at least one number.");
+            return false;
+        }
+        if (!password.matches(".*[@$!%*?&].*")) {
+            showAlert("Validation Error", "Password must contain at least one special character (@, $, !, %, *, ?, &).");
+            return false;
+        }
+
+        // Validate phone number (must start with + and have at least 8 digits)
+        if (!phoneNumber.startsWith("+") || phoneNumber.length() < 9 || !phoneNumber.substring(1).matches("\\d+")) {
+            showAlert("Validation Error", "Phone number must start with '+' and contain at least 8 digits.");
+            return false;
+        }
+        if(specialty_id.getValue() == null) {
+            showAlert("Validation Error", "Please select a specialty.");
+            return false;
+        }
+
+        return true;
+    }
+
 }

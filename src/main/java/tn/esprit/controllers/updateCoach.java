@@ -10,8 +10,6 @@ import tn.esprit.entities.Coach;
 import tn.esprit.entities.user;
 import tn.esprit.services.UserServices;
 
-import java.sql.SQLException;
-import java.util.regex.Pattern;
 
 public class updateCoach {
 
@@ -55,9 +53,9 @@ public class updateCoach {
     }
     @FXML
     private void updateCoachAction() {
-        /*if (!validateInputs()) {
+        if (!validateInputs()) {
             return;
-        }*/
+        }
         selectedCoach.setUser_fname(fname_id.getText());
         selectedCoach.setUser_lname(lname_id.getText());
         selectedCoach.setUser_email(email_id.getText());
@@ -83,32 +81,55 @@ public class updateCoach {
         alert.showAndWait();
     }
 
-    /*private boolean validateInputs() {
-        boolean valid = true;
-        String namePattern = "^[a-zA-Z]+$";
+    private boolean validateInputs() {
+        String fname = fname_id.getText().trim();
+        String lname = lname_id.getText().trim();
+        String email = email_id.getText().trim();
+        String password = password_id.getText().trim();
+        String phoneNumber = phone_nb_id.getText().trim();
 
-        if (teamNameU.getText().isEmpty() || !Pattern.matches(namePattern, teamNameU.getText())) {
-            showAlert("Validation Error", "Team name must contain only letters and cannot be empty.");
-            valid = false;
-        } else if (teamTOSU.getValue() == null) {
-            showAlert("Validation Error", "Please select a sport.");
-            valid = false;
-        }
-        try {
-            Integer.parseInt(teamLossesU.getText());
-        } catch (NumberFormatException e) {
-            showAlert("Validation Error", "Losses must be a valid integer.");
-            valid = false;
+        // Validate first name
+        if (fname.isEmpty() || !fname.matches("[a-zA-Z]+")) {
+            showAlert("Validation Error", "First name should only contain letters (no numbers or special characters).");
+            return false;
         }
 
-        try {
-            Integer.parseInt(teamWinsU.getText());
-        } catch (NumberFormatException e) {
-            showAlert("Validation Error", "Wins must be a valid integer.");
-            valid = false;
+        // Validate last name
+        if (lname.isEmpty() || !lname.matches("[a-zA-Z]+")) {
+            showAlert("Validation Error", "Last name should only contain letters (no numbers or special characters).");
+            return false;
         }
 
+        // Validate email
+        if (!email.contains("@") || !email.contains(".") || email.startsWith("@") || email.endsWith(".")) {
+            showAlert("Validation Error", "Invalid email format. Example: example@domain.com");
+            return false;
+        }
 
-        return valid;
-}*/
+        // Validate password (at least 8 characters, one uppercase, one number, one special character)
+        if (password.length() < 8) {
+            showAlert("Validation Error", "Password must be at least 8 characters long.");
+            return false;
+        }
+        if (!password.matches(".*[A-Z].*")) {
+            showAlert("Validation Error", "Password must contain at least one uppercase letter.");
+            return false;
+        }
+        if (!password.matches(".*\\d.*")) {
+            showAlert("Validation Error", "Password must contain at least one number.");
+            return false;
+        }
+        if (!password.matches(".*[@$!%*?&].*")) {
+            showAlert("Validation Error", "Password must contain at least one special character (@, $, !, %, *, ?, &).");
+            return false;
+        }
+
+        // Validate phone number (must start with + and have at least 8 digits)
+        if (!phoneNumber.startsWith("+") || phoneNumber.length() < 9 || !phoneNumber.substring(1).matches("\\d+")) {
+            showAlert("Validation Error", "Phone number must start with '+' and contain at least 8 digits.");
+            return false;
+        }
+
+        return true;
+    }
 }

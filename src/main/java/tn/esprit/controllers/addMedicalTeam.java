@@ -44,45 +44,25 @@ public class addMedicalTeam {
 
     @FXML
     private void addStaffAction() {
-        String fname = fname_id1.getText().trim();
-        String lname = lname_id1.getText().trim();
-        String email = email_id1.getText().trim();
-        String password = password_id1.getText().trim();
-        String phoneNumber = phone_nb_id1.getText().trim();
-        String specialty = specialty_id.getValue();
-        String role = "medical_staff"; // Always "medical_staff"
-
-        // Validate input
-        if (!isValidName(fname)) {
-            showAlert("Validation Error", "First name should only contain letters.");
+        if (!validateInputs()) {
             return;
         }
-
-        if (!isValidName(lname)) {
-            showAlert("Validation Error", "Last name should only contain letters.");
-            return;
-        }
-
-        if (!isValidEmail(email)) {
-            showAlert("Validation Error", "Invalid email format. Example: example@domain.com");
-            return;
-        }
-
-        if (!isValidPassword(password)) {
-            showAlert("Validation Error", "Password must contain letters, numbers, and special characters.");
-            return;
-        }
-
-        if (!isValidPhoneNumber(phoneNumber)) {
-            showAlert("Validation Error", "Phone number must start with '+' followed by digits.");
-            return;
-        }
-
-
-        // Create a MedicalStaff object
-        Medical_staff newStaff = new Medical_staff(fname, lname, email, password, phoneNumber, specialty);
 
         try {
+            Medical_staff newStaff = null;
+            String fname = fname_id1.getText().trim();
+            String lname = lname_id1.getText().trim();
+            String email = email_id1.getText().trim();
+            String password = password_id1.getText().trim();
+            String phoneNumber = phone_nb_id1.getText().trim();
+            String specialty = specialty_id.getValue();
+            String role = "medical_staff"; // Always "medical_staff"
+
+
+
+            // Create a MedicalStaff object
+            newStaff = new Medical_staff(fname, lname, email, password, phoneNumber, specialty);
+
             userService.add(newStaff);
             showAlert("Success", "Medical staff added successfully!");
             clearFields();
@@ -90,22 +70,61 @@ public class addMedicalTeam {
             showAlert("Database Error", "Error adding medical staff: " + e.getMessage());
         }
     }
+    private boolean validateInputs() {
+        String fname = fname_id1.getText().trim();
+        String lname = lname_id1.getText().trim();
+        String email = email_id1.getText().trim();
+        String password = password_id1.getText().trim();
+        String phoneNumber = phone_nb_id1.getText().trim();
+        String specialty = specialty_id.getValue();
 
-    private boolean isValidEmail(String email) {
-        String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
-        return Pattern.matches(emailRegex, email);
-    }
+        // Validate first name
+        if (fname.isEmpty() || !fname.matches("[a-zA-Z]+")) {
+            showAlert("Validation Error", "First name should only contain letters (no numbers or special characters).");
+            return false;
+        }
 
-    private boolean isValidName(String name) {
-        return name.matches("^[a-zA-Z ]+$");
-    }
+        // Validate last name
+        if (lname.isEmpty() || !lname.matches("[a-zA-Z]+")) {
+            showAlert("Validation Error", "Last name should only contain letters (no numbers or special characters).");
+            return false;
+        }
 
-    private boolean isValidPassword(String password) {
-        return password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[^A-Za-z0-9])[A-Za-z\\d@#$%^&+=*!]{6,}$");
-    }
+        // Validate email
+        if (!email.contains("@") || !email.contains(".") || email.startsWith("@") || email.endsWith(".")) {
+            showAlert("Validation Error", "Invalid email format. Example: example@domain.com");
+            return false;
+        }
 
-    private boolean isValidPhoneNumber(String phoneNumber) {
-        return phoneNumber.matches("^\\+\\d+$");
+        // Validate password (at least 8 characters, one uppercase, one number, one special character)
+        if (password.length() < 8) {
+            showAlert("Validation Error", "Password must be at least 8 characters long.");
+            return false;
+        }
+        if (!password.matches(".*[A-Z].*")) {
+            showAlert("Validation Error", "Password must contain at least one uppercase letter.");
+            return false;
+        }
+        if (!password.matches(".*\\d.*")) {
+            showAlert("Validation Error", "Password must contain at least one number.");
+            return false;
+        }
+        if (!password.matches(".*[@$!%*?&].*")) {
+            showAlert("Validation Error", "Password must contain at least one special character (@, $, !, %, *, ?, &).");
+            return false;
+        }
+
+        // Validate phone number (must start with + and have at least 8 digits)
+        if (!phoneNumber.startsWith("+") || phoneNumber.length() < 9 || !phoneNumber.substring(1).matches("\\d+")) {
+            showAlert("Validation Error", "Phone number must start with '+' and contain at least 8 digits.");
+            return false;
+        }
+        if(specialty_id.getValue() == null) {
+            showAlert("Validation Error", "Please select a specialty.");
+            return false;
+        }
+
+        return true;
     }
 
     private void clearFields() {
