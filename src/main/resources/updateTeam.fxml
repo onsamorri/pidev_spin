@@ -21,16 +21,16 @@
         <VBox prefHeight="535.0" prefWidth="157.0">
             <children>
                 <HBox prefHeight="91.0" prefWidth="157.0">
-               <children>
-                  <ImageView fitHeight="128.0" fitWidth="124.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@logo.png" />
-                     </image>
-                     <HBox.margin>
-                        <Insets left="15.0" top="5.0" />
-                     </HBox.margin>
-                  </ImageView>
-               </children></HBox>
+                    <children>
+                        <ImageView fitHeight="128.0" fitWidth="124.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@logo.png" />
+                            </image>
+                            <HBox.margin>
+                                <Insets left="15.0" top="5.0" />
+                            </HBox.margin>
+                        </ImageView>
+                    </children></HBox>
                 <HBox alignment="CENTER" prefHeight="50.0" prefWidth="104.0">
                     <children>
                         <Label fx:id="addTeamLabelU" alignment="CENTER" contentDisplay="CENTER" prefHeight="47.0" prefWidth="88.0" style="-fx-text-fill: white;" text="Add team" textFill="WHITE">
@@ -49,9 +49,9 @@
                 <HBox alignment="CENTER" prefHeight="50.0" prefWidth="104.0">
                     <children>
                         <Label fx:id="consultTeamLabelU" prefHeight="47.0" prefWidth="108.0" text="Consult teams" textFill="WHITE">
-                     <font>
-                        <Font name="Calibri Bold" size="18.0" />
-                     </font></Label>
+                            <font>
+                                <Font name="Calibri Bold" size="18.0" />
+                            </font></Label>
                     </children>
                     <VBox.margin>
                         <Insets top="5.0" />
@@ -61,23 +61,28 @@
                     <VBox.margin>
                         <Insets top="5.0" />
                     </VBox.margin>
-               <children>
-                  <Label fx:id="addTournLabelU" prefHeight="47.0" prefWidth="129.0" text="Add tournament" textFill="WHITE">
-                     <font>
-                        <Font name="Calibri Bold" size="18.0" />
-                     </font>
-                  </Label>
-               </children>
+                    <children>
+                        <Label fx:id="addTournLabelU" prefHeight="47.0" prefWidth="129.0" text="Add tournament" textFill="WHITE">
+                            <font>
+                                <Font name="Calibri Bold" size="18.0" />
+                            </font>
+                        </Label>
+                    </children>
                 </HBox>
-            <HBox alignment="CENTER" layoutX="10.0" layoutY="216.0" prefHeight="50.0" prefWidth="104.0">
-               <children>
-                  <Label fx:id="viewTournLabelU" prefHeight="47.0" prefWidth="141.0" text="View tournaments" textFill="WHITE">
-                     <font>
-                        <Font name="Calibri Bold" size="18.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
+                <HBox alignment="CENTER" layoutX="10.0" layoutY="216.0" prefHeight="50.0" prefWidth="104.0">
+                    <children>
+                        <Label fx:id="viewTournLabelU" prefHeight="47.0" prefWidth="141.0" text="View tournaments" textFill="WHITE">
+                            <font>
+                                <Font name="Calibri Bold" size="18.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </HBox>
+            <Label fx:id="backBtn" style="-fx-background-color: black;" text="Label">
+               <VBox.margin>
+                  <Insets left="100.0" top="100.0" />
+               </VBox.margin>
+            </Label>
             </children>
         </VBox>
         <VBox layoutX="170.0" layoutY="7.0" prefHeight="512.0" prefWidth="681.0" AnchorPane.rightAnchor="10.0">
@@ -103,16 +108,16 @@
                                                 <Font name="Calibri" size="15.0" />
                                             </font>
                                         </Label>
-                              <Label layoutX="10.0" layoutY="48.0" prefHeight="38.0" prefWidth="138.0" text="Enter Wins :">
-                                 <font>
-                                    <Font name="Calibri" size="16.0" />
-                                 </font>
-                              </Label>
-                              <Label layoutX="10.0" layoutY="81.0" prefHeight="38.0" prefWidth="138.0" text="Enter Losses :">
-                                 <font>
-                                    <Font name="Calibri" size="15.0" />
-                                 </font>
-                              </Label>
+                                        <Label layoutX="10.0" layoutY="48.0" prefHeight="38.0" prefWidth="138.0" text="Enter Wins :">
+                                            <font>
+                                                <Font name="Calibri" size="16.0" />
+                                            </font>
+                                        </Label>
+                                        <Label layoutX="10.0" layoutY="81.0" prefHeight="38.0" prefWidth="138.0" text="Enter Losses :">
+                                            <font>
+                                                <Font name="Calibri" size="15.0" />
+                                            </font>
+                                        </Label>
                                     </children>
                                     <HBox.margin>
                                         <Insets left="15.0" />
@@ -134,20 +139,20 @@
                                                     <String fx:value="Handball" />
                                                 </FXCollections>
                                             </items>
-                                 <VBox.margin>
-                                    <Insets left="12.0" />
-                                 </VBox.margin>
+                                            <VBox.margin>
+                                                <Insets left="12.0" />
+                                            </VBox.margin>
                                         </ComboBox>
-                              <TextField id="teamName" fx:id="teamWinsU" layoutX="32.0" layoutY="15.0" prefHeight="26.0" prefWidth="94.0" style="-fx-background-radius: 8; -fx-background-color: white;">
-                                 <VBox.margin>
-                                    <Insets left="12.0" right="5.0" />
-                                 </VBox.margin>
-                              </TextField>
-                              <TextField id="teamName" fx:id="teamLossesU" layoutX="20.0" layoutY="74.0" prefHeight="26.0" prefWidth="94.0" style="-fx-background-radius: 8; -fx-background-color: white;">
-                                 <VBox.margin>
-                                    <Insets bottom="5.0" left="12.0" right="5.0" />
-                                 </VBox.margin>
-                              </TextField>
+                                        <TextField id="teamName" fx:id="teamWinsU" layoutX="32.0" layoutY="15.0" prefHeight="26.0" prefWidth="94.0" style="-fx-background-radius: 8; -fx-background-color: white;">
+                                            <VBox.margin>
+                                                <Insets left="12.0" right="5.0" />
+                                            </VBox.margin>
+                                        </TextField>
+                                        <TextField id="teamName" fx:id="teamLossesU" layoutX="20.0" layoutY="74.0" prefHeight="26.0" prefWidth="94.0" style="-fx-background-radius: 8; -fx-background-color: white;">
+                                            <VBox.margin>
+                                                <Insets bottom="5.0" left="12.0" right="5.0" />
+                                            </VBox.margin>
+                                        </TextField>
                                     </children>
                                     <HBox.margin>
                                         <Insets />
@@ -168,9 +173,9 @@
                             <VBox.margin>
                                 <Insets left="5.0" right="5.0" />
                             </VBox.margin>
-                     <padding>
-                        <Insets left="150.0" />
-                     </padding>
+                            <padding>
+                                <Insets left="150.0" />
+                            </padding>
                         </HBox>
                         <VBox prefHeight="354.0" prefWidth="681.0">
                             <VBox.margin>

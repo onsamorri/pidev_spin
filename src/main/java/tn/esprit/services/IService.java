@@ -5,10 +5,8 @@ import java.util.List;
 
 public interface IService<T> {
     void add(T t) throws SQLException;
-    void addP(T t) throws SQLException;
-    void delete(int id) throws SQLException;
-    void update(int id,T t) throws SQLException;
-    List<T> returnList() throws SQLException;
-
+    void delete(int id);
+    void update(int id,T t);
+    List<T> getAll();
 
 }

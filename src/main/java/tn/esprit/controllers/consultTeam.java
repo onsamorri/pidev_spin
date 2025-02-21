@@ -39,6 +39,11 @@ public class consultTeam {
 
     @FXML
     private TableColumn<team, String> tabTeamSport;
+    @FXML
+    private Label backBtn;
+    @FXML
+    private Label addTeamLabelC;
+
 
     @FXML
     private TableColumn<team, Integer> tabTeamWins;
@@ -46,6 +51,8 @@ public class consultTeam {
     private final ObservableList<team> teamList = FXCollections.observableArrayList();
     @FXML
     public void initialize() {
+        addTeamLabelC.setOnMouseClicked(event -> switchScreenAddTeam());
+        backBtn.setOnMouseClicked(event -> switchBackToCoachFront());
         tabTeamId.setCellValueFactory(new PropertyValueFactory<>("teamId"));
         tabTeamName.setCellValueFactory(new PropertyValueFactory<>("teamName"));
         tabTeamNath.setCellValueFactory(new PropertyValueFactory<>("teamNath"));
@@ -58,12 +65,30 @@ public class consultTeam {
 
 
     }
+    private void switchBackToCoachFront() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Coachfront.fxml"));
+            Parent root = loader.load();
+
+            Coachfront controller = loader.getController();
+            controller.initialize();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Consult Team");
+            stage.setUserData(this);
+            stage.show();
+            Stage currentStage = (Stage) backBtn.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            showAlert("Error", "Failed to open consult screen: " + e.getMessage());
+        }
+    }
     void updateteamList() {
         teamList.clear();
         try {
             List<team> teams = teamService.returnList();
             teamList.addAll(teams);
-           tabTeam.refresh();
+            tabTeam.refresh();
         } catch (SQLException e) {
             showAlert("Error", "Failed to load team data: " + e.getMessage());
         }
@@ -76,18 +101,21 @@ public class consultTeam {
         alert.showAndWait();
     }
 
-    private void switchScreenConsult(team team) {
+    private void switchScreenAddTeam() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/consultTeam.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/addTeam.fxml"));
             Parent root = loader.load();
 
-            consultTeam controller = loader.getController();
+            addTeam controller = loader.getController();
+            controller.initialize();
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Consult Team");
             stage.setUserData(this);
             stage.show();
+            Stage currentStage = (Stage) addTeamLabelC.getScene().getWindow();
+            currentStage.close();
         } catch (IOException e) {
             showAlert("Error", "Failed to open consult screen: " + e.getMessage());
         }

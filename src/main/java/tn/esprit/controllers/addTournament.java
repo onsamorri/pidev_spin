@@ -76,7 +76,8 @@ public class addTournament {
 
     @FXML
     private Label viewTournLabel;
-
+    @FXML
+    private Label backBtn;
 
     private final TournamentService tournamentService = new TournamentService();
     private final teamServices teamService = new teamServices();
@@ -86,8 +87,8 @@ public class addTournament {
     @FXML
     public void initialize() {
         addTournbtn.setOnAction(event -> addTournAction());
-        consultTeamLabel.setOnMouseClicked(event -> switchScreenConsult());
-
+        viewTournLabel.setOnMouseClicked(event -> switchScreenConsult());
+        backBtn.setOnMouseClicked(event -> switchBackToCoachFront());
         // Update event trigger: Filtering when ComboBox is clicked
         tournTOS.setOnAction(event -> filterTeamsBySport());
 
@@ -102,7 +103,6 @@ public class addTournament {
         tabTeam.setItems(teamList);
 
         addActionButtonsToTable();
-        addTeamLabel.setOnMouseClicked(event -> switchScreenAdd());
         viewTournLabel.setOnMouseClicked(event -> switchScreenConsult());
 
     }
@@ -177,32 +177,38 @@ public class addTournament {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/viewTournament.fxml"));
             Parent root = loader.load();
+
+            viewTournament controller = loader.getController();
+            controller.initialize();
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
-            stage.setTitle("Consult Tournament");
+            stage.setTitle("viewing tournaments");
+            stage.setUserData(this);
             stage.show();
+            Stage currentStage = (Stage) viewTournLabel.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            showAlert("Error", "Failed to open view tournament screen: " + e.getMessage());
+        }
+    }
+    private void switchBackToCoachFront() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Coachfront.fxml"));
+            Parent root = loader.load();
+
+            Coachfront controller = loader.getController();
+            controller.initialize();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Welcome Coach");
+            stage.setUserData(this);
+            stage.show();
+            Stage currentStage = (Stage) backBtn.getScene().getWindow();
+            currentStage.close();
         } catch (IOException e) {
             showAlert("Error", "Failed to open consult screen: " + e.getMessage());
         }
     }
-    private void switchScreenAdd() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/addTeam.fxml"));
-            Parent root = loader.load();
-
-            addTeam controller = loader.getController();
-            controller.initialize();
-
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Add Team");
-            stage.setUserData(this);
-            stage.show();
-        } catch (IOException e) {
-            showAlert("Error", "Failed to open add screen: " + e.getMessage());
-        }
-    }
-
     private boolean validateInputs() {
         String name = tournName.getText();
         String location = tournLoc.getText();

@@ -78,10 +78,10 @@ public class updateTournament {
     public void initData(tournament tournament) {
         updateTournbtn.setOnAction(event -> updateTournamentAction());
         this.selectedTournament = tournament;
-       tournName.setText(tournament.getTournamentName());
-       tournStartDate.setValue(tournament.getTournamentStartDate().toLocalDate());
-       tournEndDate.setValue(tournament.getTournamentEndDate().toLocalDate());
-      tournLoc.setText(tournament.getTournamentLocation());
+        tournName.setText(tournament.getTournamentName());
+        tournStartDate.setValue(tournament.getTournamentStartDate().toLocalDate());
+        tournEndDate.setValue(tournament.getTournamentEndDate().toLocalDate());
+        tournLoc.setText(tournament.getTournamentLocation());
         tournTOS.setValue(tournament.getTournamentTOS());
 
 

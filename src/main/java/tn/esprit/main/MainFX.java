@@ -5,28 +5,28 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
 
 public class MainFX extends Application {
 
-    public static void main(String[] args) {
-        launch(args);
-    }
 
     @Override
     public void start(Stage primaryStage) throws IOException {
 
-        Parent root= FXMLLoader.load(getClass().getResource("/addTournament.fxml"));
+        Parent root= FXMLLoader.load(getClass().getResource("/Coachfront.fxml"));
         Scene scene=new Scene(root);
-
+        //primaryStage.setTitle("first Scene");
+        primaryStage.initStyle(StageStyle.DECORATED);
         primaryStage.setScene(scene);
-
         primaryStage.show();
 
-        primaryStage.setTitle("first Scene");
 
 
+    }
+    public static void main(String[] args) {
+        launch(args);
     }
 }

@@ -23,12 +23,15 @@ public class updateTeam {
     @FXML private TextField teamWinsU;
     @FXML
     private Label addTeamLabelU;
+    @FXML
+    private Label backBtn;
 
     private team selectedTeam;
     private final teamServices teamService = new teamServices();
 
     public void initData(team t) {
         updateTeambtn.setOnAction(event -> updateTeamAction());
+        backBtn.setOnMouseClicked(event -> switchBackToCoachFront());
         this.selectedTeam = t;
         teamNameU.setText(t.getTeamName());
         teamLossesU.setText(String.valueOf(t.getTeamL()));
@@ -85,6 +88,25 @@ public class updateTeam {
             showAlert("Error", "Failed to open add screen: " + e.getMessage());
         }
     }
+    private void switchBackToCoachFront() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Coachfront.fxml"));
+            Parent root = loader.load();
+
+            Coachfront controller = loader.getController();
+            controller.initialize();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Consult Team");
+            stage.setUserData(this);
+            stage.show();
+            Stage currentStage = (Stage) backBtn.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            showAlert("Error", "Failed to open consult screen: " + e.getMessage());
+        }
+    }
+
     private boolean validateInputs() {
         boolean valid = true;
         String namePattern = "^[a-zA-Z]+$";

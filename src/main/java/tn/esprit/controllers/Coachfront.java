@@ -1,0 +1,69 @@
+package tn.esprit.controllers;
+
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+
+
+public class Coachfront {
+    //Asma (team and tournament)
+    @FXML private Label teamsBtn;
+    @FXML private Label tournBtn;
+    @FXML
+    public void initialize() {
+        teamsBtn.setOnMouseClicked(event -> switchScreenTeam());
+        tournBtn.setOnMouseClicked(event -> switchScreenTournament());
+    }
+    private void switchScreenTeam() {
+
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/addTeam.fxml"));
+            Parent root = loader.load();
+
+            addTeam controller = loader.getController();
+            controller.initialize();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Adding Team");
+            stage.setUserData(this);
+            stage.show();
+            Stage currentStage = (Stage) teamsBtn.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            showAlert("Error", "Failed to open add screen: " + e.getMessage());
+        }
+    }
+    private void switchScreenTournament() {
+
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/addTournament.fxml"));
+            Parent root = loader.load();
+
+            addTournament controller = loader.getController();
+            controller.initialize();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Adding Tournament");
+            stage.setUserData(this);
+            stage.show();
+            Stage currentStage = (Stage) tournBtn.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            showAlert("Error", "Failed to open tournament screen: " + e.getMessage());
+        }
+    }
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+}

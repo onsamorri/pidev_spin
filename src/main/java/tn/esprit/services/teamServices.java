@@ -1,6 +1,5 @@
 package tn.esprit.services;
 
-import javafx.fxml.FXML;
 import tn.esprit.entities.team;
 import tn.esprit.utils.MyDatabase;
 
@@ -8,7 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class teamServices implements IService<team> {
+public class teamServices implements IService2<team> {
 
     private Connection con;
     public teamServices() {
@@ -41,12 +40,12 @@ public class teamServices implements IService<team> {
     public void delete(int teamId) throws SQLException {
         String query = "DELETE FROM `team` WHERE `teamId`=?";
         PreparedStatement ps =  con.prepareStatement(query);
-            ps.setInt(1,teamId);
-            int test=ps.executeUpdate();
-            if (test==0){
-                System.out.println("not found");
-            }else
-                System.out.println("deleted");
+        ps.setInt(1,teamId);
+        int test=ps.executeUpdate();
+        if (test==0){
+            System.out.println("not found");
+        }else
+            System.out.println("deleted");
 
     }
 
@@ -54,12 +53,12 @@ public class teamServices implements IService<team> {
     public void update(int teamId,team t)  throws SQLException {
         String query = "UPDATE `team` SET `teamName`=?,`teamNbAthletes`=?,`teamTypeOfSport`=?,`teamWins`=?,`teamLosses`=? WHERE `teamId`=?";
         PreparedStatement ps = con.prepareStatement(query);
-            ps.setString(1,t.getTeamName());
-            ps.setInt(2,t.getTeamNath());
-            ps.setString(3,t.getTeamTOS());
-            ps.setInt(4,t.getTeamW());
-            ps.setInt(5,t.getTeamL());
-            ps.setInt(6,teamId);
+        ps.setString(1,t.getTeamName());
+        ps.setInt(2,t.getTeamNath());
+        ps.setString(3,t.getTeamTOS());
+        ps.setInt(4,t.getTeamW());
+        ps.setInt(5,t.getTeamL());
+        ps.setInt(6,teamId);
         int test=ps.executeUpdate();
         if (test==0){
             System.out.println("not found");
@@ -75,9 +74,9 @@ public class teamServices implements IService<team> {
         List<team> teams = new ArrayList<>();
         ResultSet rs = stM.executeQuery(query);
         while (rs.next()) {
-           team t = new team(rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getString(4), rs.getInt(5), rs.getInt(6) );//index starts at 1 unlike add which starts at 0
+            team t = new team(rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getString(4), rs.getInt(5), rs.getInt(6) );//index starts at 1 unlike add which starts at 0
 
-       teams.add(t);
+            teams.add(t);
         }
 
         return teams;
@@ -104,6 +103,5 @@ public class teamServices implements IService<team> {
 
         return teams;
     }
-
 
 }

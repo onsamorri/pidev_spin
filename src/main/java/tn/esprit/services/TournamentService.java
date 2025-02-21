@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TournamentService implements IService<tournament> {
+public class TournamentService implements IService2<tournament> {
     private Connection connection;
 
     public TournamentService() {
@@ -90,3 +90,4 @@ public class TournamentService implements IService<tournament> {
         return tournaments;
     }
 }
+

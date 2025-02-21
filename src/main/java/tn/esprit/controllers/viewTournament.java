@@ -39,12 +39,19 @@ public class viewTournament {
     private TableColumn<tournament, Integer> tabTournTeams;
     @FXML
     private TableColumn<tournament, Void> tabTournActions;
+    @FXML
+    private Label backBtn;
+    @FXML
+    private Label addTournLabelC;
 
     private final TournamentService tournamentService = new TournamentService();
     private final ObservableList<tournament> tournamentList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
+        backBtn.setOnMouseClicked(event -> switchBackToCoachFront());
+        addTournLabelC.setOnMouseClicked(event -> switchScreenAddTournament());
+
         tabTournid.setCellValueFactory(new PropertyValueFactory<>("tournamentId"));
         tabTournName.setCellValueFactory(new PropertyValueFactory<>("tournamentName"));
         tabTournLoc.setCellValueFactory(new PropertyValueFactory<>("tournamentLocation"));
@@ -68,7 +75,43 @@ public class viewTournament {
             showAlert("Error", "Failed to load tournament data: " + e.getMessage());
         }
     }
+    private void switchBackToCoachFront() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Coachfront.fxml"));
+            Parent root = loader.load();
 
+            Coachfront controller = loader.getController();
+            controller.initialize();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Welcome Coach");
+            stage.setUserData(this);
+            stage.show();
+            Stage currentStage = (Stage) backBtn.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            showAlert("Error", "Failed to open Coach screen: " + e.getMessage());
+        }
+    }
+    private void switchScreenAddTournament() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/addTournament.fxml"));
+            Parent root = loader.load();
+
+            addTournament controller = loader.getController();
+            controller.initialize();
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Adding Tournament");
+            stage.setUserData(this);
+            stage.show();
+            Stage currentStage = (Stage) addTournLabelC.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            showAlert("Error", "Failed to open add tournament screen: " + e.getMessage());
+        }
+    }
     private void openUpdateTournamentScreen(tournament tournament) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/updateTournament.fxml"));

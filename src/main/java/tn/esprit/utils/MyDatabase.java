@@ -10,22 +10,25 @@ public class MyDatabase {
     private final String USERNAME = "root";
 
     private final String PWD = "";
+
     private Connection con;
 
-    private MyDatabase() {
+    private static MyDatabase instance ;
+
+    public MyDatabase() {
         try {
-            con= DriverManager.getConnection(URL,USERNAME, PWD);
+            con = DriverManager.getConnection(URL,USERNAME,PWD);
             System.out.println("Connected to database");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());;
+            System.out.println(e.getMessage());
         }
     }
-    private static MyDatabase instance;
     public static MyDatabase getInstance() {
         if (instance == null)
             instance = new MyDatabase();
         return instance;
     }
+
     public Connection getCon() {
         return con;
     }

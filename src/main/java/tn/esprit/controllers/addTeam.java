@@ -41,12 +41,17 @@ public class addTeam {
     @FXML
     private ComboBox<String> teamTOS;
 
+    @FXML
+    private Label backBtn;
+
+
     private final teamServices ts = new teamServices();
 
     @FXML
     public void initialize() {
         addTeambtn.setOnAction(event -> addTeamAction());
         consultTeamLabel.setOnMouseClicked(event -> switchScreenConsult());
+        backBtn.setOnMouseClicked(event -> switchBackToCoachFront());
     }
 
     @FXML
@@ -80,13 +85,33 @@ public class addTeam {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/consultTeam.fxml"));
             Parent root = loader.load();
 
-            consultTeam controller = loader.getController();
+           consultTeam controller = loader.getController();
+           controller.initialize();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Consult Team");
+            stage.setUserData(this);
+            stage.show();
+            Stage currentStage = (Stage) addTeambtn.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            showAlert("Error", "Failed to open consult screen: " + e.getMessage());
+        }
+    }
+    private void switchBackToCoachFront() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Coachfront.fxml"));
+            Parent root = loader.load();
+
+            Coachfront controller = loader.getController();
             controller.initialize();
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Consult Team");
             stage.setUserData(this);
             stage.show();
+            Stage currentStage = (Stage) backBtn.getScene().getWindow();
+            currentStage.close();
         } catch (IOException e) {
             showAlert("Error", "Failed to open consult screen: " + e.getMessage());
         }
