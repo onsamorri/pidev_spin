@@ -60,7 +60,7 @@ public class Main {
             recoveryPlanServices.add(recoveryPlan);
 
             // Adding a nutrition plan
-            NutritionPlan nutritionPlan = new NutritionPlan(0, 1, DietType.VEGAN, Allergies.NONE, 2000, LocalDate.now(), LocalDate.of(2025, 2, 28), "Balanced meal plan", "No notes");
+            NutritionPlan nutritionPlan = new NutritionPlan(0, user, DietType.VEGAN, Allergies.NONE, 2000, LocalDate.now(), LocalDate.of(2025, 2, 28), "Balanced meal plan", "No notes");
             nutritionPlanServices.add(nutritionPlan);
 
             // Updating a user

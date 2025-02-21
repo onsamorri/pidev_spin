@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public class NutritionPlan {
 
     private int nutrition_id;
-    private int user_id;
+    private User user; // Changed from user_id to User object
 
     private DietType nutrition_dietType;
     private Allergies nutrition_allergies;
@@ -15,11 +15,11 @@ public class NutritionPlan {
     private String nutrition_meal_plan;
     private String nutrition_notes;
 
-    public NutritionPlan(int nutrition_id, int user_id, DietType nutrition_dietType,
+    public NutritionPlan(int nutrition_id, User user, DietType nutrition_dietType,
                          Allergies nutrition_allergies, int nutrition_calorie_intake, LocalDate nutrition_start_date,
                          LocalDate nutrition_end_date, String nutrition_meal_plan, String nutrition_notes) {
         this.nutrition_id = nutrition_id;
-        this.user_id = user_id;
+        this.user = user; // Changed to User object
         this.nutrition_dietType = nutrition_dietType;
         this.nutrition_allergies = nutrition_allergies;
         this.nutrition_calorie_intake = nutrition_calorie_intake;
@@ -37,8 +37,9 @@ public class NutritionPlan {
         return nutrition_id;
     }
 
-    public int getUser_id() {
-        return user_id;
+
+    public User getUser() {  // Changed from getUser_id() to getUser() returning a User object
+        return user;
     }
 
     public DietType getNutrition_dietType() {
@@ -69,8 +70,8 @@ public class NutritionPlan {
         return nutrition_notes;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setUser(User user) {  // Changed to set a User object
+        this.user = user;
     }
 
     public void setNutrition_dietType(DietType nutrition_dietType) {
@@ -105,7 +106,7 @@ public class NutritionPlan {
     public String toString() {
         return "NutritionPlan{" +
                 "nutrition_id=" + nutrition_id +
-                ", user_id=" + user_id +
+                ", user=" + (user != null ? user.getUser_fname() + " " + user.getUser_lname() : "Unknown") +
                 ", nutrition_dietType=" + nutrition_dietType +
                 ", nutrition_allergies=" + nutrition_allergies +
                 ", nutrition_calorie_intake=" + nutrition_calorie_intake +

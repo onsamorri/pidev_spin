@@ -12,7 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import tn.esprit.entities.RecoveryPlan;
 import tn.esprit.services.RecoveryPlanServices;
-import javafx.util.Callback;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -21,33 +21,29 @@ public class ShowRecoveryPlanController {
 
     @FXML
     private TableView<RecoveryPlan> RecoveryTable;
-
     @FXML
     private TableColumn<RecoveryPlan, String> RecoveryIdColumn;
-
     @FXML
     private TableColumn<RecoveryPlan, String> AthleteFirstNameColumn;
-
     @FXML
     private TableColumn<RecoveryPlan, String> AthleteLastNameColumn;
-
     @FXML
     private TableColumn<RecoveryPlan, String> RecoveryGoalColumn;
-
     @FXML
     private TableColumn<RecoveryPlan, String> RecoveryDescriptionColumn;
-
     @FXML
     private TableColumn<RecoveryPlan, String> RecoveryStartDateColumn;
-
     @FXML
     private TableColumn<RecoveryPlan, String> RecoveryEndDateColumn;
-
     @FXML
     private TableColumn<RecoveryPlan, String> RecoveryStatusColumn;
 
     @FXML
-    private TableColumn<RecoveryPlan, Void> actionsColumn;
+    private Button btnAdd;
+    @FXML
+    private Button btnUpdate;
+    @FXML
+    private Button btnDelete;
 
     private final RecoveryPlanServices recoveryPlanServices = new RecoveryPlanServices();
     private ObservableList<RecoveryPlan> recoveryPlanList;
@@ -57,33 +53,22 @@ public class ShowRecoveryPlanController {
         recoveryPlanList = FXCollections.observableArrayList();
         loadRecoveryPlans();
 
-        // Bind columns to RecoveryPlan attributes
         RecoveryIdColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(String.valueOf(cellData.getValue().getRecovery_id())));
-
         AthleteFirstNameColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getUser() != null ? cellData.getValue().getUser().getUser_fname() : "Unknown"));
-
+                new SimpleStringProperty(cellData.getValue().getUser().getUser_fname()));
         AthleteLastNameColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getUser() != null ? cellData.getValue().getUser().getUser_lname() : "Unknown"));
-
+                new SimpleStringProperty(cellData.getValue().getUser().getUser_lname()));
         RecoveryGoalColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getRecovery_Goal() != null ? cellData.getValue().getRecovery_Goal().toString() : "Unknown"));
-
+                new SimpleStringProperty(cellData.getValue().getRecovery_Goal().toString()));
         RecoveryDescriptionColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getRecovery_Description()));
-
         RecoveryStartDateColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getRecovery_StartDate() != null ? cellData.getValue().getRecovery_StartDate().toString() : "Unknown"));
-
+                new SimpleStringProperty(cellData.getValue().getRecovery_StartDate().toString()));
         RecoveryEndDateColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getRecovery_EndDate() != null ? cellData.getValue().getRecovery_EndDate().toString() : "Unknown"));
-
+                new SimpleStringProperty(cellData.getValue().getRecovery_EndDate().toString()));
         RecoveryStatusColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getRecovery_Status() != null ? cellData.getValue().getRecovery_Status().toString() : "Unknown"));
-
-        // Initialize actions column
-        actionsColumn.setCellFactory(createButtonCellFactory());
+                new SimpleStringProperty(cellData.getValue().getRecovery_Status().toString()));
 
         RecoveryTable.setItems(recoveryPlanList);
     }
@@ -97,76 +82,62 @@ public class ShowRecoveryPlanController {
         }
     }
 
-    private Callback<TableColumn<RecoveryPlan, Void>, TableCell<RecoveryPlan, Void>> createButtonCellFactory() {
-        return param -> new TableCell<>() {
-            private final Button updateButton = new Button("Update");
-            private final Button deleteButton = new Button("Delete");
-
-            {
-                updateButton.setOnAction(event -> {
-                    RecoveryPlan selectedRecoveryPlan = getTableView().getItems().get(getIndex());
-                    updateRecoveryPlan(selectedRecoveryPlan);
-                });
-
-                deleteButton.setOnAction(event -> {
-                    RecoveryPlan selectedRecoveryPlan = getTableView().getItems().get(getIndex());
-                    deleteRecoveryPlan(selectedRecoveryPlan);
-                });
-
-                HBox hBox = new HBox(updateButton, deleteButton);
-                hBox.setSpacing(10);
-                setGraphic(hBox);
-            }
-
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(getGraphic());
-                }
-            }
-        };
+    @FXML
+    private void handleAdd() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AddRecoveryPlan.fxml"));
+            Parent addRecoveryPlanRoot = loader.load();
+            Stage addRecoveryPlanStage = new Stage();
+            addRecoveryPlanStage.setTitle("Add Recovery Plan");
+            addRecoveryPlanStage.setScene(new Scene(addRecoveryPlanRoot));
+            addRecoveryPlanStage.show();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to open Add Recovery Plan interface.");
+        }
     }
 
-    private void updateRecoveryPlan(RecoveryPlan selectedRecoveryPlan) {
+    @FXML
+    private void handleUpdate() {
+        RecoveryPlan selectedRecoveryPlan = RecoveryTable.getSelectionModel().getSelectedItem();
         if (selectedRecoveryPlan != null) {
-            openUpdateRecoveryPlanInterface(selectedRecoveryPlan);
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/UpdateRecoveryPlan.fxml"));
+                Parent updateRecoveryPlanRoot = loader.load();
+                UpdateRecoveryPlanController controller = loader.getController();
+                controller.setRecoveryPlanData(selectedRecoveryPlan);
+                Stage updateRecoveryPlanStage = new Stage();
+                updateRecoveryPlanStage.setTitle("Update Recovery Plan");
+                updateRecoveryPlanStage.setScene(new Scene(updateRecoveryPlanRoot));
+                updateRecoveryPlanStage.show();
+            } catch (IOException e) {
+                showAlert(Alert.AlertType.ERROR, "Error", "Failed to open Update Recovery Plan interface.");
+            }
         } else {
             showAlert(Alert.AlertType.WARNING, "Selection Error", "Please select a recovery plan to update.");
         }
     }
 
-    private void openUpdateRecoveryPlanInterface(RecoveryPlan selectedRecoveryPlan) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/UpdateRecoveryPlan.fxml"));
-            Parent updateRecoveryPlanRoot = loader.load();
-
-            UpdateRecoveryPlanController updateRecoveryPlanController = loader.getController();
-            updateRecoveryPlanController.setRecoveryPlanData(selectedRecoveryPlan);
-            updateRecoveryPlanController.setShowRecoveryPlanController(this);
-
-            Stage updateRecoveryPlanStage = new Stage();
-            updateRecoveryPlanStage.setTitle("Update Recovery Plan");
-            updateRecoveryPlanStage.setScene(new Scene(updateRecoveryPlanRoot));
-            updateRecoveryPlanStage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Error", "Failed to open Update Recovery Plan interface.");
-        }
-    }
-
-    private void deleteRecoveryPlan(RecoveryPlan selectedRecoveryPlan) {
+    @FXML
+    private void handleDelete() {
+        RecoveryPlan selectedRecoveryPlan = RecoveryTable.getSelectionModel().getSelectedItem();
         if (selectedRecoveryPlan != null) {
-            new DeleteRecoveryPlanController().deleteRecoveryPlan(selectedRecoveryPlan);
-            loadRecoveryPlans();
-            RecoveryTable.refresh();
+            try {
+                recoveryPlanServices.delete(selectedRecoveryPlan);
+                loadRecoveryPlans();
+                RecoveryTable.refresh();
+            } catch (SQLException e) {
+                showAlert(Alert.AlertType.ERROR, "Database Error", "Failed to delete recovery plan.");
+            }
         } else {
             showAlert(Alert.AlertType.WARNING, "Selection Error", "Please select a recovery plan to delete.");
         }
     }
+
+    public void refreshTable() {
+        loadRecoveryPlans(); // Reload data from the database
+        RecoveryTable.refresh(); // Refresh the table view
+    }
+
 
     private void showAlert(Alert.AlertType alertType, String title, String content) {
         Alert alert = new Alert(alertType);
@@ -174,10 +145,5 @@ public class ShowRecoveryPlanController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
-    }
-
-    public void refreshTable() {
-        loadRecoveryPlans();
-        RecoveryTable.refresh();
     }
 }

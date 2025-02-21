@@ -14,6 +14,7 @@ import java.time.LocalDate;
 
 public class UpdateInjuryController {
 
+    // UI components from the FXML file
     @FXML
     private TextField AthleteNameField;
 
@@ -38,15 +39,19 @@ public class UpdateInjuryController {
     @FXML
     private Button cancelButton;
 
+    // Services and selected injury reference
     private InjuryServices InjuryService;
-    private Injury selectedInjury; // To hold the injury being updated
-    private ShowInjuryController showInjuryController; // Reference to the ShowInjuryController
+    private Injury selectedInjury; // Holds the injury being updated
+    private ShowInjuryController showInjuryController; // Reference to another controller
 
+    /**
+      Sets the data of the selected injury into the form fields*/
     public void setInjuryData(Injury selectedInjury) {
-        this.selectedInjury = selectedInjury; // Pass the selected Injury when opening this controller
-        // Fill fields with the selected Injury's data
+        this.selectedInjury = selectedInjury;
+        // Populate the form with injury data if available
         if (selectedInjury != null) {
             AthleteNameField.setText(selectedInjury.getUser().getUser_fname());
+            // Set the athlete's first name field with the first name from the selected injury's user
             AthleteLastNameField.setText(selectedInjury.getUser().getUser_lname());
             InjuryDescriptionField.setText(selectedInjury.getInjury_description());
             InjuryTypeBox.setValue(selectedInjury.getInjuryType());
@@ -55,10 +60,16 @@ public class UpdateInjuryController {
         }
     }
 
+    /**
+     * Sets a reference to the ShowInjuryController to refresh data after update
+     */
     public void setShowInjuryController(ShowInjuryController showInjuryController) {
-        this.showInjuryController = showInjuryController; // Set the reference to ShowInjuryController
+        this.showInjuryController = showInjuryController;
     }
 
+    /**
+     * Initializes the controller and sets up event handlers
+     */
     @FXML
     public void initialize() {
         InjuryService = new InjuryServices();
@@ -67,23 +78,26 @@ public class UpdateInjuryController {
         InjuryTypeBox.getItems().addAll(InjuryType.values());
         SeverityBox.getItems().addAll(Severity.values());
 
-        // Set default values (optional)
+        // Set default values
         InjuryTypeBox.setValue(InjuryType.STRAIN);
         SeverityBox.setValue(Severity.MILD);
 
-        // Set button actions
+        // Attach button click events
         updateInjuryButton.setOnAction(event -> updateInjury());
         cancelButton.setOnAction(event -> closeWindow());
 
-        // Set the date picker to not allow dates before September 1st of the current academic year
+        // Set restrictions on the date picker
         setDatePickerConstraints();
     }
 
+    /**
+     * Restricts the DatePicker to prevent selecting past dates before the academic year
+     */
     private void setDatePickerConstraints() {
         LocalDate now = LocalDate.now();
         LocalDate startOfAcademicYear = LocalDate.of(now.getYear(), 9, 1);
 
-        // If the current date is before September 1st, set the start date to September 1st of the previous year
+        // If current date is before September 1st, adjust to previous year
         if (now.isBefore(startOfAcademicYear)) {
             startOfAcademicYear = startOfAcademicYear.minusYears(1);
         }
@@ -93,11 +107,15 @@ public class UpdateInjuryController {
             @Override
             public void updateItem(LocalDate item, boolean empty) {
                 super.updateItem(item, empty);
+                // Disable dates before the start of the academic year
                 setDisable(empty || item.isBefore(finalStartOfAcademicYear));
             }
         });
     }
 
+    /**
+     * Handles updating an existing injury record
+     */
     private void updateInjury() {
         String user_fname = AthleteNameField.getText();
         String user_lname = AthleteLastNameField.getText();
@@ -106,7 +124,7 @@ public class UpdateInjuryController {
         LocalDate InjuryDate = InjuryDatePicker.getValue();
         Severity severity = SeverityBox.getValue();
 
-        // Validate inputs
+        // Input validation
         boolean valid = true;
 
         if (user_fname.isEmpty()) {
@@ -149,58 +167,47 @@ public class UpdateInjuryController {
             return;
         }
 
-        // Update the User associated with the selected Injury
+        // Update the user's information
         User user = selectedInjury.getUser();
         if (user != null) {
-            user.setUser_fname(user_fname); // Update the first name
-            user.setUser_lname(user_lname); // Update the last name
+            user.setUser_fname(user_fname);
+            user.setUser_lname(user_lname);
         }
 
-        // Update the selected Injury with the new data
+        // Update injury details
         selectedInjury.setInjuryType(type);
         selectedInjury.setInjury_description(injury_description);
         selectedInjury.setInjuryDate(InjuryDate);
         selectedInjury.setInjury_severity(severity);
 
         try {
-            // Update Injury in the database
+            // Update the injury in the database
             InjuryService.update(selectedInjury);
             showAlert(Alert.AlertType.INFORMATION, "Success", "Injury updated successfully!");
-            showInjuryController.refreshTable(); // Refresh the table in ShowInjuryController
-            closeWindow(); // Close the window after update
+            showInjuryController.refreshTable(); // Refresh the table
+            closeWindow(); // Close the window
         } catch (SQLException e) {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Database Error", "Failed to update Injury.");
         }
     }
 
+    /**
+     * Closes the update injury window
+     */
     private void closeWindow() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Displays an alert message
+     */
     private void showAlert(Alert.AlertType alertType, String title, String content) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
-    }
-
-    private void clearFields() {
-        AthleteNameField.clear();
-        AthleteLastNameField.clear();
-        InjuryDatePicker.setValue(null);
-        InjuryTypeBox.setValue(InjuryType.DISLOCATION);
-        InjuryDescriptionField.clear();
-        SeverityBox.setValue(Severity.SEVERE);
-
-        // Remove invalid-input class
-        AthleteNameField.getStyleClass().remove("invalid-input");
-        AthleteLastNameField.getStyleClass().remove("invalid-input");
-        InjuryTypeBox.getStyleClass().remove("invalid-input");
-        InjuryDescriptionField.getStyleClass().remove("invalid-input");
-        InjuryDatePicker.getStyleClass().remove("invalid-input");
-        SeverityBox.getStyleClass().remove("invalid-input");
     }
 }
