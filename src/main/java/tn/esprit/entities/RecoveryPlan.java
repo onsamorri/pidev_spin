@@ -1,21 +1,19 @@
 package tn.esprit.entities;
-
 import java.time.LocalDate;
 
 public class RecoveryPlan {
-
     private int recovery_id;
-    private Injury injury;  // Changed from injury_id to Injury object
-    private User user;
+    private Injury injury;
+    private user user;
     private RecoveryGoal recovery_Goal;
     private String recovery_Description;
     private LocalDate recovery_StartDate;
     private LocalDate recovery_EndDate;
     private RecoveryStatus recovery_Status;
 
-    // Constructor with all attributes
-    public RecoveryPlan(int recovery_id, Injury injury, User user, RecoveryGoal recovery_Goal, String recovery_Description,
-                        LocalDate recovery_StartDate, LocalDate recovery_EndDate, RecoveryStatus recovery_Status) {
+    public RecoveryPlan(int recovery_id, Injury injury, user user, RecoveryGoal recovery_Goal,
+                        String recovery_Description, LocalDate recovery_StartDate,
+                        LocalDate recovery_EndDate, RecoveryStatus recovery_Status) {
         this.recovery_id = recovery_id;
         this.injury = injury;
         this.user = user;
@@ -26,9 +24,9 @@ public class RecoveryPlan {
         this.recovery_Status = recovery_Status;
     }
 
-    // Constructor without recovery_id (for new records)
-    public RecoveryPlan(Injury injury, User user, RecoveryGoal recovery_Goal, String recovery_Description,
-                        LocalDate recovery_StartDate, LocalDate recovery_EndDate, RecoveryStatus recovery_Status) {
+    public RecoveryPlan(Injury injury, user user, RecoveryGoal recovery_Goal,
+                        String recovery_Description, LocalDate recovery_StartDate,
+                        LocalDate recovery_EndDate, RecoveryStatus recovery_Status) {
         this.injury = injury;
         this.user = user;
         this.recovery_Goal = recovery_Goal;
@@ -38,7 +36,9 @@ public class RecoveryPlan {
         this.recovery_Status = recovery_Status;
     }
 
-    // Getters and Setters
+    public RecoveryPlan() {
+    }
+
     public int getRecovery_id() {
         return recovery_id;
     }
@@ -55,11 +55,11 @@ public class RecoveryPlan {
         this.injury = injury;
     }
 
-    public User getUser() {
+    public user getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(user user) {
         this.user = user;
     }
 
@@ -107,8 +107,8 @@ public class RecoveryPlan {
     public String toString() {
         return "RecoveryPlan{" +
                 "recovery_id=" + recovery_id +
-                ", injury=" + (injury != null ? injury.toString() : "Unknown") +
-                ", user=" + (user != null ? user.getUser_fname() + " " + user.getUser_lname() : "Unknown") +
+                ", injury=" + injury +
+                ", user=" + user +
                 ", recovery_Goal=" + recovery_Goal +
                 ", recovery_Description='" + recovery_Description + '\'' +
                 ", recovery_StartDate=" + recovery_StartDate +

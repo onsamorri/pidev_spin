@@ -3,14 +3,13 @@ package tn.esprit.entities;
 import java.sql.Date;
 import java.time.LocalDate;
 
-public class Athlete extends User {
+public class Athlete extends user {
     private float athlete_height;
     private float athlete_weight;
     private String athlete_gender;
     private String athlete_address;
     private int isInjured;
     private Date athlete_DoB;
-    private Date athlete_regDate;
     public Athlete() {
         super();
         this.athlete_height = 0;
@@ -19,10 +18,9 @@ public class Athlete extends User {
         this.athlete_address = "";
         this.isInjured = 0;
         this.athlete_DoB=null;
-        this.athlete_regDate = null;
     }
 
-    public Athlete(int user_id, String user_fname, String user_lname, String user_email, String user_pwd, String user_nbr, Date athlete_DoB, String athlete_gender, String athlete_address, float athlete_height, float athlete_weight,   int isInjured,  Date athlete_regDate) {
+    public Athlete(int user_id, String user_fname, String user_lname, String user_email, String user_pwd, String user_nbr, Date athlete_DoB, String athlete_gender, String athlete_address, float athlete_height, float athlete_weight,   int isInjured) {
         super(user_id, user_fname, user_lname, user_email, user_pwd, user_nbr, user_role.ATHLETE);
         this.athlete_height = athlete_height;
         this.athlete_weight = athlete_weight;
@@ -30,9 +28,8 @@ public class Athlete extends User {
         this.athlete_address = athlete_address;
         this.isInjured = isInjured;
         this.athlete_DoB = athlete_DoB;
-        this.athlete_regDate = athlete_regDate;
     }
-    public Athlete(String user_fname, String user_lname, String user_email, String user_pwd, String user_nbr, Date athlete_DoB, String athlete_gender, String athlete_address, float athlete_height, float athlete_weight,   int isInjured,  Date athlete_regDate) {
+    public Athlete(String user_fname, String user_lname, String user_email, String user_pwd, String user_nbr, Date athlete_DoB, String athlete_gender, String athlete_address, float athlete_height, float athlete_weight,   int isInjured) {
         super(user_fname, user_lname, user_email, user_pwd, user_nbr, user_role.ATHLETE);
         this.athlete_height = athlete_height;
         this.athlete_weight = athlete_weight;
@@ -40,7 +37,6 @@ public class Athlete extends User {
         this.athlete_address = athlete_address;
         this.isInjured = isInjured;
         this.athlete_DoB = athlete_DoB;
-        this.athlete_regDate = athlete_regDate;
     }
 
     public float getAthlete_height() {
@@ -91,13 +87,6 @@ public class Athlete extends User {
         this.athlete_DoB = athlete_DoB;
     }
 
-    public Date getAthlete_regDate() {
-        return athlete_regDate;
-    }
-
-    public void setAthlete_regDate(Date athlete_regDate) {
-        this.athlete_regDate = athlete_regDate;
-    }
 
     @Override
     public String toString() {
@@ -108,7 +97,7 @@ public class Athlete extends User {
                 ", athlete_address='" + athlete_address + '\'' +
                 ", isInjured=" + isInjured +
                 ", athlete_DoB=" + athlete_DoB +
-                ", athlete_regDate=" + athlete_regDate +
                 '}';
     }
 }
+

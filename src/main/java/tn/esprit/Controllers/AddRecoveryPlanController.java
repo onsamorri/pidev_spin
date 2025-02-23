@@ -1,135 +1,189 @@
-package tn.esprit.Controllers;
+package tn.esprit.controllers;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import tn.esprit.entities.*;
 import tn.esprit.services.RecoveryPlanServices;
-import tn.esprit.services.InjuryServices;
 import tn.esprit.services.UserServices;
-import tn.esprit.utils.MyDatabase;
+import tn.esprit.services.InjuryServices;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 
 public class AddRecoveryPlanController {
 
-    @FXML
-    private TextField AthleteNameField;
+    @FXML private ChoiceBox<String> athleteFirstNameChoiceBox;
+    @FXML private ChoiceBox<String> athleteLastNameChoiceBox;
+    @FXML private TextField recoveryDescriptionTextField;
+    @FXML private DatePicker recoveryStartDatePicker;
+    @FXML private DatePicker recoveryEndDatePicker;
+    @FXML private ChoiceBox<RecoveryGoal> recoveryGoalChoiceBox;
+    @FXML private ChoiceBox<RecoveryStatus> recoveryStatusChoiceBox;
+    @FXML private ChoiceBox<String> injuryTypechoiceBox;
+    @FXML private Button addRecoveryPlanButton;
+    @FXML private Button viewRecoveryPlanButton;
 
-    @FXML
-    private TextField AthleteLastNameField;
+    private UserServices userServices;
+    private InjuryServices injuryServices;
+    private RecoveryPlanServices recoveryPlanServices;
 
-    @FXML
-    private ChoiceBox<RecoveryGoal> RecoveryGoalBox;
-
-    @FXML
-    private TextField RecoveryDescriptionField;
-
-    @FXML
-    private DatePicker RecoveryStartDatePicker;
-
-    @FXML
-    private DatePicker RecoveryEndDatePicker;
-
-    @FXML
-    private ChoiceBox<RecoveryStatus> RecoveryStatusBox;
-
-    @FXML
-    private Button addRecoveryPlanButton;
+    public AddRecoveryPlanController() {
+        userServices = new UserServices();
+        injuryServices = new InjuryServices();
+        recoveryPlanServices = new RecoveryPlanServices();
+    }
 
     @FXML
     public void initialize() {
-        RecoveryGoalBox.getItems().addAll(RecoveryGoal.values());
-        RecoveryStatusBox.getItems().addAll(RecoveryStatus.values());
-        RecoveryStatusBox.setValue(RecoveryStatus.PENDING);
-        RecoveryGoalBox.setValue(RecoveryGoal.PREVENTION);
-        addRecoveryPlanButton.setOnAction(event -> addRecoveryPlan());
-        setDatePickerConstraints();
+        loadAthletes();
+        loadRecoveryGoals();
+        loadRecoveryStatuses();
+
+        addRecoveryPlanButton.setOnAction(this::handleAddRecoveryPlan);
+        viewRecoveryPlanButton.setOnAction(event -> switchToListRecoveryPlan());
     }
 
-    private void setDatePickerConstraints() {
-        LocalDate now = LocalDate.now();
-        LocalDate startOfAcademicYear = LocalDate.of(now.getYear(), 9, 1);
-        if (now.isBefore(startOfAcademicYear)) {
-            startOfAcademicYear = startOfAcademicYear.minusYears(1);
+    private void switchToListRecoveryPlan() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ListRecoveryPlan.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Recovery Plan List");
+            stage.show();
+
+            Stage currentStage = (Stage) viewRecoveryPlanButton.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            showAlert("Error", "Failed to open Recovery Plan List screen: " + e.getMessage());
         }
-        LocalDate finalStartOfAcademicYear = startOfAcademicYear;
-        RecoveryStartDatePicker.setDayCellFactory(picker -> new DateCell() {
-            @Override
-            public void updateItem(LocalDate item, boolean empty) {
-                super.updateItem(item, empty);
-                setDisable(empty || item.isBefore(finalStartOfAcademicYear));
+    }
+
+    private void loadAthletes() {
+        List<user> athletes = userServices.getUsersByRole("Athlete");
+        ObservableList<String> athleteNames = FXCollections.observableArrayList();
+
+        for (user athlete : athletes) {
+            athleteNames.add(athlete.getUser_fname());
+        }
+
+        athleteFirstNameChoiceBox.setItems(athleteNames);
+        athleteFirstNameChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> loadLastNames(newValue));
+    }
+
+    private void loadLastNames(String firstName) {
+        List<user> athletes = userServices.getUsersByRole("Athlete");
+        ObservableList<String> athleteLastNames = FXCollections.observableArrayList();
+
+        for (user athlete : athletes) {
+            if (athlete.getUser_fname().equals(firstName)) {
+                athleteLastNames.add(athlete.getUser_lname());
+            }
+        }
+
+        athleteLastNameChoiceBox.setItems(athleteLastNames);
+
+        // Load injury type when last name is selected
+        athleteLastNameChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                loadInjuryType(firstName, newValue);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
         });
     }
 
-    private void addRecoveryPlan() {
-        RecoveryPlanServices recoveryPlanServices = new RecoveryPlanServices();
-        InjuryServices injuryService = new InjuryServices();
-        UserServices userService = new UserServices();
+    private void loadInjuryType(String firstName, String lastName) throws SQLException {
+        if (firstName == null || lastName == null) return;
 
-        String user_fname = AthleteNameField.getText();
-        String user_lname = AthleteLastNameField.getText();
-        String recovery_Description = RecoveryDescriptionField.getText();
-        RecoveryGoal goal = RecoveryGoalBox.getValue();
-        LocalDate recovery_StartDate = RecoveryStartDatePicker.getValue();
-        LocalDate 	recovery_EndDate = RecoveryEndDatePicker.getValue();
-        RecoveryStatus Recovery_Status = RecoveryStatusBox.getValue();
+        user athlete = userServices.getAthleteByFullName(firstName, lastName);
+        if (athlete == null) return;
 
-        if (user_fname.isEmpty() || user_lname.isEmpty() || goal == null || 	recovery_StartDate== null || recovery_EndDate == null || Recovery_Status == null) {
-            showAlert(Alert.AlertType.ERROR, "Form Error", "Please fill in all fields correctly.");
+        Injury injury = injuryServices.getInjuryByAthleteId(athlete);
+        if (injury == null) {
+            injuryTypechoiceBox.setItems(FXCollections.observableArrayList());
             return;
         }
 
-        try (Connection con = MyDatabase.getInstance().getCon()) {
-            User user = userService.getUserByName(con, user_fname, user_lname);
+        ObservableList<String> injuryTypes = FXCollections.observableArrayList();
+        injuryTypes.add(injury.getInjuryType().toString()); // Convert InjuryType to string
+        injuryTypechoiceBox.setItems(injuryTypes);
+        injuryTypechoiceBox.getSelectionModel().selectFirst(); // Auto-select the first available type
+    }
 
-            if (user == null) {
-                showAlert(Alert.AlertType.ERROR, "Error", "Athlete not found.");
+
+    private void loadRecoveryGoals() {
+        ObservableList<RecoveryGoal> recoveryGoals = FXCollections.observableArrayList(RecoveryGoal.values());
+        recoveryGoalChoiceBox.setItems(recoveryGoals);
+    }
+
+    private void loadRecoveryStatuses() {
+        ObservableList<RecoveryStatus> recoveryStatuses = FXCollections.observableArrayList(RecoveryStatus.values());
+        recoveryStatusChoiceBox.setItems(recoveryStatuses);
+    }
+
+    private void handleAddRecoveryPlan(ActionEvent event) {
+        try {
+            String selectedFirstName = athleteFirstNameChoiceBox.getValue();
+            String selectedLastName = athleteLastNameChoiceBox.getValue();
+            String recoveryDescription = recoveryDescriptionTextField.getText();
+            LocalDate recoveryStartDate = recoveryStartDatePicker.getValue();
+            LocalDate recoveryEndDate = recoveryEndDatePicker.getValue();
+            RecoveryGoal recoveryGoal = recoveryGoalChoiceBox.getValue();
+            RecoveryStatus recoveryStatus = recoveryStatusChoiceBox.getValue();
+            String injuryType = injuryTypechoiceBox.getValue();
+
+            if (selectedFirstName == null || selectedLastName == null || recoveryDescription.isEmpty() || recoveryStartDate == null || recoveryEndDate == null || recoveryGoal == null || recoveryStatus == null || injuryType == null) {
+                showAlert("Error", "All fields must be filled!");
                 return;
             }
 
-            // Fetch the Injury object based on the user's injury records
-            Injury injury = injuryService.findByUserId(user.getUser_id());
+            user athlete = userServices.getAthleteByFullName(selectedFirstName, selectedLastName);
+            if (athlete == null) {
+                showAlert("Error", "Athlete not found!");
+                return;
+            }
 
+            Injury injury = injuryServices.getInjuryByAthleteId(athlete);
             if (injury == null) {
-                showAlert(Alert.AlertType.ERROR, "Error", "No injury record found for this athlete.");
+                showAlert("Error", "No injury found for this athlete!");
                 return;
             }
 
-            // Create the RecoveryPlan object
-            RecoveryPlan recoveryPlan = new RecoveryPlan(injury, user, goal, recovery_Description, recovery_StartDate, recovery_EndDate, Recovery_Status);
+            RecoveryPlan recoveryPlan = new RecoveryPlan();
+            recoveryPlan.setRecovery_Description(recoveryDescription);
+            recoveryPlan.setRecovery_StartDate(recoveryStartDate);
+            recoveryPlan.setRecovery_EndDate(recoveryEndDate);
+            recoveryPlan.setRecovery_Goal(recoveryGoal);
+            recoveryPlan.setRecovery_Status(recoveryStatus);
+            recoveryPlan.setInjury(injury);
+            recoveryPlan.setUser(athlete);
 
-            // Add the recovery plan
-            recoveryPlanServices.add(recoveryPlan);
+            recoveryPlanServices.addP(recoveryPlan); // Use addP for persistence
+            showAlert("Success", "Recovery Plan added successfully!");
 
-            showAlert(Alert.AlertType.INFORMATION, "Success", "Recovery plan added successfully!");
-            clearFields();
         } catch (SQLException e) {
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Database Error", "Failed to add recovery plan.");
+            showAlert("Error", "SQL error occurred: " + e.getMessage());
+        } catch (Exception e) {
+            showAlert("Error", "Failed to add Recovery Plan: " + e.getMessage());
         }
     }
 
-
-
-    private void showAlert(Alert.AlertType alertType, String title, String content) {
-        Alert alert = new Alert(alertType);
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);
-        alert.setContentText(content);
+        alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    private void clearFields() {
-        AthleteNameField.clear();
-        AthleteLastNameField.clear();
-        RecoveryDescriptionField.clear();
-        RecoveryStartDatePicker.setValue(null);
-        RecoveryEndDatePicker.setValue(null);
-        RecoveryGoalBox.setValue(RecoveryGoal.PREVENTION);
-        RecoveryStatusBox.setValue(RecoveryStatus.PENDING);
     }
 }

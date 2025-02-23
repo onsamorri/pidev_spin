@@ -1,15 +1,16 @@
 package tn.esprit.entities;
 
-public enum InjuryType {
+public enum InjuryType{
     SPRAIN,
     FRACTURE,
     CONCUSSION,
-    DISLOCATION,
-    STRAIN,
-    TENDONITIS,
-    BRUISE,
-    LACERATION,
-    SPINAL_INJURY,
-    STRESS_FRACTURE,
-    WHIPLASH,
+    BRUISE;
+    public static InjuryType fromString(String value) {
+        for (InjuryType injuryType : InjuryType.values()) {
+            if (injuryType.name().equalsIgnoreCase(value)) {
+                return injuryType;
+            }
+        }
+        throw new IllegalArgumentException("Unknown value: " + value);
+    }
 }
