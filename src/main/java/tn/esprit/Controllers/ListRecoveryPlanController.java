@@ -73,7 +73,7 @@ public class ListRecoveryPlanController {
         addActionButtonsToTable();
         AddRecoveryPlanButton.setOnMouseClicked(event -> switchScreen("/AddRecoveryPlan.fxml", "Add New Recovery Plan"));
         UpdateRecoveryPlanButton.setOnMouseClicked(event -> switchScreenToUpdateRecoveryPlan());
-        BackButton.setOnMouseClicked(event -> switchScreen("/Athletefront.fxml", "Back"));
+        BackButton.setOnMouseClicked(event -> switchScreen("/Medicalfront.fxml", "Back"));
     }
 
     // Update the recovery plan list

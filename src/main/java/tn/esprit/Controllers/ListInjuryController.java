@@ -214,10 +214,10 @@ public class ListInjuryController {
 
     private void switchScreenToBack() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Athletefront.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Medicalfront.fxml"));
             Parent root = loader.load();
 
-            Athletefront controller = loader.getController();
+            Medicalfront controller = loader.getController();
             controller.initialize();
 
             Stage stage = new Stage();
