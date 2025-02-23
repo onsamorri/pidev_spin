@@ -1,6 +1,6 @@
 package tn.esprit.entities;
 
-public class Medical_staff extends User {
+public class Medical_staff extends user {
     private String speciality;
     public Medical_staff() {
         super();

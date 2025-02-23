@@ -1,16 +1,12 @@
 package tn.esprit.entities;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
-public class User {
+public class user {
     private int user_id;
 
     private String user_fname;
     private String user_lname;
-
-
-    private List<Injury> injuries = new ArrayList<>();
     private String user_email;
     private String user_pwd;
     private String user_nbr;
@@ -22,10 +18,10 @@ public class User {
         ADMIN, COACH, MEDICAL_STAFF, ATHLETE
     }
 
-    public User() {
+    public user() {
     }
 
-    public User(int user_id, String user_fname, String user_lname, String user_email, String user_pwd, String user_nbr, User.user_role user_role) {
+    public user(int user_id, String user_fname, String user_lname, String user_email, String user_pwd, String user_nbr, user.user_role user_role) {
         this.user_id = user_id;
         this.user_fname = user_fname;
         this.user_lname = user_lname;
@@ -35,7 +31,7 @@ public class User {
         this.user_role = user_role;
     }
 
-    public User(String user_fname, String user_lname, String user_email, String user_pwd, String user_nbr, User.user_role user_role) {
+    public user(String user_fname, String user_lname, String user_email, String user_pwd, String user_nbr, user.user_role user_role) {
         this.user_fname = user_fname;
         this.user_lname = user_lname;
         this.user_email = user_email;
@@ -92,20 +88,12 @@ public class User {
         this.user_nbr = user_nbr;
     }
 
-    public User.user_role getUser_role() {
+    public user.user_role getUser_role() {
         return user_role;
     }
 
-    public void setUser_role(User.user_role user_role) {
+    public void setUser_role(user.user_role user_role) {
         this.user_role = user_role;
-    }
-
-    public List<Injury> getInjuries() {
-        return injuries;
-    }
-
-    public void setInjuries(List<Injury> injuries) {
-        this.injuries = injuries;
     }
 
     @Override
@@ -121,3 +109,4 @@ public class User {
                 '}';
     }
 }
+

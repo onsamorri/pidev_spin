@@ -9,5 +9,14 @@ public enum RecoveryGoal {
     MOBILITY_RESTORATION,
     ENDURANCE_BUILDING,
     FUNCTIONAL_RECOVERY,
-    PSYCHOSOCIAL_RECOVERY
+    PSYCHOSOCIAL_RECOVERY;
+
+    public static RecoveryGoal fromString(String value) {
+        for (RecoveryGoal recoveryGoal : RecoveryGoal.values()) {
+            if (recoveryGoal.name().equalsIgnoreCase(value)) {
+                return recoveryGoal;
+            }
+        }
+        throw new IllegalArgumentException("Unknown value: " + value);
+    }
 }
