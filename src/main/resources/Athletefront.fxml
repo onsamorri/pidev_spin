@@ -56,10 +56,6 @@
             <VBox.margin>
                 <Insets top="5.0" />
             </VBox.margin>
-            <Button fx:id="viewRecoveryPlanButton" prefHeight="38.0" prefWidth="191.0" style="-fx-background-color: #709775; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-border-radius: 8px; -fx-background-radius: 8px; -fx-padding: 5px 10px;" text="View Recovery Plans">
-            <font>
-               <Font name="System Bold" size="16.0" />
-            </font></Button>
 
 
         </HBox>
@@ -79,10 +75,6 @@
             <VBox.margin>
                 <Insets top="5.0" />
             </VBox.margin>
-            <Button fx:id="viewInjuryButton" prefHeight="38.0" prefWidth="176.0" style="-fx-background-color: #709775; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-border-radius: 8px; -fx-background-radius: 8px; -fx-padding: 5px 10px;" text="Injuries">
-            <font>
-               <Font name="System Bold" size="63.0" />
-            </font></Button>
         </HBox>
 
 
