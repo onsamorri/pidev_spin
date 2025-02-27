@@ -13,11 +13,14 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import tn.esprit.entities.Injury;
 import tn.esprit.services.InjuryServices;
-
+import java.util.Comparator;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Collectors;
 
 public class ListInjuryController {
 
@@ -41,11 +44,14 @@ public class ListInjuryController {
     private TableColumn<Injury, String> Description;
     @FXML
     private TableColumn<Injury, Void> action_id;
-
     @FXML
     private Button AddInjuryButton;
     @FXML
     private TableView<Injury> tableView_id;
+    @FXML
+    private TextField searchField;
+    @FXML
+    private Button sortBySeverityButton;
 
     private final InjuryServices injuryService = new InjuryServices();
     private final ObservableList<Injury> injuryList = FXCollections.observableArrayList();
@@ -67,9 +73,51 @@ public class ListInjuryController {
         AddInjuryButton.setOnMouseClicked(event -> switchScreenToAddInjury());
         UpdateInjuryButton.setOnMouseClicked(event -> switchScreenToUpdateInjury());
         BackButton.setOnMouseClicked(event -> switchScreenToBack());
+
+        // Set up search functionality
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> filterInjuries(newValue));
+
+        // Set up sorting functionality
+        sortBySeverityButton.setOnMouseClicked(event -> sortInjuriesBySeverity());
     }
 
-    // Update the injury list
+    private void filterInjuries(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            tableView_id.setItems(injuryList);
+        } else {
+            ObservableList<Injury> filteredList = FXCollections.observableArrayList(
+                    injuryList.stream()
+                            .filter(injury -> injury.getUser().getUser_fname().toLowerCase().contains(keyword.toLowerCase())
+                                    || injury.getUser().getUser_lname().toLowerCase().contains(keyword.toLowerCase())
+                                    || injury.getInjuryType().toString().toLowerCase().contains(keyword.toLowerCase())
+                                    || injury.getInjury_severity().toString().toLowerCase().contains(keyword.toLowerCase()))
+                            .collect(Collectors.toList())
+            );
+            tableView_id.setItems(filteredList);
+        }
+    }
+
+    private boolean ascendingOrder = true; // Toggle variable
+
+    private void sortInjuriesBySeverity() {
+        Comparator<Injury> comparator = Comparator.comparing(injury -> injury.getInjury_severity().ordinal());
+
+        // Reverse order if the toggle is false
+        if (!ascendingOrder) {
+            comparator = comparator.reversed();
+        }
+
+        ObservableList<Injury> sortedList = FXCollections.observableArrayList(
+                injuryList.stream().sorted(comparator).collect(Collectors.toList())
+        );
+
+        tableView_id.setItems(sortedList);
+
+        // Toggle order for next click
+        ascendingOrder = !ascendingOrder;
+    }
+
+
     private void updateInjuryList() {
         injuryList.clear();
         try {
@@ -81,7 +129,6 @@ public class ListInjuryController {
         }
     }
 
-    // Show an alert message
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -232,7 +279,5 @@ public class ListInjuryController {
             showAlert("Error", "Failed to open add injury screen: " + e.getMessage());
         }
     }
-
-
 
 }

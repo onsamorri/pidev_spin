@@ -17,7 +17,9 @@ import tn.esprit.services.RecoveryPlanServices;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ListRecoveryPlanController {
 
@@ -48,6 +50,10 @@ public class ListRecoveryPlanController {
 
     @FXML
     private Button AddRecoveryPlanButton;
+    @FXML
+    private TextField searchField;
+    @FXML
+    private Button sortByStatusButton;
 
     @FXML
     private TableView<RecoveryPlan> tableView_id;
@@ -74,7 +80,53 @@ public class ListRecoveryPlanController {
         AddRecoveryPlanButton.setOnMouseClicked(event -> switchScreen("/AddRecoveryPlan.fxml", "Add New Recovery Plan"));
         UpdateRecoveryPlanButton.setOnMouseClicked(event -> switchScreenToUpdateRecoveryPlan());
         BackButton.setOnMouseClicked(event -> switchScreen("/Medicalfront.fxml", "Back"));
+
+        // Adding filter functionality
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> filterRecoveryPlans(newValue));
+
+        // Adding sort functionality
+        sortByStatusButton.setOnAction(event -> sortRecoveryPlansByStatus());
     }
+
+    private void filterRecoveryPlans(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            tableView_id.setItems(recoveryPlanList);
+        } else {
+            ObservableList<RecoveryPlan> filteredList = FXCollections.observableArrayList(
+                    recoveryPlanList.stream()
+                            .filter(recoveryPlan -> recoveryPlan.getUser().getUser_fname().toLowerCase().contains(keyword.toLowerCase())
+                                    || recoveryPlan.getUser().getUser_lname().toLowerCase().contains(keyword.toLowerCase())
+                                    || recoveryPlan.getRecovery_Goal().toString().toLowerCase().contains(keyword.toLowerCase())
+                                    || recoveryPlan.getRecovery_Description().toLowerCase().contains(keyword.toLowerCase())
+                                    || recoveryPlan.getRecovery_Status().toString().toLowerCase().contains(keyword.toLowerCase())
+                                    || recoveryPlan.getInjury().getInjuryType().toString().toLowerCase().contains(keyword.toLowerCase()))
+                            .collect(Collectors.toList())
+            );
+            tableView_id.setItems(filteredList);
+        }
+    }
+
+    private boolean ascendingOrderStatus = true; // Toggle variable for sorting status
+
+    private void sortRecoveryPlansByStatus() {
+        Comparator<RecoveryPlan> comparator = Comparator.comparing(recoveryPlan -> recoveryPlan.getRecovery_Status().ordinal());
+
+        // Reverse order if the toggle is false
+        if (!ascendingOrderStatus) {
+            comparator = comparator.reversed();
+        }
+
+        ObservableList<RecoveryPlan> sortedList = FXCollections.observableArrayList(
+                recoveryPlanList.stream().sorted(comparator).collect(Collectors.toList())
+        );
+
+        tableView_id.setItems(sortedList);
+
+        // Toggle order for next click
+        ascendingOrderStatus = !ascendingOrderStatus;
+    }
+
+
 
     // Update the recovery plan list
     private void updateRecoveryPlanList() {

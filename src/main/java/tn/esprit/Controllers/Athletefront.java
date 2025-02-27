@@ -14,6 +14,8 @@ import java.io.IOException;
 public class Athletefront {
     @FXML
     private Label claimButton;
+    @FXML
+    private Button MyInjuriesButton;
 
 
 
@@ -23,6 +25,7 @@ public class Athletefront {
     public void initialize() {
         // Set action for claimButton
         claimButton.setOnMouseClicked(event -> switchScreenClaim2());
+        MyInjuriesButton.setOnMouseClicked(event -> switchScreenToMyInjuries());
 
 
 
@@ -55,6 +58,27 @@ public class Athletefront {
             showAlert("Error", "Failed to open Claim screen: " + e.getMessage());
         }
     }
+
+    // Switch to My injuries
+    private void switchScreenToMyInjuries() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/MyInjuries.fxml"));
+            Parent root = loader.load();
+
+            MyInjuriesController controller = loader.getController();
+            controller.initialize();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("View My injuries");
+            stage.setUserData(this);
+            stage.show();
+            Stage currentStage = (Stage) MyInjuriesButton.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            showAlert("Error", "Failed to open Claim screen: " + e.getMessage());
+        }
+    }
+
 
 
 
