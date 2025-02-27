@@ -97,7 +97,6 @@ public class Coachfront {
             showAlert("Error", "Failed to open performance screen: " + e.getMessage());
         }
     }
-    //Yassine (Claim)
 
     private void switchScreenTraining() {
 
@@ -118,6 +117,7 @@ public class Coachfront {
             showAlert("Error", "Failed to open Training Session screen: " + e.getMessage());
         }
     }
+    //Yassine (Claim)
     private void switchScreenClaim() {
 
         try {
