@@ -9,6 +9,7 @@ public class Injury{
     private Severity injury_severity;
     private String injury_description;
     private user user;
+    private RecoveryPlan recoveryPlan;
 
     public Injury(int injury_id, InjuryType injuryType, LocalDate injuryDate, Severity injury_severity, String injury_description, user user) {
         this.injury_id = injury_id;
@@ -17,6 +18,17 @@ public class Injury{
         this.injury_severity = injury_severity;
         this.injury_description = injury_description;
         this.user = user;
+
+    }
+
+    public Injury(int injury_id, InjuryType injuryType, LocalDate injuryDate, Severity injury_severity, String injury_description, user user, RecoveryPlan recoveryPlan) {
+        this.injury_id = injury_id;
+        this.injuryType = injuryType;
+        this.injuryDate = injuryDate;
+        this.injury_severity = injury_severity;
+        this.injury_description = injury_description;
+        this.user = user;
+        this.recoveryPlan = recoveryPlan;
     }
 
     public Injury(InjuryType injuryType, LocalDate injuryDate, Severity severity, String injury_description, user user) {
@@ -78,6 +90,19 @@ public class Injury{
         this.user = user;
     }
 
+    public RecoveryPlan getRecoveryPlan() {
+        return recoveryPlan;
+    }
+
+    public void setRecoveryPlan(RecoveryPlan recoveryPlan) {
+        this.recoveryPlan = recoveryPlan;
+    }
+
+    public RecoveryStatus getRecovery_Status() {
+        return (recoveryPlan != null) ? recoveryPlan.getRecovery_Status() : null;
+    }
+
+
     @Override
     public String toString() {
         return "Injury{" +
@@ -87,6 +112,7 @@ public class Injury{
                 ", injury_severity=" + injury_severity +
                 ", injury_description='" + injury_description + '\'' +
                 ", user='" + user + '\'' +
+                ", recoveryPlan=" + recoveryPlan + '\'' +
                 '}';
     }
 }

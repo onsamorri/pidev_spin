@@ -103,6 +103,7 @@ public class AddAthleteInjuryController {
         severityChoiceBox.setItems(severities);
     }
 
+    @FXML
     private void handleAddInjury(ActionEvent event) {
         String selectedFirstName = AthleteNameTypeChoiceBox.getValue();
         String selectedLastName = AthleteLastNameTypeChoiceBox.getValue();
@@ -129,6 +130,9 @@ public class AddAthleteInjuryController {
         injury.setInjuryType(injuryType);
         injury.setUser(athlete);
 
+        // Set RecoveryPlan to null (no need to input anything for it)
+        injury.setRecoveryPlan(null);
+
         try {
             injuryServices.addP(injury);
             showAlert("Success", "Injury added successfully!");
@@ -138,6 +142,7 @@ public class AddAthleteInjuryController {
             showAlert("Error", "Failed to add injury: " + e.getMessage());
         }
     }
+
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

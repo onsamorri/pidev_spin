@@ -129,6 +129,8 @@ public class UpdateAthleteInjuryController {
             selectedInjury.setInjury_severity(severityChoiceBox.getValue());
             selectedInjury.setInjury_description(injuryDescriptionField.getText());
 
+            // Set recovery_id to NULL
+            selectedInjury.setRecoveryPlan(null);
             // Attempt to update the injury in the database
             injuryServices.update(selectedInjury.getInjury_id(), selectedInjury);
 
@@ -142,6 +144,7 @@ public class UpdateAthleteInjuryController {
             System.out.println("An error occurred while updating the injury: " + e.getMessage());
         }
     }
+
 
     private void navigateToListInjury() {
         try {

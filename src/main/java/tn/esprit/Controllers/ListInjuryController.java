@@ -190,7 +190,6 @@ public class ListInjuryController {
         });
     }
 
-    // Delete an injury from the list
     private void deleteInjury(Injury injury) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Delete Confirmation");
@@ -200,15 +199,16 @@ public class ListInjuryController {
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 try {
-                    injuryService.delete(injury.getInjury_id());
+                    injuryService.delete(injury.getInjury_id()); // Delete from database
+                    updateInjuryList(); // Refresh the list
+                    showAlert("Success", "Injury deleted successfully!");
                 } catch (SQLException e) {
-                    throw new RuntimeException(e);
+                    showAlert("Error", "Failed to delete injury: " + e.getMessage());
                 }
-                injuryList.remove(injury);
-                showAlert("Success", "Injury deleted successfully!");
             }
         });
     }
+
 
     // Switch to the screen for adding a new injury
     private void switchScreenToAddInjury() {
