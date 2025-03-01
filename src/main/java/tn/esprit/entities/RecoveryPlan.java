@@ -23,6 +23,16 @@ public class RecoveryPlan {
         this.recovery_EndDate = recovery_EndDate;
         this.recovery_Status = recovery_Status;
     }
+    public RecoveryPlan(int recovery_id, RecoveryGoal recovery_Goal, String recovery_Description,
+                        LocalDate recovery_StartDate, LocalDate recovery_EndDate, RecoveryStatus recovery_Status) {
+        this.recovery_id = recovery_id;
+        this.recovery_Goal = recovery_Goal;
+        this.recovery_Description = recovery_Description;
+        this.recovery_StartDate = recovery_StartDate;
+        this.recovery_EndDate = recovery_EndDate;
+        this.recovery_Status = recovery_Status;
+    }
+
 
     public RecoveryPlan(Injury injury, user user, RecoveryGoal recovery_Goal,
                         String recovery_Description, LocalDate recovery_StartDate,

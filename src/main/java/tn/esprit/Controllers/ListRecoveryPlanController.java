@@ -3,6 +3,7 @@ package tn.esprit.controllers;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,6 +13,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import tn.esprit.entities.RecoveryPlan;
+import tn.esprit.services.InjuryReportGenerator;
+import tn.esprit.services.RecoveryPlanReportGenerator;
 import tn.esprit.services.RecoveryPlanServices;
 
 import java.io.IOException;
@@ -27,6 +30,8 @@ public class ListRecoveryPlanController {
     public Button UpdateRecoveryPlanButton;
     @FXML
     public Button BackButton;
+    @FXML
+    public Button RecoveryReportButton;
     @FXML
     private TableColumn<RecoveryPlan, Integer> recovery_id;
     @FXML
@@ -80,6 +85,7 @@ public class ListRecoveryPlanController {
         AddRecoveryPlanButton.setOnMouseClicked(event -> switchScreen("/AddRecoveryPlan.fxml", "Add New Recovery Plan"));
         UpdateRecoveryPlanButton.setOnMouseClicked(event -> switchScreenToUpdateRecoveryPlan());
         BackButton.setOnMouseClicked(event -> switchScreen("/Medicalfront.fxml", "Back"));
+        RecoveryReportButton.setOnAction(this::handleRecoveryReportButtonClick);
 
         // Adding filter functionality
         searchField.textProperty().addListener((observable, oldValue, newValue) -> filterRecoveryPlans(newValue));
@@ -250,4 +256,17 @@ public class ListRecoveryPlanController {
             showAlert("Error", "Please select a recovery plan to update.");
         }
     }
+
+    @FXML
+    private void handleRecoveryReportButtonClick(ActionEvent event) {
+
+        try {
+            RecoveryPlanReportGenerator generator = new RecoveryPlanReportGenerator();
+            generator.exportRecoveryPlansToExcel(); // Generate the report
+            showAlert("Success", "Report generated successfully!");  // Call showAlert with only title and message
+        } catch (Exception e) {
+            showAlert("Error", "Failed to generate report: " + e.getMessage());  // Call showAlert with only title and message
+        }
+    }
+
 }

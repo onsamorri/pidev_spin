@@ -12,7 +12,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import tn.esprit.entities.Injury;
+import tn.esprit.services.InjuryReportGenerator;
 import tn.esprit.services.InjuryServices;
+
+import javafx.event.ActionEvent;
+import javafx.scene.control.Alert;
+
 import java.util.Comparator;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -28,6 +33,8 @@ public class ListInjuryController {
     public Button UpdateInjuryButton;
     @FXML
     public Button BackButton;
+    @FXML
+    public Button ReportButton;
     @FXML
     private TableColumn<Injury, Injury> Injuryid;
     @FXML
@@ -73,6 +80,7 @@ public class ListInjuryController {
         AddInjuryButton.setOnMouseClicked(event -> switchScreenToAddInjury());
         UpdateInjuryButton.setOnMouseClicked(event -> switchScreenToUpdateInjury());
         BackButton.setOnMouseClicked(event -> switchScreenToBack());
+        ReportButton.setOnAction(this::handleReportButtonClick);
 
         // Set up search functionality
         searchField.textProperty().addListener((observable, oldValue, newValue) -> filterInjuries(newValue));
@@ -279,5 +287,20 @@ public class ListInjuryController {
             showAlert("Error", "Failed to open add injury screen: " + e.getMessage());
         }
     }
+
+    // Method to handle report button click
+    @FXML
+    private void handleReportButtonClick(ActionEvent event) {
+        // Logic to generate the report (as per your InjuryReportGenerator class)
+        try {
+            InjuryReportGenerator generator = new InjuryReportGenerator();
+            generator.exportInjuriesToExcel(); // Generate the report
+            showAlert("Success", "Report generated successfully!");  // Call showAlert with only title and message
+        } catch (Exception e) {
+            showAlert("Error", "Failed to generate report: " + e.getMessage());  // Call showAlert with only title and message
+        }
+    }
+
+
 
 }

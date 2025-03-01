@@ -31,6 +31,12 @@ public class user {
         this.user_role = user_role;
     }
 
+    public user(int user_id, String user_fname, String user_lname) {
+        this.user_id = user_id;
+        this.user_fname = user_fname;
+        this.user_lname = user_lname;
+    }
+
     public user(String user_fname, String user_lname, String user_email, String user_pwd, String user_nbr, user.user_role user_role) {
         this.user_fname = user_fname;
         this.user_lname = user_lname;

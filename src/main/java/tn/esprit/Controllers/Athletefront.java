@@ -19,8 +19,6 @@ public class Athletefront {
 
 
 
-
-
     @FXML
     public void initialize() {
         // Set action for claimButton
