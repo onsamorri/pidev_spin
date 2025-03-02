@@ -48,6 +48,27 @@ public class teamServices implements IService2<team> {
             System.out.println("deleted");
 
     }
+    public List<team> getTeamsByTournamentId(int tournamentId) throws SQLException {
+        String query = "SELECT t.* FROM team t JOIN results r ON t.teamId = r.teamId WHERE r.tournamentId = ?";
+        PreparedStatement ps = con.prepareStatement(query);
+        ps.setInt(1, tournamentId);
+        ResultSet rs = ps.executeQuery();
+
+        List<team> teams = new ArrayList<>();
+        while (rs.next()) {
+            team t = new team(
+                    rs.getInt("teamId"),
+                    rs.getString("teamName"),
+                    rs.getInt("teamNbAthletes"),
+                    rs.getString("teamTypeOfSport"),
+                    rs.getInt("teamWins"),
+                    rs.getInt("teamLosses")
+
+            );
+            teams.add(t);
+        }
+        return teams;
+    }
 
     @Override
     public void update(int teamId,team t)  throws SQLException {
@@ -103,5 +124,13 @@ public class teamServices implements IService2<team> {
 
         return teams;
     }
+    public team getTeamById(int teamId) throws SQLException {
+        List<team> teams = returnList(); // Fetch all teams
+        return teams.stream()
+                .filter(t -> t.getTeamId() == teamId)
+                .findFirst()
+                .orElse(null);
+    }
+
 
 }
