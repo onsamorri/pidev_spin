@@ -6,19 +6,34 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+
 
 import java.io.IOException;
 
 
 public class Coachfront {
     //Asma (team and tournament)
-    @FXML private Label teamsBtn;
-    @FXML private Label tournBtn;
-    @FXML private Label performanceBtn;
-    @FXML private Label TrainingSesh;
-    @FXML private Label claimBtn;
-    @FXML private Label to_Add_id;
+    @FXML
+    private Label TrainingSesh;
+    @FXML
+    private Label claimBtn;
+    @FXML
+    private Label performanceBtn;
+    @FXML
+    private ImageView profile_id;
+    @FXML
+    private Label teamsBtn;
+    @FXML
+    private Label to_Add_id;
+    @FXML
+    private Label tournBtn;
+    @FXML
+    void handleProfileClick(MouseEvent event) {
+
+    }
 
 
     @FXML
@@ -29,7 +44,6 @@ public class Coachfront {
         TrainingSesh.setOnMouseClicked(event -> switchScreenTraining());
         claimBtn.setOnMouseClicked(event -> switchScreenClaim());
         to_Add_id.setOnMouseClicked(event -> switchScreenAthlete());
-
     }
     private void switchScreenTeam() {
 
