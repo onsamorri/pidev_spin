@@ -69,7 +69,7 @@ public class AddAthleteInjuryController {
     }
 
     private void loadAthletes() {
-        List<user> athletes = userServices.getUsersByRole("Athlete");
+        List<user> athletes = userServices.getUsersByRole("ATHLETE");
         ObservableList<String> athleteNames = FXCollections.observableArrayList();
 
         for (user athlete : athletes) {
@@ -81,7 +81,7 @@ public class AddAthleteInjuryController {
     }
 
     private void loadLastNames(String firstName) {
-        List<user> athletes = userServices.getUsersByRole("Athlete");
+        List<user> athletes = userServices.getUsersByRole("ATHLETE");
         ObservableList<String> athleteLastNames = FXCollections.observableArrayList();
 
         for (user athlete : athletes) {

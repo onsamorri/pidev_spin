@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import tn.esprit.entities.*;
 import tn.esprit.services.RecoveryPlanServices;
+import tn.esprit.services.RecoveryPlanSms;
 import tn.esprit.services.UserServices;
 import tn.esprit.services.InjuryServices;
 
@@ -18,7 +19,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
-
 public class AddRecoveryPlanController {
 
     @FXML private ChoiceBox<String> athleteFirstNameChoiceBox;
@@ -121,7 +121,6 @@ public class AddRecoveryPlanController {
         injuryTypechoiceBox.getSelectionModel().selectFirst(); // Auto-select the first available type
     }
 
-
     private void loadRecoveryGoals() {
         ObservableList<RecoveryGoal> recoveryGoals = FXCollections.observableArrayList(RecoveryGoal.values());
         recoveryGoalChoiceBox.setItems(recoveryGoals);
@@ -148,6 +147,11 @@ public class AddRecoveryPlanController {
                 return;
             }
 
+            if (recoveryStartDate.isAfter(recoveryEndDate)) {
+                showAlert("Error", "Recovery End Date must come after Recovery Start Date!");
+                return;
+            }
+
             user athlete = userServices.getAthleteByFullName(selectedFirstName, selectedLastName);
             if (athlete == null) {
                 showAlert("Error", "Athlete not found!");
@@ -169,8 +173,14 @@ public class AddRecoveryPlanController {
             recoveryPlan.setInjury(injury);
             recoveryPlan.setUser(athlete);
 
+            // Persist the recovery plan
             recoveryPlanServices.addP(recoveryPlan); // Use addP for persistence
-            showAlert("Success", "Recovery Plan added successfully!");
+
+            // Send SMS to athlete after recovery plan is added
+            String smsMessage = "Hello " + athlete.getUser_fname() + ", your recovery plan has been updated!";
+            RecoveryPlanSms.sendSms(athlete.getUser_nbr(), smsMessage);
+
+            showAlert("Success", "Recovery Plan added successfully and SMS sent!");
 
         } catch (SQLException e) {
             showAlert("Error", "SQL error occurred: " + e.getMessage());

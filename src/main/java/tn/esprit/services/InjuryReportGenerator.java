@@ -27,7 +27,7 @@ public class InjuryReportGenerator {
 
             // Create header row
             Row headerRow = sheet.createRow(0);
-            String[] headers = {"Injury ID", "Injury Type", "Injury Date", "Severity", "Description", "User First Name", "User Last Name"};
+            String[] headers = {"Injury ID", "User First Name", "User Last Name", "Injury Type", "Injury Date", "Severity", "Description"};
             for (int i = 0; i < headers.length; i++) {
                 Cell cell = headerRow.createCell(i);
                 cell.setCellValue(headers[i]);
@@ -39,13 +39,12 @@ public class InjuryReportGenerator {
             for (Injury injury : injuries) {
                 Row row = sheet.createRow(rowNum++);
                 row.createCell(0).setCellValue(injury.getInjury_id());
-                row.createCell(1).setCellValue(injury.getInjuryType().toString());
-                row.createCell(2).setCellValue(injury.getInjuryDate().toString());
-                row.createCell(3).setCellValue(injury.getInjury_severity().toString());
-                row.createCell(4).setCellValue(injury.getInjury_description());
-                row.createCell(5).setCellValue(injury.getUser() != null ? injury.getUser().getUser_fname() : "N/A");
-                row.createCell(6).setCellValue(injury.getUser() != null ? injury.getUser().getUser_lname() : "N/A");
-
+                row.createCell(1).setCellValue(injury.getUser() != null ? injury.getUser().getUser_fname() : "N/A");
+                row.createCell(2).setCellValue(injury.getUser() != null ? injury.getUser().getUser_lname() : "N/A");
+                row.createCell(3).setCellValue(injury.getInjuryType().toString());
+                row.createCell(4).setCellValue(injury.getInjuryDate().toString());
+                row.createCell(5).setCellValue(injury.getInjury_severity().toString());
+                row.createCell(6).setCellValue(injury.getInjury_description());
             }
 
             // Autosize columns
@@ -89,10 +88,7 @@ public class InjuryReportGenerator {
                 injury.setInjuryDate(LocalDate.parse(rs.getString("injuryDate")));
                 injury.setInjury_severity(Severity.valueOf(rs.getString("injury_severity")));
                 injury.setInjury_description(rs.getString("injury_description"));
-
                 injury.setUser(getUserById(rs.getInt("user_id")));
-
-
                 injuries.add(injury);
             }
 
@@ -102,6 +98,7 @@ public class InjuryReportGenerator {
 
         return injuries;
     }
+
     private user getUserById(int user_id) {
         String query = "SELECT user_id, user_fname, user_lname FROM user WHERE user_id = ?";
 
@@ -124,6 +121,4 @@ public class InjuryReportGenerator {
 
         return null; // Return null if user is not found
     }
-
 }
-

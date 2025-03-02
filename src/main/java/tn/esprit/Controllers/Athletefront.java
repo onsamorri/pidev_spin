@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -16,6 +17,8 @@ public class Athletefront {
     private Label claimButton;
     @FXML
     private Button MyInjuriesButton;
+    @FXML
+    private Button chatBotButton;
 
 
 
@@ -24,9 +27,7 @@ public class Athletefront {
         // Set action for claimButton
         claimButton.setOnMouseClicked(event -> switchScreenClaim2());
         MyInjuriesButton.setOnMouseClicked(event -> switchScreenToMyInjuries());
-
-
-
+        chatBotButton.setOnMouseClicked(event -> handleChatBotClick());
 
     }
 
@@ -74,6 +75,23 @@ public class Athletefront {
             currentStage.close();
         } catch (IOException e) {
             showAlert("Error", "Failed to open Claim screen: " + e.getMessage());
+        }
+    }
+
+    public void handleChatBotClick() {
+        try {
+            // Load the ChatBot FXML file
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/RecoveryChatBot.fxml"));
+            Pane root = loader.load();
+
+            // Set the new scene with the ChatBot interface
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

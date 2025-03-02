@@ -63,7 +63,7 @@
             <VBox.margin>
                 <Insets top="5.0" />
             </VBox.margin>
-            <Button fx:id="MyRecoveryPlanButton" prefHeight="35.0" prefWidth="149.0" style="-fx-background-color: #D68C45; -fx-text-fill: white; -fx-font-size: 15px; -fx-background-radius: 10; -fx-font-family: 'Calibri'; -fx-font-weight: bold;" text="My Recovery Plan" />
+            <Button fx:id="MyInjuriesButton" prefHeight="35.0" prefWidth="149.0" style="-fx-background-color: #D68C45; -fx-text-fill: white; -fx-font-size: 15px; -fx-background-radius: 10; -fx-font-family: 'Calibri'; -fx-font-weight: bold;" text="My health and recovery" />
         </HBox>
 
         <!-- Injury button  -->
@@ -71,7 +71,7 @@
             <VBox.margin>
                 <Insets top="5.0" />
             </VBox.margin>
-            <Button fx:id="MyInjuriesButton" prefHeight="35.0" prefWidth="151.0" style="-fx-background-color: #D68C45; -fx-text-fill: white; -fx-font-size: 18px; -fx-background-radius: 10; -fx-font-family: 'Calibri'; -fx-font-weight: bold;" text="My injuries" />
+            <Button fx:id="chatBotButton" text="Let's chat!" onAction="#handleChatBotClick"/>
         </HBox>
         <HBox alignment="CENTER" prefHeight="38.0" prefWidth="157.0">
             <VBox.margin>
