@@ -19,6 +19,8 @@ public class Athletefront {
     private Button MyInjuriesButton;
     @FXML
     private Button chatBotButton;
+    @FXML
+    private Button YoutubeButton;
 
 
 
@@ -28,6 +30,7 @@ public class Athletefront {
         claimButton.setOnMouseClicked(event -> switchScreenClaim2());
         MyInjuriesButton.setOnMouseClicked(event -> switchScreenToMyInjuries());
         chatBotButton.setOnMouseClicked(event -> handleChatBotClick());
+        YoutubeButton.setOnMouseClicked(event -> handleYouTubeClick());
 
     }
 
@@ -95,6 +98,29 @@ public class Athletefront {
             e.printStackTrace();
         }
     }
+
+    private void handleYouTubeClick() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/YoutubeSearch.fxml"));
+            Parent root = loader.load();
+
+            YouTubeSearchController controller = loader.getController();
+            controller.initialize();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("YouTube Screen");
+            stage.setUserData(this); // Pass this controller data if needed
+            stage.show();
+
+            Stage currentStage = (Stage) YoutubeButton.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            showAlert("Error", "Failed to open YouTube screen: " + e.getMessage());
+        }
+    }
+
+
+
 
 
 

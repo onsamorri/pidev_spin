@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.web.WebView?>
+
+<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #E0E0E0;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controllers.YouTubeSearchController">
+
+    <!-- Sidebar Menu (Green Sidebar) -->
+    <VBox prefHeight="600.0" prefWidth="178.0" style="-fx-background-color: #709775;">
+        <VBox alignment="CENTER" prefHeight="91.0" prefWidth="230.0">
+            <ImageView fitHeight="87.0" fitWidth="71.0" pickOnBounds="true" preserveRatio="true">
+                <Image url="@logo.png" />
+            </ImageView>
+        </VBox>
+
+        <HBox alignment="CENTER" prefHeight="38.0" prefWidth="157.0" />
+        <HBox alignment="CENTER" prefHeight="38.0" prefWidth="157.0">
+            <Label prefHeight="38.0" prefWidth="110.0" style="-fx-font-size: 20px; -fx-font-family: 'Calibri Bold';" text="View Team" textAlignment="RIGHT" textFill="WHITE" />
+        </HBox>
+        <HBox alignment="CENTER" prefHeight="38.0" prefWidth="157.0">
+            <Label prefHeight="38.0" prefWidth="163.0" style="-fx-font-size: 19px; -fx-font-family: 'Calibri Bold';" text="Training Sessions" textFill="WHITE" />
+        </HBox>
+        <HBox alignment="CENTER" prefHeight="38.0" prefWidth="157.0">
+            <Label prefHeight="38.0" prefWidth="170.0" style="-fx-font-size: 19px; -fx-font-family: 'Calibri Bold';" text="Performance Data" textFill="WHITE" />
+        </HBox>
+        <Label prefHeight="34.0" prefWidth="149.0" style="-fx-font-size: 18px; -fx-font-family: 'Calibri Bold'; -fx-background-radius: 10; -fx-alignment: center;" text="Claims" textFill="WHITE" />
+
+        <!-- Back Button -->
+        <Button fx:id="BackButton" alignment="CENTER" prefHeight="46.0" prefWidth="172.0" style="-fx-font-size: 16px; -fx-font-family: 'Calibri Bold'; -fx-background-radius: 10; -fx-padding: 10;" text="Back" textFill="WHITE" />
+    </VBox>
+
+    <!-- Main Content (YouTube Search Section) -->
+    <VBox alignment="CENTER" spacing="10" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="178" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+        <!-- Search Box -->
+        <HBox alignment="CENTER" spacing="10">
+            <TextField fx:id="searchField" prefWidth="500.0" promptText="Enter injury type or recovery keyword" />
+            <Button fx:id="searchButton" text="Search YouTube" />
+        </HBox>
+
+        <!-- WebView for YouTube Results -->
+        <WebView fx:id="webView" prefHeight="450" prefWidth="800" />
+
+        <!-- Refresh Button -->
+        <Button fx:id="refreshButton" text="Refresh" prefWidth="120.0" style="-fx-font-size: 14px; -fx-font-family: 'Calibri Bold'; -fx-background-radius: 10; -fx-padding: 10;" />
+    </VBox>
+
+</AnchorPane>

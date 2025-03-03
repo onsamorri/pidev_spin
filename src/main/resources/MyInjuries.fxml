@@ -20,9 +20,8 @@
 
         <HBox alignment="CENTER" prefHeight="38.0" prefWidth="157.0" />
         <HBox alignment="CENTER" prefHeight="38.0" prefWidth="157.0">
-            <children>
-                <Label prefHeight="38.0" prefWidth="110.0" style="-fx-font-size: 20px; -fx-font-family: 'Calibri Bold';" text="View Team" textAlignment="RIGHT" textFill="WHITE" />
-            </children>
+            <Label prefHeight="38.0" prefWidth="110.0" style="-fx-font-size: 20px; -fx-font-family: 'Calibri Bold';"
+                   text="View Team" textAlignment="RIGHT" textFill="WHITE"/>
         </HBox>
         <HBox alignment="CENTER" prefHeight="38.0" prefWidth="157.0">
             <Label prefHeight="38.0" prefWidth="163.0" style="-fx-font-size: 19px; -fx-font-family: 'Calibri Bold';"

@@ -63,6 +63,12 @@
             <VBox.margin>
                 <Insets top="5.0" />
             </VBox.margin>
+            <Button fx:id="YoutubeButton" prefHeight="34.0" prefWidth="121.0" style="-fx-background-color: #D68C45; -fx-text-fill: white; -fx-font-size: 18px; -fx-background-radius: 10; -fx-font-family: 'Calibri'; -fx-font-weight: bold; -fx-alignment: center;" text="YouTube" />
+        </HBox>
+        <HBox alignment="CENTER" prefHeight="38.0" prefWidth="157.0">
+            <VBox.margin>
+                <Insets top="5.0" />
+            </VBox.margin>
             <Button fx:id="MyInjuriesButton" prefHeight="34.0" prefWidth="121.0" style="-fx-background-color: #D68C45; -fx-text-fill: white; -fx-font-size: 18px; -fx-background-radius: 10; -fx-font-family: 'Calibri'; -fx-font-weight: bold; -fx-alignment: center;" text="My health" />
         </HBox>
 
