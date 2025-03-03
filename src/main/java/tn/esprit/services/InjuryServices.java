@@ -152,31 +152,58 @@ public class InjuryServices implements IService2<Injury> {
         return injuries;
     }
 
-    public Injury getInjuryByAthleteId(user athlete) throws SQLException {
-        Injury injury = null;
-        String sql = "SELECT * FROM injury WHERE user_id = ?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setInt(1, athlete.getUser_id());
+    public List<Injury> getInjuriesByAthleteId(user athlete) throws SQLException {
+        List<Injury> injuries = new ArrayList<>();
+        String query = "SELECT * FROM injury WHERE user_id = ?";
 
-        ResultSet resultSet = preparedStatement.executeQuery();
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, athlete.getUser_id());
+            ResultSet resultSet = statement.executeQuery();
 
-        if (resultSet.next()) {
-            injury = new Injury();
-            injury.setInjury_id(resultSet.getInt("injury_id"));
-            injury.setUser(athlete);
-            injury.setInjury_description(resultSet.getString("injury_description"));
-            injury.setInjuryDate(resultSet.getDate("injuryDate").toLocalDate());
-            injury.setInjury_severity(Severity.valueOf(resultSet.getString("injury_severity")));
-            injury.setInjuryType(InjuryType.valueOf(resultSet.getString("injuryType")));
+            while (resultSet.next()) {
+
+                Injury injury = new Injury();
+                injury.setInjury_id(resultSet.getInt("injury_id"));
+                injury.setInjuryType(InjuryType.valueOf(resultSet.getString("injuryType")));
+                injury.setInjury_description(resultSet.getString("injury_description"));
+                injury.setInjuryDate(resultSet.getDate("injuryDate").toLocalDate());
+                injury.setInjury_severity(Severity.valueOf(resultSet.getString("injury_severity")));
+
+                user athleteFromDb = getUserById(resultSet.getInt("user_id"));
+                injury.setUser(athleteFromDb);
+
+
+                injuries.add(injury);
+            }
         }
 
-        resultSet.close();
-        preparedStatement.close();
-
-        return injury;
+        return injuries;
     }
 
-}
 
+    private user getUserById(int userId) throws SQLException {
+        String query = "SELECT * FROM user WHERE user_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, userId);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                user athlete = new user();
+                athlete.setUser_id(resultSet.getInt("user_id"));
+                athlete.setUser_fname(resultSet.getString("user_fname"));
+                athlete.setUser_lname(resultSet.getString("user_lname"));
+                athlete.setUser_email(resultSet.getString("user_email"));
+                athlete.setUser_nbr(resultSet.getString("user_nbr"));
+
+                return athlete;
+            } else {
+                return null;  // Return null if no user is found for the given user_id
+            }
+        }
+    }
+
+
+
+}
 
 

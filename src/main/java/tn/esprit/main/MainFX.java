@@ -16,7 +16,7 @@ public class MainFX extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
 
-        Parent root= FXMLLoader.load(getClass().getResource("/Athletefront.fxml"));
+        Parent root= FXMLLoader.load(getClass().getResource("/login.fxml"));
         //Parent root= FXMLLoader.load(getClass().getResource("/AdminBack.fxml"));
         //Parent root= FXMLLoader.load(getClass().getResource("/AddClaimAthlete.fxml"));
         Scene scene=new Scene(root);

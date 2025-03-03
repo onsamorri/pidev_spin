@@ -82,7 +82,13 @@ public class ListRecoveryPlanController {
         tableView_id.setItems(recoveryPlanList);
         updateRecoveryPlanList();
         addActionButtonsToTable();
-        AddRecoveryPlanButton.setOnMouseClicked(event -> switchScreen("/AddRecoveryPlan.fxml", "Add New Recovery Plan"));
+
+        // Switch to Add Recovery Plan screen
+        AddRecoveryPlanButton.setOnMouseClicked(event -> {
+            switchScreen("/AddRecoveryPlan.fxml", "Add New Recovery Plan");
+            updateRecoveryPlanList(); // Refresh list after adding recovery plan
+        });
+
         UpdateRecoveryPlanButton.setOnMouseClicked(event -> switchScreenToUpdateRecoveryPlan());
         BackButton.setOnMouseClicked(event -> switchScreen("/Medicalfront.fxml", "Back"));
         RecoveryReportButton.setOnAction(this::handleRecoveryReportButtonClick);
@@ -93,6 +99,7 @@ public class ListRecoveryPlanController {
         // Adding sort functionality
         sortByStatusButton.setOnAction(event -> sortRecoveryPlansByStatus());
     }
+
 
     private void filterRecoveryPlans(String keyword) {
         if (keyword == null || keyword.trim().isEmpty()) {
@@ -173,7 +180,7 @@ public class ListRecoveryPlanController {
         }
     }
 
-    // Add action buttons (Update, Delete) to the table
+
     private void addActionButtonsToTable() {
         Action.setCellFactory(param -> new TableCell<>() {
             private final Button updateButton = new Button("Update");
@@ -208,7 +215,7 @@ public class ListRecoveryPlanController {
         });
     }
 
-    // Delete a recovery plan from the list
+
     private void deleteRecoveryPlan(RecoveryPlan recoveryPlan) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Delete Confirmation");
@@ -222,11 +229,12 @@ public class ListRecoveryPlanController {
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
-                recoveryPlanList.remove(recoveryPlan);
+                updateRecoveryPlanList();
                 showAlert("Success", "Recovery plan deleted successfully!");
             }
         });
     }
+
 
     // Switch to a new screen using a general method
     private void switchScreen(String fxmlPath, String title) {

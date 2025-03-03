@@ -117,6 +117,11 @@ public class AddAthleteInjuryController {
             return;
         }
 
+        if (injuryDate.isAfter(LocalDate.now())) {
+            showAlert("Validation Error", "Start date must not be in the future.");
+            return;
+        }
+
         user athlete = userServices.getAthleteByFullName(selectedFirstName, selectedLastName);
         if (athlete == null) {
             showAlert("Error", "Athlete not found!");

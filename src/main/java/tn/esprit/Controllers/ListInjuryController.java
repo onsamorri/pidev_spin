@@ -201,22 +201,20 @@ public class ListInjuryController {
     private void deleteInjury(Injury injury) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Delete Confirmation");
-        alert.setHeaderText("Are you sure you want to delete this injury?");
-        alert.setContentText("This action cannot be undone.");
-
+        alert.setContentText("Are you sure you want to delete this injury?");
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 try {
-                    injuryService.delete(injury.getInjury_id()); // Delete from database
-                    updateInjuryList(); // Refresh the list
-                    showAlert("Success", "Injury deleted successfully!");
+                    injuryService.delete(injury.getInjury_id());
+                    updateInjuryList();
+                    showAlert("Success", "Injury deleted successfully.");
                 } catch (SQLException e) {
+
                     showAlert("Error", "Failed to delete injury: " + e.getMessage());
                 }
             }
         });
     }
-
 
     // Switch to the screen for adding a new injury
     private void switchScreenToAddInjury() {

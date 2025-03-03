@@ -117,4 +117,44 @@ public class RecoveryPlanServices implements IService2<RecoveryPlan> {
         }
         return recoveryPlans;
     }
+
+    public static List<RecoveryPlan> getRecoveryPlansByAthleteId(int user_id) throws SQLException {
+        String query = "SELECT * FROM recoveryplan WHERE user_id = ?";
+        List<RecoveryPlan> recoveryPlans = new ArrayList<>();
+
+        try (Connection connection = MyDatabase.getInstance().getCon();
+             PreparedStatement stmt = connection.prepareStatement(query)) {
+
+            stmt.setInt(1, user_id);  // Use the athlete's user_id
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                // Assuming RecoveryPlan has a constructor that takes recovery_id, Injury, user, RecoveryGoal, description, startDate, endDate, and status
+                RecoveryPlan recoveryPlan = new RecoveryPlan(
+                        rs.getInt("recovery_id"),
+                        new Injury(
+                                rs.getInt("injury_id"),
+                                InjuryType.valueOf(rs.getString("injuryType").toUpperCase()), // Enum conversion for InjuryType
+                                rs.getDate("injuryDate").toLocalDate(), // Convert SQL Date to LocalDate
+                                Severity.valueOf(rs.getString("injury_severity").toUpperCase()), // Enum conversion for Severity
+                                rs.getString("injury_description"),
+                                new user(rs.getInt("user_id"), rs.getString("user_fname"), rs.getString("user_lname")) // Using user_fname and user_lname for user
+                        ),
+                        new user(rs.getInt("user_id"), rs.getString("user_fname"), rs.getString("user_lname")),  // Assuming user has a constructor with user_id, user_fname, and user_lname
+                        RecoveryGoal.valueOf(rs.getString("recovery_goal").toUpperCase()),  // Enum conversion for RecoveryGoal
+                        rs.getString("recovery_description"),
+                        rs.getDate("recovery_start_date").toLocalDate(),  // Convert SQL Date to LocalDate
+                        rs.getDate("recovery_end_date").toLocalDate(),  // Convert SQL Date to LocalDate
+                        RecoveryStatus.valueOf(rs.getString("recovery_status").toUpperCase())  // Enum conversion for RecoveryStatus
+                );
+                recoveryPlans.add(recoveryPlan);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;  // Rethrow the exception
+        }
+
+        return recoveryPlans;
+    }
+
 }

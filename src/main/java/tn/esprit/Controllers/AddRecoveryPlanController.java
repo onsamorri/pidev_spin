@@ -109,17 +109,27 @@ public class AddRecoveryPlanController {
         user athlete = userServices.getAthleteByFullName(firstName, lastName);
         if (athlete == null) return;
 
-        Injury injury = injuryServices.getInjuryByAthleteId(athlete);
-        if (injury == null) {
+        // Retrieve all injuries for this athlete
+        List<Injury> injuries = injuryServices.getInjuriesByAthleteId(athlete);
+        if (injuries == null || injuries.isEmpty()) {
             injuryTypechoiceBox.setItems(FXCollections.observableArrayList());
             return;
         }
 
         ObservableList<String> injuryTypes = FXCollections.observableArrayList();
-        injuryTypes.add(injury.getInjuryType().toString()); // Convert InjuryType to string
+        // Add all injury types to the list
+        for (Injury injury : injuries) {
+            injuryTypes.add(injury.getInjuryType().toString()); // Convert InjuryType to string
+        }
+
+        // Populate the ChoiceBox with all injury types
         injuryTypechoiceBox.setItems(injuryTypes);
-        injuryTypechoiceBox.getSelectionModel().selectFirst(); // Auto-select the first available type
+
+        if (!injuryTypes.isEmpty()) {
+            injuryTypechoiceBox.getSelectionModel().selectFirst(); // Auto-select the first available type
+        }
     }
+
 
     private void loadRecoveryGoals() {
         ObservableList<RecoveryGoal> recoveryGoals = FXCollections.observableArrayList(RecoveryGoal.values());
@@ -142,8 +152,14 @@ public class AddRecoveryPlanController {
             RecoveryStatus recoveryStatus = recoveryStatusChoiceBox.getValue();
             String injuryType = injuryTypechoiceBox.getValue();
 
+            // Validation for empty fields
             if (selectedFirstName == null || selectedLastName == null || recoveryDescription.isEmpty() || recoveryStartDate == null || recoveryEndDate == null || recoveryGoal == null || recoveryStatus == null || injuryType == null) {
                 showAlert("Error", "All fields must be filled!");
+                return;
+            }
+
+            if (recoveryStartDate.isAfter(LocalDate.now())) {
+                showAlert("Validation Error", "Start date must not be in the future.");
                 return;
             }
 
@@ -158,25 +174,39 @@ public class AddRecoveryPlanController {
                 return;
             }
 
-            Injury injury = injuryServices.getInjuryByAthleteId(athlete);
-            if (injury == null) {
-                showAlert("Error", "No injury found for this athlete!");
+            List<Injury> injuries = injuryServices.getInjuriesByAthleteId(athlete);
+            if (injuries.isEmpty()) {
+                showAlert("Error", "No injuries found for this athlete!");
                 return;
             }
 
+            Injury selectedInjury = null;
+            for (Injury injury : injuries) {
+                if (injury.getInjuryType().toString().equals(injuryType)) {
+                    selectedInjury = injury;
+                    break;
+                }
+            }
+
+            if (selectedInjury == null) {
+                showAlert("Error", "Selected injury type not found for this athlete!");
+                return;
+            }
+
+            // Create and persist the recovery plan
             RecoveryPlan recoveryPlan = new RecoveryPlan();
             recoveryPlan.setRecovery_Description(recoveryDescription);
             recoveryPlan.setRecovery_StartDate(recoveryStartDate);
             recoveryPlan.setRecovery_EndDate(recoveryEndDate);
             recoveryPlan.setRecovery_Goal(recoveryGoal);
             recoveryPlan.setRecovery_Status(recoveryStatus);
-            recoveryPlan.setInjury(injury);
+            recoveryPlan.setInjury(selectedInjury);
             recoveryPlan.setUser(athlete);
 
             // Persist the recovery plan
-            recoveryPlanServices.addP(recoveryPlan); // Use addP for persistence
+            recoveryPlanServices.addP(recoveryPlan);
 
-            // Send SMS to athlete after recovery plan is added
+            // Send SMS to athlete
             String smsMessage = "Hello " + athlete.getUser_fname() + ", your recovery plan has been updated!";
             RecoveryPlanSms.sendSms(athlete.getUser_nbr(), smsMessage);
 
@@ -188,6 +218,8 @@ public class AddRecoveryPlanController {
             showAlert("Error", "Failed to add Recovery Plan: " + e.getMessage());
         }
     }
+
+
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

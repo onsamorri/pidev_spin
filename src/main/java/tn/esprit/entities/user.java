@@ -13,6 +13,13 @@ public class user {
 
     private user_role user_role;
 
+    public user(int user_id, String user_fname, String user_lname, String user_email) {
+        this.user_id = user_id;
+        this.user_fname = user_fname;
+        this.user_lname = user_lname;
+        this.user_email = user_email;
+    }
+
 
     public enum user_role{
         ADMIN, COACH, MEDICAL_STAFF, ATHLETE

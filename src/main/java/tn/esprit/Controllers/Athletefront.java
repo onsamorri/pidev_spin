@@ -68,15 +68,16 @@ public class Athletefront {
             controller.initialize();
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
-            stage.setTitle("View My injuries");
+            stage.setTitle("View My Injuries");
             stage.setUserData(this);
             stage.show();
             Stage currentStage = (Stage) MyInjuriesButton.getScene().getWindow();
             currentStage.close();
         } catch (IOException e) {
-            showAlert("Error", "Failed to open Claim screen: " + e.getMessage());
+            showAlert("Error", "Failed to open My Injuries screen: " + e.getMessage());
         }
     }
+
 
     public void handleChatBotClick() {
         try {
