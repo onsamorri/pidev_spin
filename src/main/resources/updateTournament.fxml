@@ -14,10 +14,11 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.web.WebView?>
 
-<AnchorPane prefHeight="412.0" prefWidth="600.0" style="-fx-background-color: #709775;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controllers.updateTournament">
+<AnchorPane prefHeight="653.0" prefWidth="1161.0" style="-fx-background-color: #709775;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controllers.updateTournament">
     <children>
-        <VBox prefHeight="400.0" prefWidth="157.0">
+        <VBox prefHeight="632.0" prefWidth="157.0">
             <children>
                 <HBox prefHeight="91.0" prefWidth="157.0" />
                 <HBox alignment="CENTER" prefHeight="50.0" prefWidth="104.0">
@@ -67,11 +68,12 @@
                         </Label>
                     </children>
                 </HBox>
+            <Label fx:id="backBtn" text="Label" />
             </children>
         </VBox>
-        <VBox layoutX="157.0" layoutY="6.0" prefHeight="406.0" prefWidth="439.0">
+        <VBox layoutX="157.0" layoutY="6.0" prefHeight="646.0" prefWidth="1004.0">
             <children>
-                <VBox prefHeight="402.0" prefWidth="439.0" style="-fx-background-color: white; -fx-background-radius: 25;">
+                <VBox prefHeight="651.0" prefWidth="1004.0" style="-fx-background-color: white; -fx-background-radius: 25;">
                     <children>
                         <HBox prefHeight="52.0" prefWidth="439.0">
                             <VBox.margin>
@@ -161,35 +163,29 @@
                                         </DatePicker>
                                     </children>
                                 </VBox>
+                                  <TableView fx:id="tabTeam" prefHeight="214.0" prefWidth="439.0" style="-fx-background-radius: 25;">
+                                      <columns>
+                                          <TableColumn fx:id="tabTeamId" prefWidth="34.0" text="ID" />
+                                          <TableColumn fx:id="tabTeamName" prefWidth="62.0" text="Name" />
+                                          <TableColumn fx:id="tabTeamNath" prefWidth="83.0" text="Num Athletes" />
+                                          <TableColumn fx:id="tabTeamSport" prefWidth="58.0" text="Sport" />
+                                          <TableColumn fx:id="tabTeamWins" prefWidth="45.0" text="Wins" />
+                                          <TableColumn fx:id="tabTeamLosses" prefWidth="44.0" text="Losses" />
+                                          <TableColumn fx:id="tabTeamActions" prefWidth="112.0" text="Actions" />
+                                      </columns>
+                                  </TableView>
                             </children>
                             <VBox.margin>
                                 <Insets left="5.0" right="5.0" top="50.0" />
                             </VBox.margin>
                         </HBox>
-                        <VBox prefHeight="253.0" prefWidth="439.0">
+                        <VBox prefHeight="266.0" prefWidth="1004.0">
                             <VBox.margin>
                                 <Insets top="10.0" />
                             </VBox.margin>
-                            <children>
-                                <HBox prefHeight="197.0" prefWidth="439.0" style="-fx-background-radius: 25;">
-                                    <VBox.margin>
-                                        <Insets />
-                                    </VBox.margin>
-                                    <children>
-                                        <TableView fx:id="tabTeam" prefHeight="214.0" prefWidth="439.0" style="-fx-background-radius: 25;">
-                                            <columns>
-                                                <TableColumn fx:id="tabTeamId" prefWidth="34.0" text="ID" />
-                                                <TableColumn fx:id="tabTeamName" prefWidth="62.0" text="Name" />
-                                                <TableColumn fx:id="tabTeamNath" prefWidth="83.0" text="Num Athletes" />
-                                                <TableColumn fx:id="tabTeamSport" prefWidth="58.0" text="Sport" />
-                                                <TableColumn fx:id="tabTeamWins" prefWidth="45.0" text="Wins" />
-                                                <TableColumn fx:id="tabTeamLosses" prefWidth="44.0" text="Losses" />
-                                                <TableColumn fx:id="tabTeamActions" prefWidth="112.0" text="Actions" />
-                                            </columns>
-                                        </TableView>
-                                    </children>
-                                </HBox>
-                            </children>
+                     <children>
+                        <WebView fx:id="map" prefHeight="255.0" prefWidth="1004.0" />
+                     </children>
                         </VBox>
                     </children>
                 </VBox>

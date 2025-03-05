@@ -9,9 +9,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="412.0" prefWidth="600.0" style="-fx-background-color: #709775;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controllers.viewTournament">
+<AnchorPane prefHeight="592.0" prefWidth="1038.0" style="-fx-background-color: #709775;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controllers.viewTournament">
     <children>
-        <VBox prefHeight="400.0" prefWidth="157.0">
+        <VBox prefHeight="594.0" prefWidth="157.0">
             <children>
                 <HBox prefHeight="91.0" prefWidth="157.0" />
                 <HBox alignment="CENTER" prefHeight="50.0" prefWidth="104.0">
@@ -33,26 +33,37 @@
             </Label>
             </children>
         </VBox>
-        <VBox layoutX="157.0" layoutY="6.0" prefHeight="406.0" prefWidth="439.0">
+        <VBox layoutX="157.0" layoutY="6.0" prefHeight="576.0" prefWidth="881.0">
             <children>
-                <VBox prefHeight="402.0" prefWidth="439.0" style="-fx-background-color: white; -fx-background-radius: 25;">
+                <VBox prefHeight="846.0" prefWidth="726.0" style="-fx-background-color: white; -fx-background-radius: 25;">
                     <children>
-                        <HBox prefHeight="59.0" prefWidth="439.0" />
-                        <TableView fx:id="tabTourn" prefHeight="344.0" prefWidth="445.0" style="-fx-background-radius: 25;">
+                        <HBox prefHeight="116.0" prefWidth="881.0" />
+                        <TableView fx:id="tabTourn" prefHeight="309.0" prefWidth="1024.0" style="-fx-background-radius: 25;">
                             <columns>
-                                <TableColumn fx:id="tabTournid" prefWidth="20.0" text="ID" />
-                                <TableColumn fx:id="tabTournName" prefWidth="50.0" text="Name" />
-                                <TableColumn fx:id="tabTournSdate" prefWidth="64.0" text="Start date" />
-                                <TableColumn fx:id="tabTournEdate" prefWidth="70.0" text="End date" />
-                                <TableColumn fx:id="tabTournLoc" prefWidth="56.0" text="Location" />
-                                <TableColumn fx:id="tabTournSport" prefWidth="43.0" text="Sport" />
-                                <TableColumn fx:id="tabTournTeams" minWidth="0.0" prefWidth="45.0" text="teams" />
-                                <TableColumn fx:id="tabTournActions" prefWidth="90.0" text="Actions" />
+                                <TableColumn fx:id="tabTournid" prefWidth="22.0" text="ID" />
+                                <TableColumn fx:id="tabTournName" prefWidth="105.0" text="Name" />
+                                <TableColumn fx:id="tabTournSdate" prefWidth="106.0" text="Start date" />
+                                <TableColumn fx:id="tabTournEdate" prefWidth="99.0" text="End date" />
+                                <TableColumn fx:id="tabTournLoc" prefWidth="151.0" text="Location" />
+                                <TableColumn fx:id="tabTournSport" minWidth="7.0" prefWidth="89.0" text="Sport" />
+                                <TableColumn fx:id="tabTournWinner" prefWidth="118.0" text="Winner" />
+                        <TableColumn fx:id="tabTournActions" prefWidth="188.0" text="Actions" />
                             </columns>
                             <VBox.margin>
                                 <Insets />
                             </VBox.margin>
                         </TableView>
+                  <TableView fx:id="tabTeam" prefHeight="303.0" prefWidth="1041.0" style="-fx-background-radius: 25;">
+                     <columns>
+                        <TableColumn fx:id="tabTeamId" prefWidth="35.0" text="ID" />
+                        <TableColumn fx:id="tabTeamName" prefWidth="159.0" text="Name" />
+                        <TableColumn fx:id="tabTeamNath" prefWidth="119.0" text="Number of athletes" />
+                        <TableColumn fx:id="tabTeamSport" prefWidth="142.0" text="Sport" />
+                        <TableColumn fx:id="tabTeamW" prefWidth="106.0" text="Wins" />
+                        <TableColumn fx:id="tabTeamL" minWidth="7.0" prefWidth="122.0" text="Losses" />
+                        <TableColumn fx:id="tabTeamAction" prefWidth="194.0" text="Actions" />
+                     </columns>
+                  </TableView>
                     </children></VBox>
             </children>
         </VBox>
