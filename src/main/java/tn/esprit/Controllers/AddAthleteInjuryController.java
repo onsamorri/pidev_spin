@@ -15,6 +15,7 @@ import tn.esprit.entities.Severity;
 import tn.esprit.entities.user;
 import tn.esprit.services.InjuryServices;
 import tn.esprit.services.UserServices;
+import tn.esprit.controllers.SessionManager;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -34,6 +35,7 @@ public class AddAthleteInjuryController {
 
     private UserServices userServices;
     private InjuryServices injuryServices;
+    private final user currentUser = SessionManager.getInstance().getAuthenticatedUser();
 
     public AddAthleteInjuryController() {
         userServices = new UserServices();
