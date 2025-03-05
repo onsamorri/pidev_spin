@@ -87,5 +87,4 @@ public class team {
                 ", teamL=" + teamL +
                 '}';
     }
-
 }

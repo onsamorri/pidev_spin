@@ -1,5 +1,6 @@
 package tn.esprit.entities;
 
+import java.time.LocalDate;
 import java.sql.Date;
 
 public class tournament {
@@ -10,7 +11,6 @@ public class tournament {
     private String tournamentLocation;
     private String tournamentTOS;
     private int tournamentNbteams;
-    private int tournamentWinner;
 
     public tournament() {
     }
@@ -32,25 +32,6 @@ public class tournament {
         this.tournamentLocation = tournamentLocation;
         this.tournamentTOS = tournamentTOS;
         this.tournamentNbteams = tournamentNbteams;
-    }
-
-    public tournament(int tournamentId, String tournamentName, Date tournamentStartDate, Date tournamentEndDate, String tournamentLocation, String tournamentTOS, int tournamentNbteams, int tournamentWinner) {
-        this.tournamentId = tournamentId;
-        this.tournamentName = tournamentName;
-        this.tournamentStartDate = tournamentStartDate;
-        this.tournamentEndDate = tournamentEndDate;
-        this.tournamentLocation = tournamentLocation;
-        this.tournamentTOS = tournamentTOS;
-        this.tournamentNbteams = tournamentNbteams;
-        this.tournamentWinner = tournamentWinner;
-    }
-
-    public int getTournamentWinner() {
-        return tournamentWinner;
-    }
-
-    public void setTournamentWinner(int tournamentWinner) {
-        this.tournamentWinner = tournamentWinner;
     }
 
     public int getTournamentId() {
@@ -112,14 +93,13 @@ public class tournament {
     @Override
     public String toString() {
         return "tournament{" +
-                "tournamentId=" + tournamentId +
+                "id=" + tournamentId +
                 ", tournamentName='" + tournamentName + '\'' +
                 ", tournamentStartDate=" + tournamentStartDate +
                 ", tournamentEndDate=" + tournamentEndDate +
                 ", tournamentLocation='" + tournamentLocation + '\'' +
                 ", tournamentTOS='" + tournamentTOS + '\'' +
                 ", tournamentNbteams=" + tournamentNbteams +
-                ", tournWinner=" + tournamentWinner +
                 '}';
     }
 }

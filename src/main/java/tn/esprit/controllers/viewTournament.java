@@ -1,6 +1,5 @@
 package tn.esprit.controllers;
 
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -11,43 +10,16 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import tn.esprit.entities.results;
 import tn.esprit.entities.team;
 import tn.esprit.entities.tournament;
 import tn.esprit.services.TournamentService;
-import tn.esprit.services.resultsServices;
-import tn.esprit.services.teamServices;
 
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class viewTournament {
-    @FXML
-    private TableView<team> tabTeam;
-
-    @FXML
-    private TableColumn<team, Void> tabTeamAction;
-
-    @FXML
-    private TableColumn<team, Integer> tabTeamId;
-
-    @FXML
-    private TableColumn<team, Integer> tabTeamL;
-
-    @FXML
-    private TableColumn<team, String> tabTeamName;
-
-    @FXML
-    private TableColumn<team, Integer> tabTeamNath;
-
-    @FXML
-    private TableColumn<team, String> tabTeamSport;
-
-    @FXML
-    private TableColumn<team, Integer> tabTeamW;
 
     @FXML
     private TableView<tournament> tabTourn;
@@ -64,19 +36,16 @@ public class viewTournament {
     @FXML
     private TableColumn<tournament, String> tabTournSport;
     @FXML
-    private TableColumn<tournament, Void> tabTournActions;
+    private TableColumn<tournament, Integer> tabTournTeams;
     @FXML
-    private TableColumn<tournament, String> tabTournWinner;
+    private TableColumn<tournament, Void> tabTournActions;
     @FXML
     private Label backBtn;
     @FXML
     private Label addTournLabelC;
 
     private final TournamentService tournamentService = new TournamentService();
-    private final ObservableList<team> teamList = FXCollections.observableArrayList();
-    private final resultsServices resultsService = new resultsServices();
     private final ObservableList<tournament> tournamentList = FXCollections.observableArrayList();
-    private final teamServices teamService = new teamServices();
 
     @FXML
     public void initialize() {
@@ -89,64 +58,12 @@ public class viewTournament {
         tabTournSdate.setCellValueFactory(new PropertyValueFactory<>("tournamentStartDate"));
         tabTournEdate.setCellValueFactory(new PropertyValueFactory<>("tournamentEndDate"));
         tabTournSport.setCellValueFactory(new PropertyValueFactory<>("tournamentTOS"));
-        tabTournWinner.setCellValueFactory(cellData -> {
-            int winnerId = cellData.getValue().getTournamentWinner();
-            try {
-                team winner = teamService.getTeamById(winnerId);
-                if (winner != null) {
-                    return new SimpleStringProperty(winner.getTeamName());
-                }
-            } catch (SQLException e) {
-                System.out.println("Error fetching team by ID: " + e.getMessage());
-            }
-            return new SimpleStringProperty("N/A");
-        });
-
-
+        tabTournTeams.setCellValueFactory(new PropertyValueFactory<>("tournamentNbteams"));
         tabTourn.setItems(tournamentList);
 
         updatetournamentList();
         addActionButtonsToTable();
-        tabTeamId.setCellValueFactory(new PropertyValueFactory<>("teamId"));
-        tabTeamName.setCellValueFactory(new PropertyValueFactory<>("teamName"));
-        tabTeamNath.setCellValueFactory(new PropertyValueFactory<>("teamNath"));
-        tabTeamSport.setCellValueFactory(new PropertyValueFactory<>("teamTOS"));
-        tabTeamW.setCellValueFactory(new PropertyValueFactory<>("teamW"));
-        tabTeamL.setCellValueFactory(new PropertyValueFactory<>("teamL"));
-        tabTeam.setItems(teamList);
-
-        tabTourn.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                loadTeamsForTournament(newSelection.getTournamentId());
-            }
-        });
-        tabTourn.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                loadTeamsForTournament(newSelection.getTournamentId());
-                addWinnerButtons(newSelection);
-            }
-        });
     }
-    private void loadTeamsForTournament(int tournamentId) {
-        teamList.clear();
-        try {
-            List<results> resultsList = resultsService.returnList();
-            List<Integer> teamIds = resultsList.stream()
-                    .filter(result -> result.getTournamentId() == tournamentId)
-                    .map(results::getTeamId)
-                    .collect(Collectors.toList());
-
-            List<team> teams = teamService.returnList().stream()
-                    .filter(team -> teamIds.contains(team.getTeamId()))
-                    .collect(Collectors.toList());
-
-            teamList.addAll(teams);
-            tabTeam.refresh();
-        } catch (SQLException e) {
-            showAlert("Error", "Failed to load teams: " + e.getMessage());
-        }
-    }
-
 
     void updatetournamentList() {
         tournamentList.clear();
@@ -273,53 +190,4 @@ public class viewTournament {
         alert.setContentText(message);
         alert.showAndWait();
     }
-    private void declareWinner(tournament tournament, team winnerTeam) {
-        try {
-            // Update the tournament's winner
-            tournament.setTournamentWinner(winnerTeam.getTeamId());
-            tournamentService.update(tournament.getTournamentId(),tournament);
-
-            // Increment winner's wins
-            winnerTeam.setTeamW(winnerTeam.getTeamW() + 1);
-            teamService.update(winnerTeam.getTeamId(), winnerTeam);
-
-            // Increment losses for other teams in the tournament
-            for (team t : teamList) {
-                if (t.getTeamId() != winnerTeam.getTeamId()) {
-                    t.setTeamL(t.getTeamL() + 1);
-                    teamService.update(t.getTeamId(),t);
-                }
-            }
-
-            updatetournamentList();
-            loadTeamsForTournament(tournament.getTournamentId());
-        } catch (SQLException e) {
-            showAlert("Error", "Failed to declare winner: " + e.getMessage());
-        }
-    }
-    private void addWinnerButtons(tournament tournament) {
-        tabTeamAction.setCellFactory(param -> new TableCell<>() {
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    team team = getTableView().getItems().get(getIndex());
-                    if (tournament.getTournamentWinner() != 0) {
-                        setGraphic(new Label("Winner Already Declared"));
-                    } else {
-                        Button declareWinnerButton = new Button("Declare Winner");
-                        declareWinnerButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
-                        declareWinnerButton.setOnAction(event -> declareWinner(tournament, team));
-                        setGraphic(declareWinnerButton);
-                    }
-                }
-            }
-        });
-    }
-
-
-
-
 }
