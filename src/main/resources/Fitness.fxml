@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.Label?>
+
+<AnchorPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #709775;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controllers.RecoveryRulesController">
+    <VBox prefHeight="600.0" prefWidth="250.0" spacing="20.0" style="-fx-background-color: #709775; -fx-background-radius: 20; -fx-alignment: center;">
+        <VBox prefHeight="91.0" prefWidth="200.0">
+            <ImageView fitHeight="75.0" fitWidth="107.0" pickOnBounds="true" preserveRatio="true">
+                <VBox.margin>
+                    <Insets left="50.0" top="10.0" />
+                </VBox.margin>
+                <Image url="@logo.png" />
+            </ImageView>
+        </VBox>
+
+        <!-- Sidebar Menu Buttons aligned vertically with warm color -->
+        <VBox spacing="20.0" alignment="CENTER">
+            <Button fx:id="viewTeamButton" prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: #F39C12; -fx-text-fill: white; -fx-font-size: 18px; -fx-background-radius: 10; -fx-font-family: 'Calibri'; -fx-font-weight: bold; -fx-alignment: center; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0.0, 0, 5);" text="View Team" />
+            <Button fx:id="trainingSessionsButton" prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: #F39C12; -fx-text-fill: white; -fx-font-size: 18px; -fx-background-radius: 10; -fx-font-family: 'Calibri'; -fx-font-weight: bold; -fx-alignment: center; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0.0, 0, 5);" text="Training Sessions" />
+            <Button fx:id="performanceDataButton" prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: #F39C12; -fx-text-fill: white; -fx-font-size: 18px; -fx-background-radius: 10; -fx-font-family: 'Calibri'; -fx-font-weight: bold; -fx-alignment: center; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0.0, 0, 5);" text="Performance Data" />
+            <Button fx:id="YoutubeButton" onMouseClicked="#handleYouTubeClick" prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: #F39C12; -fx-text-fill: white; -fx-font-size: 18px; -fx-background-radius: 10; -fx-font-family: 'Calibri'; -fx-font-weight: bold; -fx-alignment: center; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0.0, 0, 5);" text="YouTube" />
+            <Button fx:id="MyInjuriesButton" onMouseClicked="#switchScreenToMyInjuries" prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: #F39C12; -fx-text-fill: white; -fx-font-size: 18px; -fx-background-radius: 10; -fx-font-family: 'Calibri'; -fx-font-weight: bold; -fx-alignment: center; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0.0, 0, 5);" text="My Health" />
+            <Button fx:id="chatBotButton" onMouseClicked="#handleChatBotClick" prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: #F39C12; -fx-text-fill: white; -fx-font-size: 18px; -fx-background-radius: 10; -fx-font-family: 'Calibri'; -fx-font-weight: bold; -fx-alignment: center; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0.0, 0, 5);" text="ChatBot" />
+            <Button fx:id="claimButton" prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: #F39C12; -fx-text-fill: white; -fx-font-size: 18px; -fx-background-radius: 10; -fx-font-family: 'Calibri'; -fx-font-weight: bold; -fx-alignment: center; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0.0, 0, 5);" text="Claims" />
+        </VBox>
+    </VBox>
+
+    <!-- Main Right Side (Exercise Lookup) -->
+    <VBox layoutX="250.0" layoutY="5.0" prefHeight="585.0" prefWidth="650.0" spacing="20.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 25;">
+        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="650.0">
+            <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2C3E50;" text="Exercise Lookup" />
+        </HBox>
+
+        <HBox alignment="CENTER" prefWidth="650.0" spacing="15">
+            <TextField fx:id="exerciseInputField" promptText="Enter Exercise Type" style="-fx-font-size: 16px; -fx-pref-width: 250px; -fx-background-radius: 5; -fx-padding: 10;" />
+
+            <HBox alignment="CENTER" prefHeight="38.0" prefWidth="157.0">
+                <VBox.margin>
+                    <Insets top="5.0" />
+                </VBox.margin>
+                <Button fx:id="fetchExerciseButton" onAction="#onExerciseSubmit" prefHeight="35.0" prefWidth="216.0" style="-fx-background-color: #F39C12; -fx-text-fill: white; -fx-font-size: 18px; -fx-background-radius: 10; -fx-font-family: 'Calibri'; -fx-font-weight: bold; -fx-alignment: center; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0.0, 0, 5);" text="Search Exercise" />
+            </HBox>
+        </HBox>
+
+        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="650.0">
+            <Label fx:id="exerciseDetailsLabel" maxWidth="500" style="-fx-font-size: 16px; -fx-text-fill: #2C3E50;" text="Exercise details will appear here..." wrapText="true" />
+        </HBox>
+
+        <ListView fx:id="exerciseListView" maxHeight="370.0" onMouseClicked="#onExerciseSelected" prefHeight="344.0" prefWidth="650.0" style="-fx-font-size: 16px; -fx-text-fill: #2C3E50; -fx-background-color: #F7F7F7; -fx-background-radius: 10;" />
+    </VBox>
+</AnchorPane>

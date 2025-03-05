@@ -18,6 +18,8 @@ public class Athletefront {
     @FXML
     private Button MyInjuriesButton;
     @FXML
+    private Button FitnessButton;
+    @FXML
     private Button chatBotButton;
     @FXML
     private Button YoutubeButton;
@@ -31,6 +33,8 @@ public class Athletefront {
         MyInjuriesButton.setOnMouseClicked(event -> switchScreenToMyInjuries());
         chatBotButton.setOnMouseClicked(event -> handleChatBotClick());
         YoutubeButton.setOnMouseClicked(event -> handleYouTubeClick());
+        FitnessButton.setOnMouseClicked(event -> handleFitnessClick());
+
 
     }
 
@@ -98,6 +102,24 @@ public class Athletefront {
             e.printStackTrace();
         }
     }
+
+    private void handleFitnessClick() {
+        try {
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fitness.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("Fitness Plan");
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void handleYouTubeClick() {
         try {

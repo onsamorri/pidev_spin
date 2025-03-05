@@ -11,18 +11,6 @@ public class RecoveryPlan {
     private LocalDate recovery_EndDate;
     private RecoveryStatus recovery_Status;
 
-    public RecoveryPlan(int recovery_id, Injury injury, user user, RecoveryGoal recovery_Goal,
-                        String recovery_Description, LocalDate recovery_StartDate,
-                        LocalDate recovery_EndDate, RecoveryStatus recovery_Status) {
-        this.recovery_id = recovery_id;
-        this.injury = injury;
-        this.user = user;
-        this.recovery_Goal = recovery_Goal;
-        this.recovery_Description = recovery_Description;
-        this.recovery_StartDate = recovery_StartDate;
-        this.recovery_EndDate = recovery_EndDate;
-        this.recovery_Status = recovery_Status;
-    }
     public RecoveryPlan(int recovery_id, RecoveryGoal recovery_Goal, String recovery_Description,
                         LocalDate recovery_StartDate, LocalDate recovery_EndDate, RecoveryStatus recovery_Status) {
         this.recovery_id = recovery_id;
@@ -47,6 +35,19 @@ public class RecoveryPlan {
     }
 
     public RecoveryPlan() {
+    }
+
+    public RecoveryPlan(int recovery_id, Injury injury, user user, RecoveryGoal recovery_Goal,
+                        String recovery_Description, LocalDate recovery_StartDate, LocalDate recovery_EndDate,
+                        RecoveryStatus recovery_Status) {
+        this.recovery_id = recovery_id;
+        this.injury = injury;
+        this.user = user;
+        this.recovery_Goal = recovery_Goal;
+        this.recovery_Description = recovery_Description;
+        this.recovery_StartDate = recovery_StartDate;
+        this.recovery_EndDate = recovery_EndDate;
+        this.recovery_Status = recovery_Status;
     }
 
     public int getRecovery_id() {
