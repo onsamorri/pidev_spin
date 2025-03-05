@@ -1,5 +1,6 @@
 package tn.esprit.controllers;
 
+import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,6 +11,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import tn.esprit.services.ExerciseServices;
+import tn.esprit.services.FavoriteExercises;
 
 import java.io.IOException;
 import java.util.List;
@@ -23,7 +25,10 @@ public class RecoveryRulesController {
     @FXML private Button MyInjuriesButton;
     @FXML private ListView<String> exerciseListView;
     @FXML private Label exerciseDetailsLabel;
-    private ExerciseServices exerciseServices = new ExerciseServices();
+    @FXML
+    private JFXButton favoriteButton;
+    @FXML private ListView<String> favoriteExercisesListView; // Added for favorite exercises display
+    private FavoriteExercises favoriteExercises = new FavoriteExercises();
 
     @FXML
     public void initialize() {
@@ -31,6 +36,8 @@ public class RecoveryRulesController {
         YoutubeButton.setOnMouseClicked(event -> handleYouTubeClick());
         MyInjuriesButton.setOnMouseClicked(event -> switchScreenToMyInjuries());
         fetchExerciseButton.setOnAction(this::onExerciseSubmit);
+
+        updateFavoriteExercisesList(); // Populate the favorite exercises list at initialization
     }
 
     private void showAlert(String title, String message) {
@@ -52,6 +59,49 @@ public class RecoveryRulesController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    @FXML
+    private void toggleFavorite(ActionEvent event) {
+        String selectedExercise = exerciseListView.getSelectionModel().getSelectedItem();
+
+        if (selectedExercise != null) {
+            if (favoriteExercises.getFavoriteExercises().contains(selectedExercise)) {
+                // Remove from favorites
+                favoriteExercises.removeFavoriteExercise(selectedExercise);
+                favoriteButton.setText("❤️"); // Empty heart icon (emoji)
+                showAlert("Exercise Removed", selectedExercise + " has been removed from your favorites.");
+            } else {
+                // Add to favorites
+                favoriteExercises.addFavoriteExercise(selectedExercise);
+                favoriteButton.setText("🖤"); // Filled heart icon (emoji)
+                showAlert("Exercise Added", selectedExercise + " has been added to your favorites!");
+            }
+
+            // Update the favorites list view
+            updateFavoriteExercisesList();
+        } else {
+            showAlert("No Exercise Selected", "Please select an exercise to toggle favorites.");
+        }
+    }
+
+    private void updateFavoriteExercisesList() {
+        // Fetch the updated list of favorite exercises
+        List<String> favoriteExercisesList = favoriteExercises.getFavoriteExercises();
+
+        // Clear the list view first to ensure we start fresh
+        favoriteExercisesListView.getItems().clear();
+
+        // If the favorite exercises list is not empty, add the updated list to the list view
+        if (!favoriteExercisesList.isEmpty()) {
+            favoriteExercisesListView.getItems().addAll(favoriteExercisesList);
+        } else {
+            // If no exercises are in favorites, show a message indicating the list is empty
+            favoriteExercisesListView.getItems().add("No favorite exercises yet.");
+        }
+    }
+
+    public List<String> getFavoriteExercises() {
+        return favoriteExercises.getFavoriteExercises();
     }
 
     @FXML
@@ -101,8 +151,8 @@ public class RecoveryRulesController {
         }
 
         // Fetch exercise data from the ExerciseDB API (via Wger API)
-        String response = exerciseServices.fetchExerciseData();
-        List<String> exercises = exerciseServices.parseExerciseData(response);
+        String response = ExerciseServices.fetchExerciseData();
+        List<String> exercises = ExerciseServices.parseExerciseData(response);
 
         exerciseListView.getItems().clear();
 
@@ -120,14 +170,10 @@ public class RecoveryRulesController {
         String selectedExerciseName = exerciseListView.getSelectionModel().getSelectedItem();
         if (selectedExerciseName != null) {
             // Assuming the ExerciseServices fetches exercise details by name
-            String exerciseDetailsResponse = exerciseServices.fetchExerciseDetailsFromAPI(selectedExerciseName);
-            String exerciseDetails = exerciseServices.parseExerciseDetails(exerciseDetailsResponse);
+            String exerciseDetailsResponse = ExerciseServices.fetchExerciseDetailsFromAPI(selectedExerciseName);
+            String exerciseDetails = ExerciseServices.parseExerciseDetails(exerciseDetailsResponse);
 
-            if (exerciseDetails != null) {
-                exerciseDetailsLabel.setText("Exercise: " + selectedExerciseName + "\nDetails: " + exerciseDetails);
-            } else {
-                exerciseDetailsLabel.setText("No details found for this exercise.");
-            }
+            exerciseDetailsLabel.setText("Exercise: " + selectedExerciseName + "\nDetails: " + exerciseDetails);
         }
     }
 }

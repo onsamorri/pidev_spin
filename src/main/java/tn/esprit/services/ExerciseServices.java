@@ -11,11 +11,11 @@ import java.util.*;
 
 public class ExerciseServices {
 
-    private static final String API_URL = "";
-    private static final String API_KEY = "";
+    private static final String API_URL = "https://wger.de/api/v2/exercise/";
+    private static final String API_KEY = "3f9f8c3147a144212d971fadff011621ae419fa5";
 
     // Fetch exercise details based on the exercise name
-    public String fetchExerciseDetailsFromAPI(String exerciseName) {
+    public static String fetchExerciseDetailsFromAPI(String exerciseName) {
         try {
 
             String encodedExerciseName = URLEncoder.encode(exerciseName, "UTF-8");
@@ -55,7 +55,7 @@ public class ExerciseServices {
     }
 
     // Fetch exercise data from the Wger API
-    public String fetchExerciseData() {
+    public static String fetchExerciseData() {
         try {
             // Construct the URL for fetching exercise data (for example, all exercises)
             URL url = new URL(API_URL + "?language=2");
@@ -92,7 +92,7 @@ public class ExerciseServices {
     }
 
     // Parse exercise data and return a list of exercise names
-    public List<String> parseExerciseData(String response) {
+    public static List<String> parseExerciseData(String response) {
         List<String> exercises = new ArrayList<>();
         if (response == null || response.isEmpty()) {
             System.out.println("No data received");
@@ -115,14 +115,14 @@ public class ExerciseServices {
     }
 
     // Parse detailed exercise response
-    public String parseExerciseDetails(String response) {
+    public static String parseExerciseDetails(String response) {
         if (response == null || response.isEmpty()) {
             return "No details available.";
         }
 
         try {
             // You can expand this with actual JSON parsing to extract description or other details
-            String description = "Description of exercise: XYZ"; // Placeholder for now.
+            String description = "This exercise boosts strength, endurance, and flexibility. Maintain good posture, engage your core, and control your movements.\""; // Placeholder for now.
 
             return description;
 

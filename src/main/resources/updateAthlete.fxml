@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
@@ -10,116 +12,400 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="412.0" prefWidth="600.0" style="-fx-background-color: #709775;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controllers.UpdateAthleteInjuryController">
-    <VBox prefHeight="400.0" prefWidth="157.0">
-        <VBox prefHeight="91.0" prefWidth="157.0">
-            <ImageView fitHeight="75.0" fitWidth="107.0" pickOnBounds="true" preserveRatio="true">
-                <VBox.margin>
-                    <Insets left="40.0" top="5.0" />
-                </VBox.margin>
-                <Image url="@logo.png" />
-            </ImageView>
-        </VBox>
-        <HBox alignment="CENTER" prefHeight="38.0" prefWidth="157.0">
-            <VBox.margin>
-                <Insets top="5.0" />
-            </VBox.margin>
-            <Label prefHeight="38.0" prefWidth="142.0" text="View Injury" textFill="WHITE">
-                <font>
-                    <Font name="Calibri Bold" size="20.0" />
-                </font>
-            </Label>
-        </HBox>
-    </VBox>
-    <VBox layoutX="157.0" layoutY="5.0" prefHeight="406.0" prefWidth="439.0">
-        <VBox prefHeight="402.0" prefWidth="462.0" style="-fx-background-color: white; -fx-background-radius: 25;">
-            <HBox prefHeight="42.0" prefWidth="439.0">
-                <HBox prefHeight="42.0" prefWidth="279.0" />
-                <HBox prefHeight="42.0" prefWidth="235.0">
-                    <HBox prefHeight="42.0" prefWidth="199.0">
-                        <HBox prefHeight="42.0" prefWidth="142.0" />
-                    </HBox>
-                    <HBox prefHeight="42.0" prefWidth="42.0" style="-fx-background-color: #709775; -fx-background-radius: 10;">
-                        <HBox.margin>
-                            <Insets bottom="2.0" left="-54.0" top="2.0" />
-                        </HBox.margin>
-                    </HBox>
-                </HBox>
-            </HBox>
-            <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="99.0" prefWidth="429.0" style="-fx-background-color: D68C45; -fx-background-radius: 25;">
-                <VBox.margin>
-                    <Insets left="5.0" />
-                </VBox.margin>
-                <HBox prefHeight="99.0" prefWidth="311.0">
-                    <VBox prefHeight="99.0" prefWidth="305.0">
-                        <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="263.0" text="Update Athlete Injury" textFill="WHITE">
+<AnchorPane prefHeight="412.0" prefWidth="600.0" style="-fx-background-color: #709775;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controllers.updateAthlete">
+
+    <children>
+        <VBox prefHeight="400.0" prefWidth="157.0">
+            <children>
+                <VBox prefHeight="91.0" prefWidth="157.0" />
+                <HBox alignment="CENTER" prefHeight="57.0" prefWidth="157.0">
+                    <children>
+                        <Label prefHeight="50.0" prefWidth="132.0" text="Add an Athlete" textFill="WHITE">
                             <font>
-                                <Font name="System Bold" size="18.0" />
+                                <Font name="Calibri Bold" size="20.0" />
                             </font>
-                            <VBox.margin>
-                                <Insets left="5.0" top="20.0" />
-                            </VBox.margin>
                         </Label>
-                    </VBox>
+                    </children>
+                    <VBox.margin>
+                        <Insets top="5.0" />
+                    </VBox.margin>
                 </HBox>
-                <ImageView fitHeight="97.0" fitWidth="117.0" pickOnBounds="true" preserveRatio="true">
-                    <Image url="@vector.png" />
-                </ImageView>
-            </HBox>
-            <HBox prefHeight="260.0" prefWidth="439.0">
-                <HBox prefHeight="250.0" prefWidth="41.0">
-                    <HBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </HBox.margin>
-                    <effect>
-                        <DropShadow height="7.0" radius="3.0" width="7.0">
-                            <color>
-                                <Color red="0.14473684132099152" green="0.12329434603452682" blue="0.12329434603452682" />
-                            </color>
-                        </DropShadow>
-                    </effect>
+                <HBox alignment="CENTER" prefHeight="57.0" prefWidth="157.0">
+                    <children>
+                        <Label prefHeight="50.0" prefWidth="129.0" text="List of Athletes" textFill="WHITE">
+                            <font>
+                                <Font name="Calibri Bold" size="20.0" />
+                            </font>
+                        </Label>
+                    </children>
+                    <VBox.margin>
+                        <Insets top="5.0" />
+                    </VBox.margin>
                 </HBox>
-                <GridPane alignment="CENTER" hgap="10" vgap="10">
-
-                    <columnConstraints>
-                        <ColumnConstraints minWidth="50.0" />
-                        <ColumnConstraints minWidth="50.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints />
-                        <RowConstraints />
-                        <RowConstraints />
-                        <RowConstraints />
-                        <RowConstraints />
-                        <RowConstraints />
-                        <RowConstraints />
-                    </rowConstraints>
-                    <Label style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #333;" text="Athlete First Name:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                    <ChoiceBox fx:id="AthleteNameTypeChoiceBox" prefWidth="200.0" style="-fx-border-color: #ccc; -fx-border-width: 1px;" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                    <Label style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #333;" text="Athlete Last Name:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                    <ChoiceBox fx:id="AthleteLastNameTypeChoiceBox" prefWidth="200.0" style="-fx-border-color: #ccc; -fx-border-width: 1px;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                    <Label style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #333;" text="Injury Description:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                    <TextField fx:id="injuryDescriptionField" prefWidth="200.0" promptText="Enter Injury Description" style="-fx-border-color: #ccc; -fx-border-width: 1px; -fx-padding: 5px;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                    <Label style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #333;" text="Injury Date:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-                    <DatePicker fx:id="injuryDatePicker" prefWidth="200.0" style="-fx-border-color: #ccc; -fx-border-width: 1px;" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                    <Label style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #333;" text="Injury Severity:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-                    <ChoiceBox fx:id="severityChoiceBox" prefWidth="200.0" style="-fx-border-color: #ccc; -fx-border-width: 1px;" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-
-                    <Label style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #333;" text="Injury Type:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
-                    <ChoiceBox fx:id="injuryTypeChoiceBox" prefWidth="200.0" style="-fx-border-color: #ccc; -fx-border-width: 1px; -fx-font-size: 14px; -fx-padding: 1px;" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-
-                    <Button fx:id="UpdateInjuryButton" style="-fx-background-color: #263238; -fx-text-fill: WHITE; -fx-font-size: 14px; -fx-font-weight: bold;" text="Update Injury" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
-
-                </GridPane>
-            </HBox>
+            </children>
         </VBox>
-    </VBox>
+        <VBox layoutX="157.0" layoutY="5.0" prefHeight="406.0" prefWidth="439.0">
+            <children>
+                <VBox prefHeight="402.0" prefWidth="462.0" style="-fx-background-color: white; -fx-background-radius: 25;">
+                    <children>
+                        <HBox prefHeight="42.0" prefWidth="439.0">
+                            <children>
+                                <HBox prefHeight="42.0" prefWidth="279.0" />
+                                <HBox prefHeight="42.0" prefWidth="235.0">
+                                    <children>
+                                        <HBox prefHeight="42.0" prefWidth="199.0">
+                                            <children>
+                                                <HBox prefHeight="42.0" prefWidth="142.0" />
+                                            </children>
+                                        </HBox>
+                                        <HBox prefHeight="42.0" prefWidth="42.0" style="-fx-background-color: #709775; -fx-background-radius: 10;">
+                                            <HBox.margin>
+                                                <Insets bottom="2.0" left="-54.0" top="2.0" />
+                                            </HBox.margin>
+                                        </HBox>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="99.0" prefWidth="429.0" style="-fx-background-color: D68C45; -fx-background-radius: 25;">
+                            <VBox.margin>
+                                <Insets left="5.0" />
+                            </VBox.margin>
+                            <children>
+                                <HBox prefHeight="99.0" prefWidth="311.0">
+                                    <children>
+                                        <VBox prefHeight="99.0" prefWidth="305.0">
+                                            <children>
+                                                <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="263.0" text="Helllo! Update Athlete?" textFill="WHITE">
+                                                    <font>
+                                                        <Font name="System Bold" size="18.0" />
+                                                    </font>
+                                                    <VBox.margin>
+                                                        <Insets left="5.0" top="2.0" />
+                                                    </VBox.margin>
+                                                </Label>
+                                                <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="263.0" text="Let's Update it.." textFill="WHITE">
+                                                    <font>
+                                                        <Font name="System Bold" size="18.0" />
+                                                    </font>
+                                                    <VBox.margin>
+                                                        <Insets left="5.0" />
+                                                    </VBox.margin>
+                                                </Label>
+                                                <Button fx:id="addAthleteBtn" mnemonicParsing="false" prefHeight="23.0" prefWidth="192.0" style="-fx-background-color: black; -fx-background-radius: 30;" text="Update Athlete" textFill="WHITE">
+                                                    <font>
+                                                        <Font name="System Bold" size="12.0" />
+                                                    </font>
+                                                    <VBox.margin>
+                                                        <Insets left="5.0" top="5.0" />
+                                                    </VBox.margin>
+                                                </Button>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </HBox>
+                                <ImageView fitHeight="100.0" fitWidth="101.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@vector.png" />
+                                    </image>
+                                </ImageView>
+                            </children>
+                        </HBox>
+                        <HBox prefHeight="260.0" prefWidth="439.0">
+                            <children>
+                                <HBox prefHeight="260.0" prefWidth="431.0" style="-fx-background-color: #f9f9f9; -fx-background-radius: 30;">
+                                    <HBox.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </HBox.margin>
+                                    <effect>
+                                        <DropShadow height="7.0" radius="3.0" width="7.0">
+                                            <color>
+                                                <Color red="0.14473684132099152" green="0.12329434603452682" blue="0.12329434603452682" />
+                                            </color>
+                                        </DropShadow>
+                                    </effect>
+                                    <children>
+                                        <VBox prefHeight="250.0" prefWidth="430.0">
+                                            <children>
+                                                <HBox prefHeight="39.0" prefWidth="429.0">
+                                                    <children>
+                                                        <VBox prefHeight="39.0" prefWidth="115.0">
+                                                            <children>
+                                                                <Label prefHeight="17.0" prefWidth="70.0" text="First Name:">
+                                                                    <VBox.margin>
+                                                                        <Insets left="15.0" top="13.0" />
+                                                                    </VBox.margin>
+                                                                    <font>
+                                                                        <Font name="System Bold" size="12.0" />
+                                                                    </font>
+                                                                </Label>
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox prefHeight="200.0" prefWidth="100.0">
+                                                            <children>
+                                                                <TextField id="fname_id" fx:id="fname_id">
+                                                                    <VBox.margin>
+                                                                        <Insets top="9.0" />
+                                                                    </VBox.margin>
+                                                                </TextField>
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox prefHeight="39.0" prefWidth="102.0">
+                                                            <children>
+                                                                <Label prefHeight="17.0" prefWidth="83.0" text="Date of Birth:">
+                                                                    <VBox.margin>
+                                                                        <Insets left="15.0" top="13.0" />
+                                                                    </VBox.margin>
+                                                                    <font>
+                                                                        <Font name="System Bold" size="12.0" />
+                                                                    </font>
+                                                                </Label>
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox prefHeight="200.0" prefWidth="100.0">
+                                                            <children>
+                                                                <DatePicker fx:id="DoB_id">
+                                                                    <VBox.margin>
+                                                                        <Insets top="9.0" />
+                                                                    </VBox.margin>
+                                                                </DatePicker>
+                                                            </children>
+                                                        </VBox>
+                                                    </children>
+                                                </HBox>
+                                                <HBox prefHeight="41.0" prefWidth="429.0">
+                                                    <children>
+                                                        <VBox prefHeight="39.0" prefWidth="115.0">
+                                                            <children>
+                                                                <Label prefHeight="17.0" prefWidth="70.0" text="Last Name:">
+                                                                    <VBox.margin>
+                                                                        <Insets left="15.0" top="13.0" />
+                                                                    </VBox.margin>
+                                                                    <font>
+                                                                        <Font name="System Bold" size="12.0" />
+                                                                    </font>
+                                                                </Label>
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox prefHeight="200.0" prefWidth="100.0">
+                                                            <children>
+                                                                <TextField id="lname_id" fx:id="lname_id">
+                                                                    <VBox.margin>
+                                                                        <Insets top="9.0" />
+                                                                    </VBox.margin>
+                                                                </TextField>
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox prefHeight="41.0" prefWidth="103.0">
+                                                            <children>
+                                                                <Label prefHeight="17.0" prefWidth="70.0" text="Gender:">
+                                                                    <VBox.margin>
+                                                                        <Insets left="15.0" top="13.0" />
+                                                                    </VBox.margin>
+                                                                    <font>
+                                                                        <Font name="System Bold" size="12.0" />
+                                                                    </font>
+                                                                </Label>
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox prefHeight="200.0" prefWidth="100.0">
+                                                            <children>
+                                                                <ComboBox fx:id="gender_id" prefWidth="150.0" promptText="choose">
+                                                                    <VBox.margin>
+                                                                        <Insets top="9.0" />
+                                                                    </VBox.margin>
+                                                                    <items>
+                                                                        <FXCollections fx:factory="observableArrayList">
+                                                                            <String fx:value="Male" />
+                                                                            <String fx:value="Female" />
+                                                                            <String fx:value="Other" />
+                                                                        </FXCollections>
+                                                                    </items>
+                                                                </ComboBox>
+
+                                                            </children>
+                                                        </VBox>
+                                                    </children>
+                                                </HBox>
+                                                <HBox prefHeight="37.0" prefWidth="429.0">
+                                                    <children>
+                                                        <VBox prefHeight="39.0" prefWidth="115.0">
+                                                            <children>
+                                                                <Label prefHeight="17.0" prefWidth="70.0" text="Email:">
+                                                                    <VBox.margin>
+                                                                        <Insets left="15.0" top="13.0" />
+                                                                    </VBox.margin>
+                                                                    <font>
+                                                                        <Font name="System Bold" size="12.0" />
+                                                                    </font>
+                                                                </Label>
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox prefHeight="200.0" prefWidth="100.0">
+                                                            <children>
+                                                                <TextField id="email_id" fx:id="email_id" prefWidth="117.0">
+                                                                    <VBox.margin>
+                                                                        <Insets top="9.0" />
+                                                                    </VBox.margin>
+                                                                </TextField>
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox prefHeight="37.0" prefWidth="106.0">
+                                                            <children>
+                                                                <Label prefHeight="17.0" prefWidth="70.0" text="Adress:">
+                                                                    <VBox.margin>
+                                                                        <Insets left="15.0" top="13.0" />
+                                                                    </VBox.margin>
+                                                                    <font>
+                                                                        <Font name="System Bold" size="12.0" />
+                                                                    </font>
+                                                                </Label>
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox prefHeight="200.0" prefWidth="100.0">
+                                                            <children>
+                                                                <TextField id="email_id" fx:id="Adress_id" prefWidth="117.0">
+                                                                    <VBox.margin>
+                                                                        <Insets top="9.0" />
+                                                                    </VBox.margin>
+                                                                </TextField>
+                                                            </children>
+                                                        </VBox>
+                                                    </children>
+                                                </HBox>
+                                                <HBox prefHeight="42.0" prefWidth="429.0">
+                                                    <children>
+                                                        <VBox prefHeight="200.0" prefWidth="115.0">
+                                                            <children>
+                                                                <Label prefHeight="17.0" prefWidth="70.0" text="Password:">
+                                                                    <VBox.margin>
+                                                                        <Insets left="15.0" top="13.0" />
+                                                                    </VBox.margin>
+                                                                    <font>
+                                                                        <Font name="System Bold" size="12.0" />
+                                                                    </font>
+                                                                </Label>
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox prefHeight="200.0" prefWidth="100.0">
+                                                            <children>
+                                                                <TextField id="password_id" fx:id="password_id">
+                                                                    <VBox.margin>
+                                                                        <Insets top="9.0" />
+                                                                    </VBox.margin>
+                                                                </TextField>
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox prefHeight="42.0" prefWidth="107.0">
+                                                            <children>
+                                                                <Label prefHeight="17.0" prefWidth="70.0" text="Height:">
+                                                                    <VBox.margin>
+                                                                        <Insets left="15.0" top="13.0" />
+                                                                    </VBox.margin>
+                                                                    <font>
+                                                                        <Font name="System Bold" size="12.0" />
+                                                                    </font>
+                                                                </Label>
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox prefHeight="200.0" prefWidth="100.0">
+                                                            <children>
+                                                                <TextField id="password_id" fx:id="Height_id">
+                                                                    <VBox.margin>
+                                                                        <Insets top="9.0" />
+                                                                    </VBox.margin>
+                                                                </TextField>
+                                                            </children>
+                                                        </VBox>
+                                                    </children>
+                                                </HBox>
+                                                <HBox prefHeight="44.0" prefWidth="429.0">
+                                                    <children>
+                                                        <VBox prefHeight="44.0" prefWidth="115.0">
+                                                            <children>
+                                                                <Label prefHeight="17.0" prefWidth="113.0" text="Phone Number:">
+                                                                    <VBox.margin>
+                                                                        <Insets left="15.0" top="13.0" />
+                                                                    </VBox.margin>
+                                                                    <font>
+                                                                        <Font name="System Bold" size="12.0" />
+                                                                    </font>
+                                                                </Label>
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox prefHeight="200.0" prefWidth="100.0">
+                                                            <children>
+                                                                <TextField id="role_id" fx:id="phone_nb_id">
+                                                                    <VBox.margin>
+                                                                        <Insets top="9.0" />
+                                                                    </VBox.margin>
+                                                                </TextField>
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox prefHeight="44.0" prefWidth="108.0">
+                                                            <children>
+                                                                <Label prefHeight="17.0" prefWidth="113.0" text="Weight:">
+                                                                    <VBox.margin>
+                                                                        <Insets left="15.0" top="13.0" />
+                                                                    </VBox.margin>
+                                                                    <font>
+                                                                        <Font name="System Bold" size="12.0" />
+                                                                    </font>
+                                                                </Label>
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox prefHeight="200.0" prefWidth="100.0">
+                                                            <children>
+                                                                <TextField id="role_id" fx:id="Weight_id">
+                                                                    <VBox.margin>
+                                                                        <Insets top="9.0" />
+                                                                    </VBox.margin>
+                                                                </TextField>
+                                                            </children>
+                                                        </VBox>
+                                                    </children>
+                                                </HBox>
+                                                <HBox prefHeight="44.0" prefWidth="429.0">
+                                                    <children>
+                                                        <VBox prefHeight="200.0" prefWidth="115.0">
+                                                            <children>
+                                                                <Label prefHeight="17.0" prefWidth="70.0" text="Role:">
+                                                                    <VBox.margin>
+                                                                        <Insets left="15.0" top="13.0" />
+                                                                    </VBox.margin>
+                                                                    <font>
+                                                                        <Font name="System Bold" size="12.0" />
+                                                                    </font>
+                                                                </Label>
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox prefHeight="200.0" prefWidth="100.0">
+                                                            <children>
+                                                                <TextField id="role_id" fx:id="role_id1" disable="true" promptText="Athlete" text="Athlete">
+                                                                    <VBox.margin>
+                                                                        <Insets top="9.0" />
+                                                                    </VBox.margin>
+                                                                </TextField>
+                                                            </children>
+                                                        </VBox>
+                                                        <VBox prefHeight="44.0" prefWidth="108.0" />
+                                                        <VBox prefHeight="200.0" prefWidth="100.0" />
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+    </children>
 </AnchorPane>
