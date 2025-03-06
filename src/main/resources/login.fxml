@@ -12,6 +12,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.web.WebView?>
 
 <AnchorPane prefHeight="397.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controllers.login">
    <children>
@@ -75,8 +76,6 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <ImageView fx:id="captcha" fitHeight="46.0" fitWidth="155.0" layoutX="83.0" layoutY="213.0" pickOnBounds="true" preserveRatio="true" />
-                  <TextField fx:id="captcha_id" alignment="CENTER" layoutX="84.0" layoutY="266.0" prefHeight="25.0" prefWidth="163.0" promptText="Enter Captcha.." />
                   <Button fx:id="refresh_id" layoutX="214.0" layoutY="338.0" mnemonicParsing="false" onAction="#login_idOnAction" prefHeight="44.0" prefWidth="92.0" style="-fx-background-color: #d68c45;" text="Refresh" textFill="WHITE">
                      <font>
                         <Font size="20.0" />
@@ -92,7 +91,8 @@
                         <Image url="@password.png" />
                      </image>
                   </ImageView>
-                  <Button fx:id="forget_id" layoutX="199.0" layoutY="179.0" mnemonicParsing="false" style="-fx-background-color: no;" text="Forget Password" />
+                  <Button fx:id="forget_id" layoutX="227.0" layoutY="174.0" mnemonicParsing="false" style="-fx-background-color: no;" text="Forget Password" />
+                  <WebView fx:id="recaptchaWebView" layoutX="16.0" layoutY="242.0" prefHeight="92.0" prefWidth="210.0" />
                </children>
             </AnchorPane>
          </right>

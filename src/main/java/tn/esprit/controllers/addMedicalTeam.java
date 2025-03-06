@@ -64,15 +64,16 @@ public class addMedicalTeam {
             String password = password_id1.getText().trim();
             String phoneNumber = phone_nb_id1.getText().trim();
             String specialty = specialty_id.getValue();
-            String role = "medical_staff"; // Always "medical_staff"
+            String role = "Medical Staff";
 
-
-
-            // Create a MedicalStaff object
             newStaff = new Medical_staff(fname, lname, email, password, phoneNumber, specialty);
 
             userService.add(newStaff);
             showAlert("Success", "Medical staff added successfully!");
+
+            // ✅ Send email to the newly created Medical Staff
+            EmailService.sendAccountCreationEmail(email, password, role);
+
             clearFields();
         } catch (SQLException e) {
             showAlert("Database Error", "Error adding medical staff: " + e.getMessage());

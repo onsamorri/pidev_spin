@@ -74,6 +74,9 @@ public class addUser {
         try {
             userService.add(newCoach);
             showAlert("Success", "Coach added successfully!");
+
+            EmailService.sendAccountCreationEmail(email, password, role);
+
             clearFields();
         } catch (SQLException e) {
             showAlert("Database Error", "Error adding coach: " + e.getMessage());

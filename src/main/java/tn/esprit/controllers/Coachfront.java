@@ -9,8 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-
-
+import tn.esprit.entities.user;
 import java.io.IOException;
 
 
@@ -32,9 +31,8 @@ public class Coachfront {
     private Label tournBtn;
     @FXML
     void handleProfileClick(MouseEvent event) {
-
+        SessionManager.openProfileBasedOnRole();
     }
-
 
     @FXML
     public void initialize() {
@@ -44,6 +42,7 @@ public class Coachfront {
         TrainingSesh.setOnMouseClicked(event -> switchScreenTraining());
         claimBtn.setOnMouseClicked(event -> switchScreenClaim());
         to_Add_id.setOnMouseClicked(event -> switchScreenAthlete());
+        profile_id.setOnMouseClicked(event -> SessionManager.openProfileBasedOnRole());
     }
     private void switchScreenTeam() {
 
@@ -65,8 +64,6 @@ public class Coachfront {
         }
     }
     private void switchScreenTournament() {
-
-
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/addTournament.fxml"));
             Parent root = loader.load();
@@ -111,6 +108,7 @@ public class Coachfront {
             showAlert("Error", "Failed to open performance screen: " + e.getMessage());
         }
     }
+    //Yassine (Claim)
 
     private void switchScreenTraining() {
 
@@ -131,9 +129,7 @@ public class Coachfront {
             showAlert("Error", "Failed to open Training Session screen: " + e.getMessage());
         }
     }
-    //Yassine (Claim)
     private void switchScreenClaim() {
-
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/AddClaimInterface.fxml"));
             Parent root = loader.load();

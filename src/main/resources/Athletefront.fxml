@@ -91,7 +91,7 @@
                     <HBox prefHeight="42.0" prefWidth="199.0">
                         <children>
                             <HBox prefHeight="42.0" prefWidth="142.0" />
-                     <ImageView fx:id="profile_id" fitHeight="35.0" fitWidth="35.0" onMouseClicked="#handleProfileClick" pickOnBounds="true" preserveRatio="true">
+                     <ImageView fx:id="profile_id" fitHeight="35.0" fitWidth="35.0"  pickOnBounds="true" preserveRatio="true">
                         <image>
                            <Image url="@profile.png" />
                         </image>

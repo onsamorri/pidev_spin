@@ -48,6 +48,7 @@ public class updateAthlete {
 
     @FXML
     private Button updateAthleteBtn;
+
     private Athlete selectedAthlete;
     private final UserServices userServices = new UserServices();
 

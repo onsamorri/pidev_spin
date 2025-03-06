@@ -7,7 +7,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import tn.esprit.entities.user;
 
 import java.io.IOException;
 
@@ -15,17 +18,19 @@ public class Athletefront {
     @FXML
     private Label claimButton;
 
+    @FXML
+    private ImageView profile_id;
 
-
-
+    @FXML
+    void handleProfileClick(MouseEvent event) {
+            SessionManager.openProfileBasedOnRole();
+    }
 
     @FXML
     public void initialize() {
         // Set action for claimButton
         claimButton.setOnMouseClicked(event -> switchScreenClaim2());
-
-
-
+        profile_id.setOnMouseClicked(event -> SessionManager.openProfileBasedOnRole());
 
     }
 
@@ -55,7 +60,4 @@ public class Athletefront {
             showAlert("Error", "Failed to open Claim screen: " + e.getMessage());
         }
     }
-
-
-
 }

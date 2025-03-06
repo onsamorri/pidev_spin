@@ -88,6 +88,7 @@ public class addAthlete {
         try {
             userService.add(newAthlete);
             showAlert("Success", "Athlete added successfully!");
+            EmailService.sendAccountCreationEmail(email, password, role);
             clearFields();
         } catch (SQLException e) {
             showAlert("Database Error", "Error adding Athlete: " + e.getMessage());

@@ -4,6 +4,8 @@ import com.mysql.cj.xdevapi.Client;
 import tn.esprit.entities.*;
 import tn.esprit.utils.MyDatabase;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -257,10 +259,28 @@ public class UserServices implements IService<user> {
         } catch (SQLException e) {
             System.out.println("Error retrieving users by role: " + e.getMessage());
         }
-
         return users;
     }
+    public boolean isEmailTaken(String email) throws SQLException {
+        String query = "SELECT * FROM user WHERE user_email = ?";
+        PreparedStatement preparedStatement = con.prepareStatement(query);
+        preparedStatement.setString(1, email);
+        try (ResultSet resultSet = preparedStatement.executeQuery()) {
+            return resultSet.next();
+        }
+    }
 
+    public void updateForgottenPassword(String email, String password) {
 
-
+        String query = "UPDATE user " + "SET user_pwd = ? WHERE user_email = ?";
+        try {
+            PreparedStatement preparedStatement = con.prepareStatement(query);
+            preparedStatement.setString(1, password);
+            preparedStatement.setString(2, email);
+            preparedStatement.executeUpdate();
+            System.out.println("Password updated!");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

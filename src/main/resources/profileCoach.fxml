@@ -12,7 +12,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="412.0" prefWidth="600.0" style="-fx-background-color: #709775;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controllers.ProfileController">
+<AnchorPane prefHeight="412.0" prefWidth="600.0" style="-fx-background-color: #709775;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tn.esprit.controllers.profileCoach">
     <children>
         <VBox prefHeight="400.0" prefWidth="157.0">
             <children>
