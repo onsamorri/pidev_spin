@@ -31,8 +31,8 @@ public class Coachfront {
         tournBtn.setOnMouseClicked(event -> switchScreenTournament());
         performanceBtn.setOnMouseClicked(event -> switchScreenPerformance());
         TrainingSesh.setOnMouseClicked(event -> switchScreenTraining());
-        claimBtn.setOnMouseClicked(event -> switchScreenClaim());
-        to_Add_id.setOnMouseClicked(event -> switchScreenAthlete());
+        //claimBtn.setOnMouseClicked(event -> switchScreenClaim());
+        //to_Add_id.setOnMouseClicked(event -> switchScreenAthlete());
         deepseekBtn.setOnMouseClicked(event ->openDeepSeek());
 
     }
@@ -86,7 +86,6 @@ public class Coachfront {
     // joujou (Performance and training session and deepseek)
 
     private void switchScreenPerformance() {
-
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/addPerformance.fxml"));
             Parent root = loader.load();
@@ -95,13 +94,13 @@ public class Coachfront {
             controller.initialize();
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
-            stage.setTitle("Performance");
+            stage.setTitle("Adding Performance");
             stage.setUserData(this);
             stage.show();
-            Stage currentStage = (Stage) performanceBtn.getScene().getWindow();
+            Stage currentStage = (Stage) tournBtn.getScene().getWindow();
             currentStage.close();
         } catch (IOException e) {
-            showAlert("Error", "Failed to open performance screen: " + e.getMessage());
+            showAlert("Error", "Failed to open Performance screen " + e.getMessage());
         }
     }
 
@@ -110,9 +109,6 @@ public class Coachfront {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/addTrainingSession.fxml"));
             Parent root = loader.load();
-
-            AddTrainingSession controller = loader.getController();
-            controller.initialize();
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Adding Training Session");
@@ -141,46 +137,44 @@ public class Coachfront {
             showAlert("Error", "Failed to open DeepSeek: " + e.getMessage());
         }
     }
-    //Yassine (Claim)
-    private void switchScreenClaim() {
-
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AddClaimInterface.fxml"));
-            Parent root = loader.load();
-
-            AddClaimController controller = loader.getController();
-            controller.initialize();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Adding Claim");
-            stage.setUserData(this);
-            stage.show();
-            Stage currentStage = (Stage) claimBtn.getScene().getWindow();
-            currentStage.close();
-        } catch (IOException e) {
-            showAlert("Error", "Failed to open Training Session screen: " + e.getMessage());
-        }
-    }
-    //Ons (athelete)
-    private void switchScreenAthlete() {
-
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/addAthlete.fxml"));
-            Parent root = loader.load();
-
-            addAthlete controller = loader.getController();
-            controller.initialize();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Adding Athlete");
-            stage.setUserData(this);
-            stage.show();
-            Stage currentStage = (Stage) to_Add_id.getScene().getWindow();
-            currentStage.close();
-        } catch (IOException e) {
-            showAlert("Error", "Failed to open add screen: " + e.getMessage());
-        }
-    }
+//    //Yassine (Claim)
+//    private void switchScreenClaim() {
+//
+//        try {
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AddClaimInterface.fxml"));
+//            Parent root = loader.load();
+//
+//            Stage stage = new Stage();
+//            stage.setScene(new Scene(root));
+//            stage.setTitle("Adding Claim");
+//            stage.setUserData(this);
+//            stage.show();
+//            Stage currentStage = (Stage) claimBtn.getScene().getWindow();
+//            currentStage.close();
+//        } catch (IOException e) {
+//            showAlert("Error", "Failed to open Training Session screen: " + e.getMessage());
+//        }
+//    }
+//    //Ons (athelete)
+//    private void switchScreenAthlete() {
+//
+//        try {
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/addAthlete.fxml"));
+//            Parent root = loader.load();
+//
+//            addAthlete controller = loader.getController();
+//            controller.initialize();
+//            Stage stage = new Stage();
+//            stage.setScene(new Scene(root));
+//            stage.setTitle("Adding Athlete");
+//            stage.setUserData(this);
+//            stage.show();
+//            Stage currentStage = (Stage) to_Add_id.getScene().getWindow();
+//            currentStage.close();
+//        } catch (IOException e) {
+//            showAlert("Error", "Failed to open add screen: " + e.getMessage());
+//        }
+//    }
 
 
 

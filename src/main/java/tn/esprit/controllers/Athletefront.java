@@ -63,8 +63,6 @@ public class Athletefront {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/AddClaimAthlete.fxml"));
             Parent root = loader.load();
 
-            AddClaimAthlete controller = loader.getController();
-            controller.initialize();
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.setTitle("Adding Claim");
