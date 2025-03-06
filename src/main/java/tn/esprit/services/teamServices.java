@@ -16,7 +16,7 @@ public class teamServices implements IService2<team> {
 
     @Override
     public void add(team team) throws SQLException {
-        String query = "INSERT INTO `team`(`teamName`, `teamNbAthletes`, `teamTypeOfSport`, `teamWins`, `teamLosses`) VALUES ('"+team.getTeamName()+"','"+team.getTeamNath()+"','"+team.getTeamTOS()+"','"+team.getTeamW()+"','"+team.getTeamL()+"')";
+        String query = "INSERT INTO `team`(`teamName`, `teamNbAthletes`, `teamTypeOfSport`, `teamWins`, `teamLosses`,`teamCoachId`) VALUES ('"+team.getTeamName()+"','"+team.getTeamNath()+"','"+team.getTeamTOS()+"','"+team.getTeamW()+"','"+team.getTeamL()+"','"+team.getTeamCoachId()+"')";
         Statement stM = con.createStatement();
         stM.executeUpdate(query);
         System.out.println("added");
@@ -47,6 +47,27 @@ public class teamServices implements IService2<team> {
         }else
             System.out.println("deleted");
 
+    }
+    public List<team> getTeamsByTournamentId(int tournamentId) throws SQLException {
+        String query = "SELECT t.* FROM team t JOIN results r ON t.teamId = r.teamId WHERE r.tournamentId = ?";
+        PreparedStatement ps = con.prepareStatement(query);
+        ps.setInt(1, tournamentId);
+        ResultSet rs = ps.executeQuery();
+
+        List<team> teams = new ArrayList<>();
+        while (rs.next()) {
+            team t = new team(
+                    rs.getInt("teamId"),
+                    rs.getString("teamName"),
+                    rs.getInt("teamNbAthletes"),
+                    rs.getString("teamTypeOfSport"),
+                    rs.getInt("teamWins"),
+                    rs.getInt("teamLosses")
+
+            );
+            teams.add(t);
+        }
+        return teams;
     }
 
     @Override
@@ -103,5 +124,13 @@ public class teamServices implements IService2<team> {
 
         return teams;
     }
+    public team getTeamById(int teamId) throws SQLException {
+        List<team> teams = returnList(); // Fetch all teams
+        return teams.stream()
+                .filter(t -> t.getTeamId() == teamId)
+                .findFirst()
+                .orElse(null);
+    }
+
 
 }

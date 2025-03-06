@@ -5,7 +5,7 @@ public class team {
     private String teamName;
     private int teamNath;
     private String teamTOS;
-    private int teamW,teamL;
+    private int teamW,teamL,teamCoachId;
 
 
     public team(String teamName, int teamNath, String teamTOS, int teamW, int teamL) {
@@ -14,6 +14,14 @@ public class team {
         this.teamL = teamL;
         this.teamName = teamName;
         this.teamTOS = teamTOS;
+    }
+
+    public int getTeamCoachId() {
+        return teamCoachId;
+    }
+
+    public void setTeamCoachId(int teamCoachId) {
+        this.teamCoachId = teamCoachId;
     }
 
     public int getTeamId() {
@@ -87,4 +95,20 @@ public class team {
                 ", teamL=" + teamL +
                 '}';
     }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true; // Check if the objects are the same instance
+        if (o == null || getClass() != o.getClass()) return false; // Check if the object is of the same class
+
+        team team = (team) o; // Cast the object to a team
+
+        // Compare the teamId fields
+        return teamId == team.teamId;
+    }
+
+    @Override
+    public int hashCode() {
+        return teamId; // Use teamId as the hash code
+    }
+
 }

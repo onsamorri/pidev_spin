@@ -1,6 +1,5 @@
 package tn.esprit.controllers;
 
-import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -9,65 +8,53 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
-import netscape.javascript.JSObject;
 import org.json.JSONObject;
 import tn.esprit.utils.MyDatabase;
 import tn.esprit.entities.user;
 
 import java.io.BufferedReader;
-import java.io.IOException;
+import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class login {
     @FXML
-    private Button cancel_id;
-
+    private Button cancel_id, login_id, refresh_id;
+    @FXML
+    private WebView recaptchaWebView;
+    @FXML
+    private TextField username_id;
+    @FXML
+    private PasswordField password_id;
     @FXML
     private Label error_id;
 
-    @FXML
-    private Button forget_id;
-
-    @FXML
-    private Button login_id;
-
-    @FXML
-    private PasswordField password_id;
-
-    @FXML
-    private WebView recaptchaWebView;
-
-    @FXML
-    private Button refresh_id;
-
-    @FXML
-    private TextField username_id;
 
 
     @FXML
     public void initialize() {
-        forget_id.setOnMouseClicked(event -> {
-            try {
-                redirect_passwordpage();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        // Load the reCAPTCHA widget
+
+
     }
+
     public void login_idOnAction(ActionEvent e) {
 
+
+        // Proceed with login logic
         if (!username_id.getText().isBlank() && !password_id.getText().isBlank()) {
             validatelogin();
         } else {
             error_id.setText("Please enter Email and password");
         }
     }
+
 
 
     public void cancel_idOnAction(ActionEvent e) {
@@ -140,13 +127,6 @@ public class login {
             e.printStackTrace();
         }
     }
-    @FXML
-    void redirect_passwordpage() throws IOException {
-        Stage stage = (Stage) login_id.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/forgotPassword.fxml"));
-        Scene scene = new Scene(loader.load());
-        stage.setScene(scene);
-        stage.show();
-    }
+
 }
 

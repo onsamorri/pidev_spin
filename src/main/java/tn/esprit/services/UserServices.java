@@ -4,8 +4,6 @@ import com.mysql.cj.xdevapi.Client;
 import tn.esprit.entities.*;
 import tn.esprit.utils.MyDatabase;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +21,7 @@ public class UserServices implements IService<user> {
             System.out.println("Admins must be added manually in the database.");
             return; // Don't allow adding admins through this method
         }
-        String query = "INSERT INTO `user`(`user_fname`, `user_lname`, `user_email`, `user_pwd`, `user_nbr`, `user_role`, `nb_teams`,`med_specialty`,`athlete_DoB`, `athlete_gender`,`athlete_address`, `athlete_height`, `athlete_weight`,`isInjured` )" + " VALUES (?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?)";
+        String query = "INSERT INTO `user`(`user_fname`, `user_lname`, `user_email`, `user_pwd`, `user_nbr`, `user_role`, `nb_teams`,`med_specialty`,`athlete_DoB`, `athlete_gender`,`athlete_address`, `athlete_height`, `athlete_weight`,`isInjured`,`athlete_teamId` )" + " VALUES (?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?)";
         try (PreparedStatement ps = con.prepareStatement(query)) {
             ps.setString(1, user.getUser_fname());
             ps.setString(2, user.getUser_lname());
@@ -51,6 +49,7 @@ public class UserServices implements IService<user> {
                 ps.setString(11, athlete.getAthlete_address());
                 ps.setInt(14, athlete.getIsInjured());
                 ps.setDate(9, athlete.getAthlete_DoB());
+                ps.setInt(15, athlete.getAthlete_teamId());
             } else {
                 ps.setNull(12, java.sql.Types.FLOAT);
                 ps.setNull(13, java.sql.Types.FLOAT);
@@ -58,6 +57,7 @@ public class UserServices implements IService<user> {
                 ps.setNull(11, java.sql.Types.VARCHAR);
                 ps.setNull(14, java.sql.Types.INTEGER);
                 ps.setNull(9, java.sql.Types.DATE);
+                ps.setNull(15, java.sql.Types.INTEGER);
             }
             ps.executeUpdate();
             System.out.println("User added successfully.");
@@ -85,7 +85,7 @@ public class UserServices implements IService<user> {
     }
 
     public void update(int user_id,user updatedUser) {String query = "UPDATE user SET user_fname=?, user_lname=?, user_email=?, user_pwd=?, user_nbr=?, user_role=?, "
-            + "nb_teams=?, med_specialty=?,athlete_DoB=?, athlete_gender=?,athlete_address=?, athlete_height=?, athlete_weight=?,isInjured=? WHERE user_id=?";
+            + "nb_teams=?, med_specialty=?,athlete_DoB=?, athlete_gender=?,athlete_address=?, athlete_height=?, athlete_weight=?,isInjured=?,athlete_teamId=? WHERE user_id=?";
 
         try (PreparedStatement ps = con.prepareStatement(query)) {
             ps.setString(1, updatedUser.getUser_fname());
@@ -105,6 +105,7 @@ public class UserServices implements IService<user> {
                 ps.setNull(12, java.sql.Types.FLOAT);
                 ps.setNull(13, java.sql.Types.FLOAT);
                 ps.setNull(14, java.sql.Types.INTEGER);
+                ps.setNull(15, java.sql.Types.INTEGER);
 
             } else if  (updatedUser instanceof Medical_staff medical_staff) {
                 // Set Medical_staff-specific fields
@@ -116,6 +117,7 @@ public class UserServices implements IService<user> {
                 ps.setNull(12, java.sql.Types.FLOAT);
                 ps.setNull(13, java.sql.Types.FLOAT);
                 ps.setNull(14, java.sql.Types.INTEGER);
+                ps.setNull(15, java.sql.Types.INTEGER);
             } else if (updatedUser instanceof Athlete athlete) {
                 // Set Athlete-specific fields
                 ps.setDate(9, athlete.getAthlete_DoB());
@@ -124,6 +126,7 @@ public class UserServices implements IService<user> {
                 ps.setFloat(12, athlete.getAthlete_height());
                 ps.setFloat(13, athlete.getAthlete_weight());
                 ps.setInt(14, athlete.getIsInjured());
+                ps.setInt(15, athlete.getAthlete_teamId());
                 ps.setNull(7, java.sql.Types.INTEGER);
                 ps.setNull(8, java.sql.Types.VARCHAR);
             } else if (updatedUser instanceof Admin admin) {
@@ -136,9 +139,10 @@ public class UserServices implements IService<user> {
                 ps.setNull(12, java.sql.Types.FLOAT);
                 ps.setNull(13, java.sql.Types.FLOAT);
                 ps.setNull(14, java.sql.Types.INTEGER);
+                ps.setNull(15, java.sql.Types.INTEGER);
             }
 
-            ps.setInt(15, user_id); // WHERE condition
+            ps.setInt(16, user_id); // WHERE condition
             ps.executeUpdate();
             System.out.println("Account updated successfully.");
         } catch (SQLException e) {
@@ -179,7 +183,7 @@ public class UserServices implements IService<user> {
                     users.add(new Athlete(user_id, user_fname, user_lname, user_email, user_pwd, user_nbr,
                             rs.getDate("athlete_DoB"), rs.getString("athlete_gender"),
                             rs.getString("athlete_address"), rs.getFloat("athlete_height"),
-                            rs.getFloat("athlete_weight"), rs.getInt("isInjured")));
+                            rs.getFloat("athlete_weight"), rs.getInt("isInjured"), rs.getInt("athlete_teamId")));
                 }
                 else if ("admin".equalsIgnoreCase(user_role)) {
                     users.add(new Admin(user_id, user_fname, user_lname, user_email, user_pwd, user_nbr));
@@ -214,7 +218,7 @@ public class UserServices implements IService<user> {
                     users.add(new Athlete(user_id, user_fname, user_lname, user_email, user_pwd, user_nbr,
                             rs.getDate("athlete_DoB"), rs.getString("athlete_gender"),
                             rs.getString("athlete_address"), rs.getFloat("athlete_height"),
-                            rs.getFloat("athlete_weight"), rs.getInt("isInjured")));
+                            rs.getFloat("athlete_weight"), rs.getInt("isInjured"),rs.getInt("athlete_teamId")));
                 }
             }
         } catch (SQLException e) {
@@ -250,7 +254,7 @@ public class UserServices implements IService<user> {
                         users.add(new Athlete(user_id, user_fname, user_lname, user_email, user_pwd, user_nbr,
                                 rs.getDate("athlete_DoB"), rs.getString("athlete_gender"),
                                 rs.getString("athlete_address"), rs.getFloat("athlete_height"),
-                                rs.getFloat("athlete_weight"), rs.getInt("isInjured")));
+                                rs.getFloat("athlete_weight"), rs.getInt("isInjured"),rs.getInt("athlete_teamId")));
                     } else if ("admin".equalsIgnoreCase(role)) {
                         users.add(new Admin(user_id, user_fname, user_lname, user_email, user_pwd, user_nbr));
                     }
@@ -259,28 +263,10 @@ public class UserServices implements IService<user> {
         } catch (SQLException e) {
             System.out.println("Error retrieving users by role: " + e.getMessage());
         }
+
         return users;
     }
-    public boolean isEmailTaken(String email) throws SQLException {
-        String query = "SELECT * FROM user WHERE user_email = ?";
-        PreparedStatement preparedStatement = con.prepareStatement(query);
-        preparedStatement.setString(1, email);
-        try (ResultSet resultSet = preparedStatement.executeQuery()) {
-            return resultSet.next();
-        }
-    }
 
-    public void updateForgottenPassword(String email, String password) {
 
-        String query = "UPDATE user " + "SET user_pwd = ? WHERE user_email = ?";
-        try {
-            PreparedStatement preparedStatement = con.prepareStatement(query);
-            preparedStatement.setString(1, password);
-            preparedStatement.setString(2, email);
-            preparedStatement.executeUpdate();
-            System.out.println("Password updated!");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 }

@@ -7,14 +7,17 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import tn.esprit.entities.Coach;
+import tn.esprit.entities.team;
 import tn.esprit.services.UserServices;
 import tn.esprit.entities.Athlete;
+import tn.esprit.services.teamServices;
 
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.regex.Pattern;
 
 
@@ -55,46 +58,93 @@ public class addAthlete {
     @FXML private Label toListA;
     @FXML
     private Label backBtn;
+    @FXML
+    private ComboBox<String> athTeam_id;
+
 
 
     @FXML
     private TextField role_id1;
     private final UserServices userService = new UserServices(); // Initialize UserServices
+    private final teamServices teamService = new teamServices(); // Initialize teamServices
 
     @FXML
     public void initialize() {
+        // Populate the team ComboBox
+        populateTeamComboBox();
+
         // Attach event listener to the button
         addAthleteBtn.setOnAction(event -> addUserAction());
         toListA.setOnMouseClicked(event -> switchScreenToAthleteList());
         backBtn.setOnMouseClicked(event -> switchBackToCoachFront());
+    }
 
+    private void populateTeamComboBox() {
+        try {
+            List<team> teams = teamService.returnList(); // Fetch all teams
+            athTeam_id.getItems().clear(); // Clear existing items
+            athTeam_id.getItems().add("None"); // Add 'None' option for null teamId
+            for (team team : teams) {
+                athTeam_id.getItems().add(team.getTeamName()); // Add team names to ComboBox
+            }
+        } catch (SQLException e) {
+            showAlert("Database Error", "Failed to fetch teams: " + e.getMessage());
+        }
     }
     @FXML
     private void addUserAction() {
         if (!validateInputs()) return;
+
+        // Get the selected team name
+        String selectedTeamName = athTeam_id.getValue();
+        if (selectedTeamName == null || !selectedTeamName.equals("None") || selectedTeamName.trim().isEmpty()) {
+            showAlert("Validation Error", "Please select a team.");
+            return;
+        }
+
+        // Fetch the team ID for the selected team name
+        int athlete_teamId = -1; // Default invalid ID
+        try {
+            List<team> teams = teamService.returnList();
+            for (team team : teams) {
+                if (team.getTeamName().equals(selectedTeamName)) {
+                    athlete_teamId = team.getTeamId();
+                    break;
+                }
+            }
+        } catch (SQLException e) {
+            showAlert("Database Error", "Failed to fetch teams: " + e.getMessage());
+            return;
+        }
+
+        if (athlete_teamId == -1) {
+            showAlert("Validation Error", "Invalid team selected.");
+            return;
+        }
+
+        // Create the Athlete object
         String fname = fname_id.getText();
         String lname = lname_id.getText();
         String email = email_id.getText();
         String password = password_id.getText();
         String phoneNumber = phone_nb_id.getText();
-        String role = "athlete";
-        LocalDate athlete_DoB=DoB_id.getValue() ;
+        LocalDate athlete_DoB = DoB_id.getValue();
         String athlete_gender = gender_id.getValue();
         String athlete_address = Adress_id.getText();
         float athlete_height = Float.parseFloat(Height_id.getText());
         float athlete_weight = Float.parseFloat(Weight_id.getText());
-        Athlete newAthlete = new Athlete(fname, lname, email, password, phoneNumber, Date.valueOf(athlete_DoB), athlete_gender, athlete_address, athlete_height, athlete_weight, 0);
 
+        Athlete newAthlete = new Athlete(fname, lname, email, password, phoneNumber, Date.valueOf(athlete_DoB), athlete_gender, athlete_address, athlete_height, athlete_weight, 0, athlete_teamId);
+
+        // Add the athlete to the database
         try {
             userService.add(newAthlete);
             showAlert("Success", "Athlete added successfully!");
-            EmailService.sendAccountCreationEmail(email, password, role);
             clearFields();
         } catch (SQLException e) {
             showAlert("Database Error", "Error adding Athlete: " + e.getMessage());
         }
     }
-
     private void switchBackToCoachFront() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Coachfront.fxml"));

@@ -10,6 +10,7 @@ public class Athlete extends user {
     private String athlete_address;
     private int isInjured;
     private Date athlete_DoB;
+    private int athlete_teamId;
     public Athlete() {
         super();
         this.athlete_height = 0;
@@ -20,7 +21,7 @@ public class Athlete extends user {
         this.athlete_DoB=null;
     }
 
-    public Athlete(int user_id, String user_fname, String user_lname, String user_email, String user_pwd, String user_nbr, Date athlete_DoB, String athlete_gender, String athlete_address, float athlete_height, float athlete_weight,   int isInjured) {
+    public Athlete(int user_id, String user_fname, String user_lname, String user_email, String user_pwd, String user_nbr, Date athlete_DoB, String athlete_gender, String athlete_address, float athlete_height, float athlete_weight, int isInjured, int athleteTeamId) {
         super(user_id, user_fname, user_lname, user_email, user_pwd, user_nbr, user_role.ATHLETE);
         this.athlete_height = athlete_height;
         this.athlete_weight = athlete_weight;
@@ -28,8 +29,9 @@ public class Athlete extends user {
         this.athlete_address = athlete_address;
         this.isInjured = isInjured;
         this.athlete_DoB = athlete_DoB;
+        this.athlete_teamId = athleteTeamId;
     }
-    public Athlete(String user_fname, String user_lname, String user_email, String user_pwd, String user_nbr, Date athlete_DoB, String athlete_gender, String athlete_address, float athlete_height, float athlete_weight,   int isInjured) {
+    public Athlete(String user_fname, String user_lname, String user_email, String user_pwd, String user_nbr, Date athlete_DoB, String athlete_gender, String athlete_address, float athlete_height, float athlete_weight, int isInjured, int athleteTeamId) {
         super(user_fname, user_lname, user_email, user_pwd, user_nbr, user_role.ATHLETE);
         this.athlete_height = athlete_height;
         this.athlete_weight = athlete_weight;
@@ -37,8 +39,15 @@ public class Athlete extends user {
         this.athlete_address = athlete_address;
         this.isInjured = isInjured;
         this.athlete_DoB = athlete_DoB;
+        this.athlete_teamId = athleteTeamId;
     }
 
+    public int getAthlete_teamId() {
+        return athlete_teamId;
+    }
+    public void setAthlete_teamId(int athlete_teamId) {
+        this.athlete_teamId = athlete_teamId;
+    }
     public float getAthlete_height() {
         return athlete_height;
     }
@@ -97,6 +106,7 @@ public class Athlete extends user {
                 ", athlete_address='" + athlete_address + '\'' +
                 ", isInjured=" + isInjured +
                 ", athlete_DoB=" + athlete_DoB +
+                ", athlete_teamId=" + athlete_teamId +
                 '}';
     }
 }
