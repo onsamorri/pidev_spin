@@ -15,8 +15,11 @@ public class MainFX extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-
         Parent root= FXMLLoader.load(getClass().getResource("/Coachfront.fxml"));
+        //Parent root= FXMLLoader.load(getClass().getResource("/Medicalfront.fxml"));
+        //Parent root= FXMLLoader.load(getClass().getResource("/AdminBack.fxml"));
+        //Parent root= FXMLLoader.load(getClass().getResource("/AddClaimAthlete.fxml"));
+        //Parent root= FXMLLoader.load(getClass().getResource("/Athletefront.fxml"));
         Scene scene=new Scene(root);
         //primaryStage.setTitle("first Scene");
         primaryStage.initStyle(StageStyle.DECORATED);

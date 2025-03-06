@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="tn.esprit.controllers.StatsController">
+
+    <LineChart fx:id="performanceLineChart" prefHeight="300.0" prefWidth="500.0">
+        <xAxis>
+            <CategoryAxis label="Performance Metrics"/>
+        </xAxis>
+        <yAxis>
+            <NumberAxis label="Value"/>
+        </yAxis>
+    </LineChart>
+</AnchorPane>

@@ -1,25 +1,35 @@
 package tn.esprit.controllers;
 
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.event.ActionEvent;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import tn.esprit.services.PDFExportServices;
 import tn.esprit.services.PerformanceServices;
 import tn.esprit.entities.Performance;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.sql.Date;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AddPerformanceData {
     @FXML
@@ -46,8 +56,6 @@ public class AddPerformanceData {
     @FXML
     private TableView<Performance> performanceTable;
 
-    @FXML
-    private TableColumn<Performance, Integer> colId;
 
     @FXML
     private TableColumn<Performance, Float> colSpeed;
@@ -70,14 +78,27 @@ public class AddPerformanceData {
     @FXML
     private TableColumn<Performance, Void> colActions;
     @FXML
-    private Label backBtn;
+    private ImageView backBtn;
+    @FXML
+    private Button importCsvButton;
+    @FXML
+    private TextField searchField;
+    @FXML
+    private Button searchBtn;
+    @FXML
+    private Button exportPdfBtn;
+    @FXML
+    private ComboBox<String> sortComboBox;
 
     private final PerformanceServices performanceService = new PerformanceServices();
     private final ObservableList<Performance> performanceList = FXCollections.observableArrayList();
+    private PDFExportServices pdfExportService = new PDFExportServices();
+
+
+
 
     @FXML
     public void initialize() {
-        colId.setCellValueFactory(new PropertyValueFactory<>("performance_id"));
         colSpeed.setCellValueFactory(new PropertyValueFactory<>("speed"));
         colAgility.setCellValueFactory(new PropertyValueFactory<>("agility"));
         colGoals.setCellValueFactory(new PropertyValueFactory<>("nbr_goals"));
@@ -89,6 +110,9 @@ public class AddPerformanceData {
         performanceTable.setItems(performanceList);
         updatePerformanceList();
         addActionButtonsToTable();
+        importCsvButton.setOnAction(event -> importCsv(event));
+        searchBtn.setOnAction(event -> search(searchField.getText()));
+        exportPdfBtn.setOnAction(event -> exportToPDF());
     }
 
     @FXML
@@ -232,23 +256,31 @@ public class AddPerformanceData {
         colActions.setCellFactory(param -> new TableCell<>() {
             private final Button updateButton = new Button("Update");
             private final Button deleteButton = new Button("Delete");
-            private final HBox pane = new HBox(updateButton, deleteButton);
+            private final Button statsButton = new Button("View Stats");
+            private final HBox pane = new HBox(updateButton, deleteButton, statsButton);
 
             {
                 updateButton.setStyle("-fx-background-color: #BCCCE0; -fx-text-fill: white;");
                 deleteButton.setStyle("-fx-background-color: #D68C45; -fx-text-fill: white;");
+                statsButton.setStyle("-fx-background-color: #709775; -fx-text-fill: white;");
                 pane.setSpacing(5);
 
                 // Update Button Action
                 updateButton.setOnAction(event -> {
-                    Performance performance = (Performance) getTableView().getItems().get(getIndex());
+                    Performance performance = getTableView().getItems().get(getIndex());
                     openUpdatePerformanceScreen(performance);
                 });
 
                 // Delete Button Action
                 deleteButton.setOnAction(event -> {
-                    Performance performance = (Performance) getTableView().getItems().get(getIndex());
+                    Performance performance = getTableView().getItems().get(getIndex());
                     deletePerformance(performance);
+                });
+
+                // View Stats Button Action
+                statsButton.setOnAction(event -> {
+                    Performance performance = getTableView().getItems().get(getIndex());
+                    openStatsWindow(performance);
                 });
             }
 
@@ -301,4 +333,135 @@ public class AddPerformanceData {
             }
         });
     }
+    //importing a csv file
+    @FXML
+    private void importCsv(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+        File file = fileChooser.showOpenDialog(null);
+
+        if (file != null) {
+            try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                String line;
+                boolean isFirstLine = true;
+                while ((line = br.readLine()) != null) {
+                    if (isFirstLine) {
+                        isFirstLine = false;
+                        continue; // Skip the header row
+                    }
+                    String[] values = line.split(",");
+                    if (values.length == 6) {
+                        float speed = Float.parseFloat(values[0]);
+                        float agility = Float.parseFloat(values[1]);
+                        int goals = Integer.parseInt(values[2]);
+                        int assists = Integer.parseInt(values[3]);
+                        Date date = Date.valueOf(values[4]);
+                        int fouls = Integer.parseInt(values[5]);
+
+                        Performance performance = new Performance(speed, agility, goals, assists, date, fouls);
+                        performanceService.addP(performance);
+                    }
+                }
+                showAlert("Success", "CSV data imported successfully!");
+                updatePerformanceList();
+            } catch (IOException | SQLException | NumberFormatException e) {
+                showAlert("Error", "Failed to import CSV data: " + e.getMessage());
+            }
+        }
+    }
+
+    //search method
+    @FXML
+    private void search(String keyword) {
+        ObservableList<Performance> filteredList = FXCollections.observableArrayList();
+        try {
+            float keywordFloat = Float.parseFloat(keyword);
+            for (Performance performance : performanceList) {
+                if (performance.getSpeed() == keywordFloat ||
+                        performance.getAgility() == keywordFloat ||
+                        Integer.toString(performance.getNbr_goals()).contains(keyword) ||
+                        Integer.toString(performance.getAssists()).contains(keyword) ||
+                        performance.getDate_recorded().toString().contains(keyword) ||
+                        Integer.toString(performance.getNbr_fouls()).contains(keyword)) {
+                    filteredList.add(performance);
+                }
+            }
+        } catch (NumberFormatException e) {
+            // If keyword is not a float, continue with string comparison for other fields
+            for (Performance performance : performanceList) {
+                if (Integer.toString(performance.getNbr_goals()).contains(keyword) ||
+                        Integer.toString(performance.getAssists()).contains(keyword) ||
+                        performance.getDate_recorded().toString().contains(keyword) ||
+                        Integer.toString(performance.getNbr_fouls()).contains(keyword)) {
+                    filteredList.add(performance);
+                }
+            }
+        }
+        performanceTable.setItems(filteredList);
+    }
+    //stats
+    private void openStatsWindow(Performance performance) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/stats.fxml"));
+            Parent root = loader.load();
+
+            StatsController statsController = loader.getController();
+            statsController.displayPerformanceStats(performance);
+
+            Stage stage = new Stage();
+            stage.setTitle("Performance Statistics");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            showAlert("Error", "Failed to open stats window: " + e.getMessage());
+        }
+    }
+    //PDF
+    @FXML
+    private void exportToPDF() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+        File file = fileChooser.showSaveDialog(null);
+
+        if (file != null) {
+            pdfExportService.exportPerformanceDataToPDF(performanceList, file.getAbsolutePath());
+        }
+    }
+    //sorting for two criteria
+
+    @FXML
+    void sortTableView(ActionEvent event) {
+        try {
+            String selectedSortOption = sortComboBox.getValue();
+            List<Performance> sortedPerformances = null;
+
+            switch (selectedSortOption) {
+                case "Highest Speed":
+                    sortedPerformances = performanceList.stream()
+                            .sorted(Comparator.comparingDouble(Performance::getSpeed).reversed())
+                            .collect(Collectors.toList());
+                    break;
+                case "Least Fouls":
+                    sortedPerformances = performanceList.stream()
+                            .sorted(Comparator.comparingInt(Performance::getNbr_fouls))
+                            .collect(Collectors.toList());
+                    break;
+                default:
+                    break;
+            }
+
+            if (sortedPerformances != null) {
+                performanceList.setAll(sortedPerformances);
+                performanceTable.refresh();
+            } else {
+                showAlert("Error", "Sorted performances list is null.");
+            }
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("ERROR");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
+    }
+
 }

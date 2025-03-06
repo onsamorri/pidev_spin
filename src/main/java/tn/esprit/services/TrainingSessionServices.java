@@ -64,7 +64,6 @@ public class TrainingSessionServices implements IService3<TrainingSession> {
                 }
 
                 TrainingSession session = new TrainingSession(
-                        rs.getInt("trainingSession_id"),
                         focus,
                         rs.getTime("session_start_time").toLocalTime(),
                         Duration.fromString(rs.getString("session_duration")),

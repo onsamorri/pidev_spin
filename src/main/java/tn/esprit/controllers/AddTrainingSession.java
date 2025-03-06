@@ -4,11 +4,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.event.ActionEvent;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -16,6 +18,7 @@ import javafx.util.StringConverter;
 import tn.esprit.entities.Duration;
 import tn.esprit.entities.Focus;
 import tn.esprit.entities.TrainingSession;
+import tn.esprit.services.QRCodeService;
 import tn.esprit.services.TrainingSessionServices;
 
 import java.io.IOException;
@@ -46,9 +49,6 @@ public class AddTrainingSession {
     private TableView<TrainingSession> trainingTable;
 
     @FXML
-    private TableColumn<TrainingSession, Integer> colId;
-
-    @FXML
     private TableColumn<TrainingSession, Focus> colFocus;
 
     @FXML
@@ -66,7 +66,14 @@ public class AddTrainingSession {
     @FXML
     private TableColumn<TrainingSession, Void> colActions;
     @FXML
-    private Label backBtn;
+    private ImageView backBtn;
+    @FXML
+    private Button weatherBtn;
+    @FXML
+    private TextField searchField;
+    @FXML
+    private Button searchBtn;
+
 
 
     private final TrainingSessionServices trainingSessionService = new TrainingSessionServices();
@@ -75,7 +82,8 @@ public class AddTrainingSession {
     @FXML
     public void initialize() {
         backBtn.setOnMouseClicked(event -> switchBackToCoachFront());
-        colId.setCellValueFactory(new PropertyValueFactory<>("trainingSession_id"));
+        weatherBtn.setOnMouseClicked(event->switchScreenWeather());
+        searchBtn.setOnAction(event -> search(searchField.getText()));
         colFocus.setCellValueFactory(new PropertyValueFactory<>("focus"));
         colStartTime.setCellValueFactory(new PropertyValueFactory<>("start_time"));
         colDuration.setCellValueFactory(new PropertyValueFactory<>("duration"));
@@ -126,6 +134,27 @@ public class AddTrainingSession {
         });
         training_duration.setValue(null); // set the placeholder as the default value
     }
+
+    @FXML
+    private void switchScreenWeather() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/weather.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Weather Information");
+            stage.setUserData(this);
+            stage.show();
+
+            // Close the current stage
+            Stage currentStage = (Stage) weatherBtn.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            showAlert("Error", "Failed to open weather screen: " + e.getMessage());
+        }
+    }
+
 
     private void switchBackToCoachFront() {
         try {
@@ -321,4 +350,37 @@ public class AddTrainingSession {
             }
         });
     }
+    //search
+    @FXML
+    private void search(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            // If the keyword is empty, display the entire list
+            trainingTable.setItems(trainingSessionList);
+            return;
+        }
+
+        ObservableList<TrainingSession> filteredList = FXCollections.observableArrayList();
+        keyword = keyword.toUpperCase(); // Convert keyword to uppercase for case-insensitive search
+
+        for (TrainingSession session : trainingSessionList) {
+            if (session.getFocus().name().contains(keyword) ||
+                    session.getStart_time().toString().contains(keyword) ||
+                    session.getDuration().name().contains(keyword) ||
+                    session.getLocation().toLowerCase().contains(keyword.toLowerCase()) ||
+                    session.getSession_notes().toLowerCase().contains(keyword.toLowerCase())) {
+                filteredList.add(session);
+            }
+        }
+
+        if (filteredList.isEmpty()) {
+            // If no matches found, show an alert and refresh the table view
+            showAlert("No Results", "No matching training sessions found.");
+            trainingTable.setItems(trainingSessionList);
+        } else {
+            trainingTable.setItems(filteredList);
+        }
+    }
+
+
+
 }

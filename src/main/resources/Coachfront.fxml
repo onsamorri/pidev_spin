@@ -98,6 +98,14 @@
                   <Insets top="5.0" />
                </VBox.margin>
             </HBox>
+            <Label fx:id="deepseekBtn" prefHeight="36.0" prefWidth="107.0" text="DeepSeek" textFill="WHITE">
+               <font>
+                  <Font name="Calibri Bold" size="20.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="25.0" />
+               </VBox.margin>
+            </Label>
          </children>
       </VBox>
       <VBox layoutX="157.0" layoutY="5.0" prefHeight="406.0" prefWidth="439.0">

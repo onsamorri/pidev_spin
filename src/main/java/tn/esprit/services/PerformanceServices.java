@@ -6,7 +6,9 @@ import tn.esprit.utils.MyDatabase;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class PerformanceServices implements IService3<Performance> {
@@ -55,7 +57,6 @@ public class PerformanceServices implements IService3<Performance> {
             Date dateRecorded = rs.getDate("performance_date_recorded");
 
             Performance pr = new Performance(
-                    rs.getInt("performance_id"),
                     rs.getFloat("performance_speed"),
                     rs.getFloat("performance_agility"),
                     rs.getInt("performance_nbr_goals"),
@@ -112,6 +113,34 @@ public class PerformanceServices implements IService3<Performance> {
             }else {
                 System.out.println("Oops ! Failed to update :<");
             }
+        }
+    }
+
+    // Calculates the overall performance based on Performance entity attributes
+    public double getOverallPerformance(Performance performance) {
+        return (performance.getSpeed() * 0.3) +
+                (performance.getAgility() * 0.3) +
+                (performance.getNbr_goals() * 0.2) +
+                (performance.getAssists() * 0.1) -
+                (performance.getNbr_fouls() * 0.1);
+    }
+
+    // Aggregates performance by month
+    public Map<String, Double> getAveragePerformanceByMonth() throws SQLException {
+        String query = "SELECT DATE_FORMAT(performance_date_recorded, '%Y-%m') AS month, " +
+                "AVG(performance_speed * 0.3 + performance_agility * 0.3 + " +
+                "performance_nbr_goals * 0.2 + performance_assists * 0.1 - performance_nbr_fouls * 0.1) AS avgPerformance " +
+                "FROM performance_data GROUP BY month ORDER BY month ASC";
+
+        try (Statement stmt = con.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            Map<String, Double> performanceData = new HashMap<>();
+            while (rs.next()) {
+                performanceData.put(rs.getString("month"), rs.getDouble("avgPerformance"));
+            }
+
+            return performanceData;
         }
     }
 
